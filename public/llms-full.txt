@@ -1,4 +1,4 @@
-# https://bergdaniel.com.br llms-full.txt
+# https://bergholz.com.br llms-full.txt
 
 ## Daniel Bergholz
 # Hello
@@ -18,7 +18,7 @@ FreeNew\\
 \\
 21 videos\\
 \\
-![Phoenix crash course](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FhsYrr1OgQ28%2Fmaxresdefault.jpg&w=828&q=75)](https://www.youtube.com/playlist?list=PLbV6TI03ZWYXKCJePfD8G34hyWdW_WLFk "Phoenix crash course") [**Elixir crash course** \\
+![Phoenix crash course](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FhsYrr1OgQ28%2Fmaxresdefault.jpg&w=828&q=75)](https://www.youtube.com/playlist?list=PLbV6TI03ZWYXKCJePfD8G34hyWdW_WLFk "Phoenix crash course") [**Elixir crash course** \\
 \\
 🇺🇸\\
 \\
@@ -28,9 +28,9 @@ Free\\
 \\
 21 videos\\
 \\
-![Elixir crash course](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FQ0Z1jqv6LW0%2Fmaxresdefault.jpg&w=828&q=75)](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVQEC_Txq_cV0Uy_s16b0d3 "Elixir crash course")
+![Elixir crash course](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FQ0Z1jqv6LW0%2Fmaxresdefault.jpg&w=828&q=75)](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVQEC_Txq_cV0Uy_s16b0d3 "Elixir crash course")
 
-[![Curso de React](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FmXuxPrs6oHE%2Fmqdefault.jpg&w=640&q=75)\\
+[![Curso de React](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FmXuxPrs6oHE%2Fmqdefault.jpg&w=640&q=75)\\
 \\
 **Curso de React** \\
 \\
@@ -38,7 +38,7 @@ Free\\
 \\
 Free\\
 \\
-6videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVIiHL5XBvefrVwhcLo7XYN "Curso de React") [![Curso de NPM](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fg-V5qptW2oo%2Fmqdefault.jpg&w=640&q=75)\\
+6videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVIiHL5XBvefrVwhcLo7XYN "Curso de React") [![Curso de NPM](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fg-V5qptW2oo%2Fmqdefault.jpg&w=640&q=75)\\
 \\
 **Curso de NPM** \\
 \\
@@ -46,7 +46,7 @@ Free\\
 \\
 Free\\
 \\
-8videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVjruiKLeb3m2rEXeYsG6RQ "Curso de NPM") [![Curso de Typescript](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2F3LPWQtvxHOk%2Fmqdefault.jpg&w=640&q=75)\\
+8videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVjruiKLeb3m2rEXeYsG6RQ "Curso de NPM") [![Curso de Typescript](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2F3LPWQtvxHOk%2Fmqdefault.jpg&w=640&q=75)\\
 \\
 **Curso de Typescript** \\
 \\
@@ -54,7 +54,7 @@ Free\\
 \\
 Free\\
 \\
-11videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYWwU5p9ZBH8oJTCjgneX53u "Curso de Typescript") [![Curso de Trello](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fck7WWHaAgpU%2Fmqdefault.jpg&w=640&q=75)\\
+11videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYWwU5p9ZBH8oJTCjgneX53u "Curso de Typescript") [![Curso de Trello](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fck7WWHaAgpU%2Fmqdefault.jpg&w=640&q=75)\\
 \\
 **Curso de Trello** \\
 \\
@@ -62,7 +62,7 @@ Free\\
 \\
 Free\\
 \\
-1video](https://www.youtube.com/playlist?list=PLbV6TI03ZWYX0JAlemRNK6IXoeXscW5C8 "Curso de Trello") [![Curso de Javascript](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FpL9nX6Ac2Lc%2Fmqdefault.jpg&w=640&q=75)\\
+1video](https://www.youtube.com/playlist?list=PLbV6TI03ZWYX0JAlemRNK6IXoeXscW5C8 "Curso de Trello") [![Curso de Javascript](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FpL9nX6Ac2Lc%2Fmqdefault.jpg&w=640&q=75)\\
 \\
 **Curso de Javascript** \\
 \\
@@ -70,7 +70,7 @@ Free\\
 \\
 Free\\
 \\
-14videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVP6EByYoUxZJeZaqitHi9r "Curso de Javascript") [![Curso de Terminal Linux](https://bergdaniel.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FVRR3V42EdSg%2Fmqdefault.jpg&w=640&q=75)\\
+14videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYVP6EByYoUxZJeZaqitHi9r "Curso de Javascript") [![Curso de Terminal Linux](https://bergholz.com.br/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FVRR3V42EdSg%2Fmqdefault.jpg&w=640&q=75)\\
 \\
 **Curso de Terminal Linux** \\
 \\

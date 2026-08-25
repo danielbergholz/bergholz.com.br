@@ -4,7 +4,7 @@ export const locales = ["pt", "en"] as const
 
 export type Locale = (typeof locales)[number]
 
-// Portuguese lives unprefixed at the root (bergdaniel.com.br is a Brazilian
+// Portuguese lives unprefixed at the root (bergholz.com.br is a Brazilian
 // site first); English lives under /en. The proxy rewrites unprefixed paths
 // to /pt internally, so "/pt" never appears in public URLs.
 export const defaultLocale: Locale = "pt"

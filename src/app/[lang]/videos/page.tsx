@@ -33,7 +33,7 @@ export async function generateMetadata({
       url: localePath(locale, "/videos"),
       description: t.description,
       images: {
-        url: "https://bergdaniel.com.br/og.png",
+        url: "https://bergholz.com.br/og.png",
         width: 1200,
         height: 630
       }
@@ -45,7 +45,7 @@ export async function generateMetadata({
       title: t.title,
       description: t.description,
       images: {
-        url: "https://bergdaniel.com.br/og.png",
+        url: "https://bergholz.com.br/og.png",
         width: 1200,
         height: 630
       }

@@ -37,7 +37,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale)
 
   return {
-    metadataBase: new URL("https://bergdaniel.com.br"),
+    metadataBase: new URL("https://bergholz.com.br"),
     alternates: pageAlternates(locale, "/"),
     title: dict.meta.home.title,
     description: dict.meta.home.description,
@@ -58,7 +58,7 @@ export async function generateMetadata({
       "JavaScript",
       "TypeScript"
     ],
-    authors: [{ name: "Daniel Bergholz", url: "https://bergdaniel.com.br" }],
+    authors: [{ name: "Daniel Bergholz", url: "https://bergholz.com.br" }],
     creator: "Daniel Bergholz",
     publisher: "Daniel Bergholz",
     robots: {
@@ -80,7 +80,7 @@ export async function generateMetadata({
       url: localePath(locale, "/"),
       description: dict.meta.home.ogDescription,
       images: {
-        url: "https://bergdaniel.com.br/og.png",
+        url: "https://bergholz.com.br/og.png",
         width: 1200,
         height: 630
       }
@@ -92,7 +92,7 @@ export async function generateMetadata({
       title: dict.meta.home.title,
       description: dict.meta.home.ogDescription,
       images: {
-        url: "https://bergdaniel.com.br/og.png",
+        url: "https://bergholz.com.br/og.png",
         width: 1200,
         height: 630
       }
@@ -105,8 +105,8 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Daniel Bergholz",
-  url: "https://bergdaniel.com.br",
-  image: "https://bergdaniel.com.br/og.png",
+  url: "https://bergholz.com.br",
+  image: "https://bergholz.com.br/og.png",
   jobTitle: ["Software Engineer", "Content Creator", "Solopreneur"],
   description:
     "Software Engineer, Content Creator and Solopreneur from Brazil, building SaaS products while teaching programming to developers",
@@ -181,7 +181,7 @@ export default async function RootLayout({
             re-render a raw script tag React can't execute */}
         <Script
           defer
-          data-domain="bergdaniel.com.br"
+          data-domain="bergholz.com.br"
           src="https://plausible.io/js/script.js"
           strategy="afterInteractive"
         />
