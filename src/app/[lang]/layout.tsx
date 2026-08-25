@@ -134,7 +134,7 @@ const personSchema = {
   ],
   contactPoint: {
     "@type": "ContactPoint",
-    email: "bergholz.daniel@gmail.com",
+    email: "daniel@bergholz.com.br",
     contactType: "Personal"
   }
 }

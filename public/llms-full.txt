@@ -5,7 +5,7 @@
 
 ## My name is Daniel Bergholz, I'm a Software Engineer and Content Creator from Brazil
 
- [Contact me](mailto:bergholz.daniel@gmail.com "Send email to Daniel Bergholz")[YouTube](https://www.youtube.com/@DanielBergholz "YouTube")[X (Formerly Twitter)](https://twitter.com/danielbergholz "X (Formerly Twitter)")[LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn")[GitHub](https://github.com/danielbergholz "GitHub") [Get early access to my upcoming courses](https://www.youtube.com/@DanielBergholz/join)
+ [Contact me](mailto:daniel@bergholz.com.br "Send email to Daniel Bergholz")[YouTube](https://www.youtube.com/@DanielBergholz "YouTube")[X (Formerly Twitter)](https://twitter.com/danielbergholz "X (Formerly Twitter)")[LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn")[GitHub](https://github.com/danielbergholz "GitHub") [Get early access to my upcoming courses](https://www.youtube.com/@DanielBergholz/join)
 
 ## Free Programming Courses
 [**Phoenix crash course** \\

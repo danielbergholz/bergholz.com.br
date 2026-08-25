@@ -56,7 +56,7 @@ async function HomeContent({ lang }: { lang: Locale }) {
         </h2>
         <a
           className="group w-max text-xs md:text-sm uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity duration-300 motion-reduce:transition-none"
-          href="mailto:bergholz.daniel@gmail.com"
+          href="mailto:daniel@bergholz.com.br"
           aria-label={t.getInTouchAria}
         >
           {t.getInTouch}{" "}

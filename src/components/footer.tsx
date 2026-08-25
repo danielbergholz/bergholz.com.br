@@ -56,10 +56,10 @@ export function Footer({ locale, t, nav }: Props) {
               Daniel Bergholz
             </p>
             <a
-              href="mailto:bergholz.daniel@gmail.com"
+              href="mailto:daniel@bergholz.com.br"
               className="text-sm text-foreground/60 hover:text-foreground transition-colors w-max"
             >
-              bergholz.daniel@gmail.com
+              daniel@bergholz.com.br
             </a>
           </div>
 
