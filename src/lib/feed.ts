@@ -54,6 +54,28 @@ export function siteLanguage(tag: string | undefined): "en" | "pt" | undefined {
   return primary === "en" || primary === "pt" ? primary : undefined
 }
 
+// Details map with a channel-level language fallback applied: videos that
+// don't declare a language on YouTube inherit their channel's language, so
+// e.g. BR-channel uploads still get a language badge. Pure — returns a new
+// map, never mutates the input.
+export function withChannelLanguage(
+  details: Map<string, VideoDetails>,
+  videos: LatestVideo[],
+  languageTag: string
+): Map<string, VideoDetails> {
+  const result = new Map(details)
+  for (const video of videos) {
+    const id = video.snippet.resourceId.videoId
+    const existing = result.get(id)
+    if (!existing) {
+      result.set(id, { language: languageTag })
+    } else if (!existing.language) {
+      result.set(id, { ...existing, language: languageTag })
+    }
+  }
+  return result
+}
+
 function videoToItem(
   video: LatestVideo,
   article: Article | undefined,

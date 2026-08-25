@@ -5,7 +5,8 @@ import {
   buildContentFeed,
   firstMeaningfulLine,
   siteLanguage,
-  videoIdFromBody
+  videoIdFromBody,
+  withChannelLanguage
 } from "./feed.ts"
 import type { Article, LatestVideo, VideoDetails } from "./types"
 
@@ -108,6 +109,36 @@ test("siteLanguage collapses BCP-47 tags to the site's languages", () => {
   assert.equal(siteLanguage("pt-PT"), "pt")
   assert.equal(siteLanguage("es"), undefined)
   assert.equal(siteLanguage(undefined), undefined)
+})
+
+test("withChannelLanguage fills missing languages but keeps declared ones", () => {
+  const declared = video({ id: "declared001" })
+  const missing = video({ id: "missing0001" })
+  const absent = video({ id: "absent00001" })
+  const input = details([
+    ["declared001", { durationSeconds: 600, language: "en" }],
+    ["missing0001", { durationSeconds: 600 }]
+  ])
+
+  const result = withChannelLanguage(
+    input,
+    [declared, missing, absent],
+    "pt-BR"
+  )
+
+  assert.equal(result.get("declared001")?.language, "en")
+  assert.equal(result.get("missing0001")?.language, "pt-BR")
+  assert.equal(
+    result.get("missing0001")?.durationSeconds,
+    600,
+    "keeps the other details"
+  )
+  assert.equal(result.get("absent00001")?.language, "pt-BR")
+  assert.equal(
+    input.get("missing0001")?.language,
+    undefined,
+    "input map is not mutated"
+  )
 })
 
 // --- buildContentFeed ---

@@ -127,6 +127,8 @@ const personSchema = {
   ],
   sameAs: [
     "https://www.youtube.com/@DanielBergholz",
+    "https://www.youtube.com/@DanielBergholzbr",
+    "https://www.instagram.com/bergholz.dev/",
     "https://twitter.com/danielbergholz",
     "https://www.linkedin.com/in/daniel-gobbi-bergholz/",
     "https://github.com/danielbergholz",

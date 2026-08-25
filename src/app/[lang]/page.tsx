@@ -1,10 +1,17 @@
 import { ContentCard } from "@/components/content-card"
-import { GitHub, LinkedIn, Twitter, YouTube } from "@/components/icons"
+import {
+  GitHub,
+  Instagram,
+  LinkedIn,
+  Twitter,
+  YouTube
+} from "@/components/icons"
 import { getDictionary } from "@/dictionaries"
 import { getContentFeed } from "@/data-access/content"
 import { getChannelStats } from "@/data-access/youtube"
 import { HomeLoadingSkeleton } from "@/components/skeletons"
 import { type Locale, hasLocale, localePath } from "@/lib/i18n"
+import { instagramUrl, youtubeChannels } from "@/lib/socials"
 import { formatNumber } from "@/lib/utils"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -68,14 +75,33 @@ async function HomeContent({ lang }: { lang: Locale }) {
         <hr className="w-12 border-t border-current opacity-20 my-1" />
 
         <section aria-label={t.socialAria} className="flex items-center gap-4">
+          {youtubeChannels(lang).map(({ href, tag }) => (
+            <a
+              key={href}
+              href={href}
+              aria-label={`YouTube ${tag}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-end gap-1 opacity-60 hover:opacity-100 hover:scale-110 motion-reduce:hover:scale-100 transition-all duration-300 motion-reduce:transition-none"
+            >
+              <YouTube width={24} height={24} aria-hidden />
+              <span
+                className="text-[9px] font-bold tracking-wider leading-none pb-0.5"
+                aria-hidden
+              >
+                {tag}
+              </span>
+            </a>
+          ))}
+
           <a
-            href="https://www.youtube.com/@DanielBergholz"
-            aria-label="YouTube"
+            href={instagramUrl}
+            aria-label="Instagram"
             target="_blank"
             rel="noreferrer noopener"
             className="opacity-60 hover:opacity-100 hover:scale-110 motion-reduce:hover:scale-100 transition-all duration-300 motion-reduce:transition-none"
           >
-            <YouTube width={24} height={24} aria-hidden />
+            <Instagram width={22} height={22} aria-hidden />
           </a>
 
           <a

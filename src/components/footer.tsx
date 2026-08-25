@@ -3,11 +3,16 @@ import Link from "next/link"
 
 import type { Dictionary } from "@/dictionaries"
 import { type Locale, localePath } from "@/lib/i18n"
+import { instagramUrl, youtubeChannels } from "@/lib/socials"
 
-const socialLinks = [
+const socialLinks = (locale: Locale) => [
+  ...youtubeChannels(locale).map(({ href, tag }) => ({
+    href,
+    label: `YouTube · ${tag}`
+  })),
   {
-    href: "https://www.youtube.com/@DanielBergholz",
-    label: "YouTube"
+    href: instagramUrl,
+    label: "Instagram"
   },
   {
     href: "https://twitter.com/danielbergholz",
@@ -80,7 +85,7 @@ export function Footer({ locale, t, nav }: Props) {
             <nav aria-label={t.socialAria}>
               <p className={sectionLabel}>{t.social}</p>
               <ul className="flex flex-col gap-2.5">
-                {socialLinks.map(({ href, label }) => (
+                {socialLinks(locale).map(({ href, label }) => (
                   <li key={href}>
                     <a
                       href={href}

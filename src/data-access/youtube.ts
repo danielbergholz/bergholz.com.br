@@ -13,14 +13,21 @@ import { parseIsoDuration } from "@/lib/utils"
 
 const API_KEY = process.env.YOUTUBE_API_KEY
 const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID
+// Second channel, with Brazilian Portuguese content. Optional: without it the
+// feed and stats simply cover only the main channel.
+const CHANNEL_ID_BR = process.env.YOUTUBE_CHANNEL_ID_BR
 const BASE_URL = "https://www.googleapis.com/youtube/v3"
 const PLAYLISTS_URL = `${BASE_URL}/playlists?part=snippet,contentDetails&maxResults=50&key=${API_KEY}&channelId=${CHANNEL_ID}`
-const CHANNEL_URL = `${BASE_URL}/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`
+// The channels endpoint accepts a comma-separated id list, so both channels'
+// stats come back from a single call.
+const STATS_CHANNEL_IDS = [CHANNEL_ID, CHANNEL_ID_BR].filter(Boolean).join(",")
+const CHANNEL_URL = `${BASE_URL}/channels?part=statistics&id=${STATS_CHANNEL_IDS}&key=${API_KEY}`
 
 // Every channel's auto-generated "uploads" playlist shares the channel id with
 // the `UC` prefix swapped for `UU` — so we can list recent uploads with a single
 // playlistItems call (1 quota unit) instead of an extra channels lookup.
 const UPLOADS_PLAYLIST_ID = CHANNEL_ID?.replace(/^UC/, "UU")
+const UPLOADS_PLAYLIST_ID_BR = CHANNEL_ID_BR?.replace(/^UC/, "UU")
 
 const getPlaylists = async () => {
   const response = await fetch(PLAYLISTS_URL)
@@ -41,6 +48,7 @@ const getPlaylists = async () => {
   return data.items
 }
 
+// Combined totals across every configured channel (main + BR).
 export const getChannelStats = async () => {
   const response = await fetch(CHANNEL_URL, { next: { revalidate: 86400 } })
   if (!response.ok) {
@@ -48,20 +56,34 @@ export const getChannelStats = async () => {
   }
 
   const data: ChannelStats = await response.json()
-  const stats = data.items?.[0]?.statistics
-  if (!stats) {
+  if (!data.items?.length) {
     throw new Error("YouTube API: missing channel statistics")
   }
 
-  return {
-    subscriberCount: Number(stats.subscriberCount),
-    viewCount: Number(stats.viewCount)
-  }
+  return data.items.reduce(
+    (totals, item) => ({
+      subscriberCount:
+        totals.subscriberCount + Number(item.statistics.subscriberCount),
+      viewCount: totals.viewCount + Number(item.statistics.viewCount)
+    }),
+    { subscriberCount: 0, viewCount: 0 }
+  )
 }
 
-export const getLatestVideos = async (maxResults = 6) => {
-  const url = `${BASE_URL}/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${UPLOADS_PLAYLIST_ID}&key=${API_KEY}`
+const getUploads = async (
+  playlistId: string | undefined,
+  maxResults: number,
+  { emptyOn404 = false } = {}
+): Promise<LatestVideo[]> => {
+  const url = `${BASE_URL}/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId}&key=${API_KEY}`
   const response = await fetch(url, { next: { revalidate: 3600 } })
+
+  // A channel's auto-generated uploads playlist 404s until its first video is
+  // published; for channels where that's expected (brand-new BR channel),
+  // treat it as "no uploads yet" instead of an error.
+  if (response.status === 404 && emptyOn404) {
+    return []
+  }
 
   // Same guards as the other calls: throw on any bad response so ISR keeps
   // serving the last healthy page instead of caching an empty/broken video list.
@@ -76,6 +98,18 @@ export const getLatestVideos = async (maxResults = 6) => {
 
   return data.items
 }
+
+export const getLatestVideos = async (maxResults = 6) =>
+  getUploads(UPLOADS_PLAYLIST_ID, maxResults)
+
+// Uploads from the BR channel; [] when YOUTUBE_CHANNEL_ID_BR isn't set (do
+// not fail the page).
+export const getLatestVideosBr = async (
+  maxResults = 6
+): Promise<LatestVideo[]> =>
+  UPLOADS_PLAYLIST_ID_BR
+    ? getUploads(UPLOADS_PLAYLIST_ID_BR, maxResults, { emptyOn404: true })
+    : []
 
 export const getCourses = async () => {
   const playlists = await getPlaylists()
@@ -129,20 +163,8 @@ const fetchWatchNext = async (videoId: string): Promise<unknown | null> => {
   }
 }
 
-const getHostUploads = async (maxResults: number): Promise<LatestVideo[]> => {
-  const url = `${BASE_URL}/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${COLLAB_HOST_UPLOADS_PLAYLIST_ID}&key=${API_KEY}`
-  const response = await fetch(url, { next: { revalidate: 3600 } })
-  if (!response.ok) {
-    throw new Error(`YouTube API error: ${response.status}`)
-  }
-
-  const data: LatestVideos = await response.json()
-  if (!Array.isArray(data.items)) {
-    throw new Error("YouTube API: missing playlist items")
-  }
-
-  return data.items
-}
+const getHostUploads = async (maxResults: number): Promise<LatestVideo[]> =>
+  getUploads(COLLAB_HOST_UPLOADS_PLAYLIST_ID, maxResults)
 
 // Guest appearances on a host channel (Dashbit by default): recent uploads
 // where this channel is an accepted YouTube Studio collaborator. The Data API

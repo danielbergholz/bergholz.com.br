@@ -1,10 +1,18 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { DevTo, GitHub, LinkedIn, Twitter, YouTube } from "@/components/icons"
+import {
+  DevTo,
+  GitHub,
+  Instagram,
+  LinkedIn,
+  Twitter,
+  YouTube
+} from "@/components/icons"
 import { Link } from "@/components/link"
 import { getDictionary } from "@/dictionaries"
 import { defaultLocale, hasLocale, pageAlternates } from "@/lib/i18n"
+import { instagramUrl, youtubeChannels } from "@/lib/socials"
 
 export async function generateMetadata({
   params
@@ -44,8 +52,14 @@ export default async function Links({
         aria-label={t.sectionAria}
         className="flex flex-col items-center gap-3"
       >
-        <Link href="https://www.youtube.com/@DanielBergholz" title="YouTube">
-          <YouTube width={28} height={28} />
+        {youtubeChannels(lang).map(({ href, tag }) => (
+          <Link key={href} href={href} title={`YouTube · ${tag}`}>
+            <YouTube width={28} height={28} />
+          </Link>
+        ))}
+
+        <Link href={instagramUrl} title="Instagram">
+          <Instagram width={26} height={26} />
         </Link>
 
         <Link href="https://twitter.com/danielbergholz" title="Twitter">
