@@ -1,9 +1,9 @@
 User-agent: *
 Allow: /
 
-Host: https://bergdaniel.com.br/
+Host: https://bergholz.com.br/
 
-Sitemap: https://bergdaniel.com.br/sitemap.xml
+Sitemap: https://bergholz.com.br/sitemap.xml
 
 # Disallow crawling of internal Next.js files and API routes
 Disallow: /api/

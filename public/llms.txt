@@ -1,6 +1,6 @@
-# https://bergdaniel.com.br llms.txt
+# https://bergholz.com.br llms.txt
 
-- [Daniel Bergholz](https://bergdaniel.com.br/): Software engineer and content creator from Brazil.
-- [Free Programming Courses](https://bergdaniel.com.br/courses): Explore free courses on Elixir, Phoenix, React, and more.
-- [Useful Links](https://bergdaniel.com.br/links): Links to premium content, tech resources, and social media.
-- [TechSchool and Developer Journey](https://bergdaniel.com.br/blog): Explore free programming courses and personal development stories.
+- [Daniel Bergholz](https://bergholz.com.br/): Software engineer and content creator from Brazil.
+- [Free Programming Courses](https://bergholz.com.br/courses): Explore free courses on Elixir, Phoenix, React, and more.
+- [Useful Links](https://bergholz.com.br/links): Links to premium content, tech resources, and social media.
+- [TechSchool and Developer Journey](https://bergholz.com.br/blog): Explore free programming courses and personal development stories.

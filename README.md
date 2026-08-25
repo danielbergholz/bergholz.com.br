@@ -1,4 +1,4 @@
-# bergdaniel.com.br
+# bergholz.com.br
 
 Daniel Bergholz's personal website — built with Next.js 16 (App Router), TypeScript, and Tailwind CSS v4. It pulls in dynamic content from external APIs: videos and course playlists from the YouTube Data API and articles from Dev.to.
 
