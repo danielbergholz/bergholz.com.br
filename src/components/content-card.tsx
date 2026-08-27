@@ -23,14 +23,7 @@ function Thumbnail({
   t: CardLabels
   languageBadge?: string
 }) {
-  const {
-    title,
-    thumbnailUrl,
-    videoUrl,
-    articleUrl,
-    durationSeconds,
-    isCollab
-  } = item
+  const { title, thumbnailUrl, videoUrl, articleUrl, durationSeconds } = item
   const isArticleOnly = !videoUrl && !!articleUrl
 
   return (
@@ -47,16 +40,11 @@ function Thumbnail({
         }
         className="object-cover"
       />
-      {(isArticleOnly || isCollab || languageBadge) && (
+      {(isArticleOnly || languageBadge) && (
         <div className="absolute left-2 top-2 flex flex-wrap gap-1">
           {isArticleOnly && (
             <span className="rounded-sm border border-current/20 bg-background px-1.5 py-0.5 text-[10px] uppercase tracking-widest opacity-70">
               {t.article}
-            </span>
-          )}
-          {isCollab && (
-            <span className="rounded-sm border border-current/20 bg-background px-1.5 py-0.5 text-[10px] uppercase tracking-widest opacity-70">
-              {t.collab}
             </span>
           )}
           {languageBadge && (

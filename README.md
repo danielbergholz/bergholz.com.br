@@ -20,7 +20,6 @@ Copy `.env.example` to `.env` and fill in:
 - `YOUTUBE_API_KEY` — YouTube Data API key
 - `YOUTUBE_CHANNEL_ID` — channel ID for fetching videos and playlists
 - `YOUTUBE_CHANNEL_ID_BR` — (optional) Brazilian Portuguese channel; its uploads join the content feed and its stats are added to the totals
-- `YOUTUBE_COLLAB_CHANNEL_ID` — (optional) host channel to scan for Studio collabs; defaults to Dashbit
 - `DEV_TO_API_KEY` — Dev.to API key for articles
 
 `YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, and `DEV_TO_API_KEY` are required. The data-access layer throws on a failed API response (so a broken or empty page is never cached), so the build will error if a required key is missing or invalid.
