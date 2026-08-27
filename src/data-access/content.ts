@@ -35,10 +35,17 @@ export const getContentFeed = async (): Promise<ContentItem[]> => {
     "pt-BR"
   )
 
+  // The BR channel posts no Shorts, so its short uploads are real videos —
+  // exempt them from the duration-based Shorts filter.
+  const brVideoIds = new Set(
+    videosBr.map((video) => video.snippet.resourceId.videoId)
+  )
+
   return buildContentFeed(
     [...videos, ...videosBr],
     articles,
     courseVideoIds,
-    detailsWithLanguage
+    detailsWithLanguage,
+    brVideoIds
   )
 }

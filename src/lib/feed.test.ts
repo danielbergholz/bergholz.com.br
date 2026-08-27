@@ -300,3 +300,23 @@ test("sorts newest first across videos and articles", () => {
     ["article-3", "oldvid00001"]
   )
 })
+
+test("shortsExemptIds keeps short videos that would otherwise be dropped", () => {
+  const exemptShort = video({ id: "brwelcome01" })
+  const normalShort = video({ id: "realshort01" })
+  const feed = buildContentFeed(
+    [exemptShort, normalShort],
+    [],
+    noCourses,
+    durations([
+      ["brwelcome01", 122],
+      ["realshort01", 60]
+    ]),
+    new Set(["brwelcome01"])
+  )
+
+  assert.deepEqual(
+    feed.map((i) => i.id),
+    ["brwelcome01"]
+  )
+})
