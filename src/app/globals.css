@@ -101,3 +101,322 @@
     display: none;
   }
 }
+
+/*
+  Blog post bodies come pre-rendered from dev.to (Forem): plain HTML plus
+  Rouge-highlighted code (Pygments-compatible token classes inside
+  .highlight), YouTube <iframe>s and GIFs/images from dev.to's CDN. No
+  highlighting JS needed — just this CSS. Tailwind's preflight strips the
+  browser defaults, so every element is styled explicitly here.
+*/
+@layer components {
+  /* Rouge palette (GitHub light/dark), scoped to post bodies. `literal`
+     covers numbers, constants and attribute/JSON keys, which share a hue. */
+  .article-body {
+    --code-bg: #f6f8fa;
+    --hl-comment: #6a737d;
+    --hl-keyword: #d73a49;
+    --hl-string: #032f62;
+    --hl-literal: #005cc5;
+    --hl-name: #24292e;
+    --hl-function: #6f42c1;
+    --hl-tag: #22863a;
+    --hl-variable: #e36209;
+    --hl-deleted-bg: #ffeef0;
+    --hl-inserted-bg: #f0fff4;
+
+    font-size: 1rem;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .article-body {
+      --code-bg: #0d1117;
+      --hl-comment: #8b949e;
+      --hl-keyword: #ff7b72;
+      --hl-string: #a5d6ff;
+      --hl-literal: #79c0ff;
+      --hl-name: #c9d1d9;
+      --hl-function: #d2a8ff;
+      --hl-tag: #7ee787;
+      --hl-variable: #ffa657;
+      --hl-deleted-bg: rgb(248 81 73 / 0.18);
+      --hl-inserted-bg: rgb(63 185 80 / 0.18);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .article-body {
+      font-size: 1.0625rem;
+    }
+  }
+
+  .article-body > * + * {
+    margin-top: 1.25em;
+  }
+
+  .article-body h2,
+  .article-body h3,
+  .article-body h4 {
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-top: 2em;
+    scroll-margin-top: 5rem;
+  }
+
+  .article-body h2 {
+    font-size: 1.5em;
+  }
+
+  .article-body h3 {
+    font-size: 1.25em;
+  }
+
+  .article-body h4 {
+    font-size: 1.1em;
+  }
+
+  /* dev.to emits an empty <a name="…"> inside each heading as the anchor
+     target. As a zero-height block it takes no space (inline it would leave
+     a stray leading gap before the heading text) and still scroll-offsets
+     like the heading. */
+  .article-body h2 > a[name],
+  .article-body h3 > a[name],
+  .article-body h4 > a[name] {
+    display: block;
+    height: 0;
+    scroll-margin-top: 5rem;
+  }
+
+  .article-body a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(var(--foreground-rgb), 0.4);
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .article-body a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .article-body strong {
+    font-weight: 700;
+  }
+
+  .article-body em {
+    font-style: italic;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    padding-left: 1.5em;
+  }
+
+  .article-body ul {
+    list-style: disc;
+  }
+
+  .article-body ol {
+    list-style: decimal;
+  }
+
+  .article-body li + li {
+    margin-top: 0.4em;
+  }
+
+  .article-body li > p {
+    margin: 0;
+  }
+
+  .article-body blockquote {
+    border-left: 2px solid rgba(var(--foreground-rgb), 0.3);
+    padding-left: 1.25em;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .article-body hr {
+    border: 0;
+    border-top: 1px solid rgba(var(--foreground-rgb), 0.15);
+    margin: 2.5em 0;
+  }
+
+  /* Images and GIFs (dev.to wraps each in an <a class="article-body-image-wrapper">).
+     Natural size, never wider than the column, centered. */
+  .article-body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 0.5rem;
+  }
+
+  .article-body a.article-body-image-wrapper {
+    display: block;
+    text-decoration: none;
+  }
+
+  /* YouTube embeds already ship width:100% + aspect-ratio:16/9 inline. */
+  .article-body iframe {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 0.5rem;
+  }
+
+  .article-body table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.9em;
+  }
+
+  .article-body th,
+  .article-body td {
+    padding: 0.5em 0.75em;
+    text-align: left;
+    border-bottom: 1px solid rgba(var(--foreground-rgb), 0.15);
+  }
+
+  .article-body th {
+    font-weight: 700;
+  }
+
+  .article-body code {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+      monospace;
+    font-size: 0.875em;
+  }
+
+  .article-body :not(pre) > code {
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    background: rgba(var(--foreground-rgb), 0.07);
+  }
+
+  .article-body pre {
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(var(--foreground-rgb), 0.1);
+    border-radius: 0.5rem;
+    background: var(--code-bg);
+    color: var(--hl-name);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .article-body pre code {
+    padding: 0;
+    background: none;
+    font-size: inherit;
+  }
+
+  /* dev.to's fullscreen toggle for code blocks needs its own JS — drop it. */
+  .article-body .highlight__panel {
+    display: none;
+  }
+
+  /* Rouge / Pygments token classes (plain names/punctuation inherit the
+     <pre> colour). */
+  .article-body .c,
+  .article-body .c1,
+  .article-body .cm,
+  .article-body .cs,
+  .article-body .cp,
+  .article-body .cpf {
+    color: var(--hl-comment);
+    font-style: italic;
+  }
+
+  .article-body .k,
+  .article-body .kd,
+  .article-body .kn,
+  .article-body .kp,
+  .article-body .kr,
+  .article-body .kv,
+  .article-body .ow,
+  .article-body .ne,
+  .article-body .err {
+    color: var(--hl-keyword);
+  }
+
+  .article-body .kt,
+  .article-body .kc,
+  .article-body .nb,
+  .article-body .bp,
+  .article-body .no,
+  .article-body .sr,
+  .article-body .se,
+  .article-body .ss,
+  .article-body .m,
+  .article-body .mi,
+  .article-body .mf,
+  .article-body .mh,
+  .article-body .mo,
+  .article-body .mb,
+  .article-body .mx,
+  .article-body .il,
+  .article-body .na,
+  .article-body .nl {
+    color: var(--hl-literal);
+  }
+
+  .article-body .s,
+  .article-body .s1,
+  .article-body .s2,
+  .article-body .sa,
+  .article-body .sb,
+  .article-body .sc,
+  .article-body .sd,
+  .article-body .sh,
+  .article-body .si,
+  .article-body .sx,
+  .article-body .dl {
+    color: var(--hl-string);
+  }
+
+  .article-body .nf,
+  .article-body .fm,
+  .article-body .nd,
+  .article-body .nc,
+  .article-body .nn {
+    color: var(--hl-function);
+  }
+
+  .article-body .nt {
+    color: var(--hl-tag);
+  }
+
+  .article-body .nv,
+  .article-body .vi,
+  .article-body .vc,
+  .article-body .vg,
+  .article-body .vm {
+    color: var(--hl-variable);
+  }
+
+  .article-body .gd {
+    background: var(--hl-deleted-bg);
+  }
+
+  .article-body .gi {
+    background: var(--hl-inserted-bg);
+  }
+
+  .article-body .gh,
+  .article-body .gu,
+  .article-body .gs {
+    font-weight: 700;
+  }
+
+  .article-body .ge {
+    font-style: italic;
+  }
+}

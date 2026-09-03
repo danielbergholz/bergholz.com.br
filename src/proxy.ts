@@ -30,7 +30,9 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals and any file with an extension (static assets and
-  // metadata routes like sitemap.xml, robots.txt, og.png).
-  matcher: ["/((?!_next|.*\\..*).*)"]
+  // Skip Next internals, /api/* route handlers (they live outside [lang]) and
+  // any file with an extension (static assets and metadata routes like
+  // sitemap.xml, robots.txt, og.png). Routes under [lang] must therefore be
+  // extensionless — which is why the RSS feed is /blog/feed, not rss.xml.
+  matcher: ["/((?!_next|api/|.*\\..*).*)"]
 }

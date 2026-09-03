@@ -4,11 +4,47 @@ import type { Locale } from "@/lib/i18n"
 import type { ContentItem } from "@/lib/types"
 import { formatDuration, readableDate } from "@/lib/utils"
 import Image from "next/image"
+import Link from "next/link"
 
-const CARD_BASE =
+export const CARD_BASE =
   "group flex rounded-lg border border-current/10 dark:border-current/20 hover:border-current/30 dark:hover:border-current/40 transition-all duration-300 motion-reduce:transition-none"
 
 type CardLabels = Dictionary["card"]
+
+const isExternal = (href: string) => /^https?:\/\//i.test(href)
+
+// External targets (YouTube, dev.to) open in a new tab; internal ones (a post
+// on this site) are client-side navigations.
+function CardLink({
+  href,
+  className,
+  title,
+  children
+}: {
+  href: string
+  className?: string
+  title?: string
+  children: React.ReactNode
+}) {
+  if (isExternal(href)) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer noopener"
+        title={title}
+        className={className}
+      >
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href} title={title} className={className}>
+      {children}
+    </Link>
+  )
+}
 
 function Thumbnail({
   item,
@@ -92,24 +128,20 @@ function Actions({
     return (
       <div className="flex flex-wrap items-center gap-3">
         {videoUrl && (
-          <a
+          <CardLink
             href={videoUrl}
-            target="_blank"
-            rel="noreferrer noopener"
             className="inline-flex items-center justify-center gap-2 rounded-sm bg-foreground min-h-11 px-4 py-2.5 text-xs uppercase tracking-widest text-background hover:opacity-80 transition-opacity"
           >
             <Play width={14} height={14} /> {t.watch}
-          </a>
+          </CardLink>
         )}
         {articleUrl && (
-          <a
+          <CardLink
             href={articleUrl}
-            target="_blank"
-            rel="noreferrer noopener"
             className="inline-flex items-center justify-center gap-2 rounded-sm border border-current/30 min-h-11 px-4 py-2.5 text-xs uppercase tracking-widest hover:border-current/60 transition-colors"
           >
             <Read width={14} height={14} /> {t.read}
-          </a>
+          </CardLink>
         )}
       </div>
     )
@@ -118,27 +150,17 @@ function Actions({
   return (
     <div className="flex shrink-0 items-center gap-2">
       {videoUrl && (
-        <a
-          href={videoUrl}
-          target="_blank"
-          rel="noreferrer noopener"
-          className={compactActionClass}
-        >
+        <CardLink href={videoUrl} className={compactActionClass}>
           <Play width={12} height={12} /> {t.watch}
-        </a>
+        </CardLink>
       )}
       {articleUrl && (
-        <a
-          href={articleUrl}
-          target="_blank"
-          rel="noreferrer noopener"
-          className={compactActionClass}
-        >
+        <CardLink href={articleUrl} className={compactActionClass}>
           <Read width={12} height={12} /> {t.read}
           {readingMinutes != null && (
             <span className="opacity-60">· {readingMinutes}m</span>
           )}
-        </a>
+        </CardLink>
       )}
     </div>
   )
@@ -180,10 +202,8 @@ export function ContentCard({
       <article
         className={`${CARD_BASE} flex-col md:flex-row gap-5 md:gap-6 p-5 md:p-6`}
       >
-        <a
+        <CardLink
           href={primary}
-          target="_blank"
-          rel="noreferrer noopener"
           title={title}
           className="block md:w-[440px] md:shrink-0"
         >
@@ -194,18 +214,13 @@ export function ContentCard({
             t={t}
             languageBadge={languageBadge}
           />
-        </a>
+        </CardLink>
         <div className="flex flex-1 flex-col gap-3">
-          <a
-            href={primary}
-            target="_blank"
-            rel="noreferrer noopener"
-            title={title}
-          >
+          <CardLink href={primary} title={title}>
             <h2 className="text-xl md:text-2xl font-bold leading-tight group-hover:opacity-80 transition-opacity">
               {title}
             </h2>
-          </a>
+          </CardLink>
           {description && (
             <p className="opacity-50 text-sm md:text-base leading-relaxed line-clamp-3">
               {description}
@@ -229,13 +244,7 @@ export function ContentCard({
 
   return (
     <article className={`${CARD_BASE} flex-col gap-3 p-4`}>
-      <a
-        href={primary}
-        target="_blank"
-        rel="noreferrer noopener"
-        title={title}
-        className="flex flex-col gap-3"
-      >
+      <CardLink href={primary} title={title} className="flex flex-col gap-3">
         <Thumbnail
           item={item}
           featured={false}
@@ -246,7 +255,7 @@ export function ContentCard({
         <h2 className="font-bold text-base md:text-lg leading-snug line-clamp-2 group-hover:opacity-80 transition-opacity">
           {title}
         </h2>
-      </a>
+      </CardLink>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs uppercase tracking-widest opacity-60">
           {readableDate(date, locale)}

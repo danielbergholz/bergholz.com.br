@@ -11,6 +11,7 @@ export type SiteRoute = {
 export const siteRoutes: SiteRoute[] = [
   { path: "/", changeFrequency: "monthly", priority: 1.0 },
   { path: "/videos", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/blog", changeFrequency: "weekly", priority: 0.9 },
   { path: "/courses", changeFrequency: "monthly", priority: 0.8 },
   { path: "/products", changeFrequency: "monthly", priority: 0.7 },
   { path: "/work-with-me", changeFrequency: "monthly", priority: 0.7 },

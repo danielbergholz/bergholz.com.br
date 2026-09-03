@@ -2,13 +2,20 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import {
   articleSlugFromDescription,
+  articleUrl,
   buildContentFeed,
   firstMeaningfulLine,
-  siteLanguage,
   videoIdFromBody,
-  withChannelLanguage
+  withChannelLanguage,
+  withPublishedMetadata
 } from "./feed.ts"
-import type { Article, LatestVideo, VideoDetails } from "./types"
+import { siteLanguage } from "./i18n.ts"
+import type {
+  Article,
+  LatestVideo,
+  PublishedArticle,
+  VideoDetails
+} from "./types.ts"
 
 // --- fixtures ---
 const thumb = (url: string) => ({ url, width: 1280, height: 720 })
@@ -42,6 +49,7 @@ function article(opts: {
   description?: string
   body?: string
   minutes?: number
+  language?: "en" | "pt"
 }): Article {
   return {
     id: opts.id,
@@ -54,7 +62,30 @@ function article(opts: {
     social_image: `social-${opts.id}`,
     reading_time_minutes: opts.minutes ?? 5,
     tag_list: [],
-    body_markdown: opts.body ?? ""
+    body_markdown: opts.body ?? "",
+    language: opts.language
+  }
+}
+
+function published(opts: {
+  id: number
+  slug: string
+  language: string
+}): PublishedArticle {
+  return {
+    id: opts.id,
+    title: `Post ${opts.id}`,
+    slug: opts.slug,
+    description: `desc ${opts.id}`,
+    published_at: "2025-01-01T00:00:00Z",
+    edited_at: null,
+    url: `https://dev.to/danielbergholz/${opts.slug}`,
+    canonical_url: `https://dev.to/danielbergholz/${opts.slug}`,
+    cover_image: `cover-${opts.id}`,
+    social_image: `public-social-${opts.id}`,
+    reading_time_minutes: 5,
+    tag_list: [],
+    language: opts.language
   }
 }
 
@@ -319,4 +350,58 @@ test("shortsExemptIds keeps short videos that would otherwise be dropped", () =>
     feed.map((i) => i.id),
     ["brwelcome01"]
   )
+})
+
+test("withPublishedMetadata merges language and social image by id", () => {
+  const known = article({ id: 1, slug: "known" })
+  const unknown = article({ id: 2, slug: "unknown" })
+  const result = withPublishedMetadata(
+    [known, unknown],
+    [
+      published({ id: 1, slug: "known", language: "pt" }),
+      published({ id: 3, slug: "other", language: "en" })
+    ]
+  )
+
+  assert.equal(result[0].language, "pt")
+  assert.equal(result[0].social_image, "public-social-1")
+  assert.equal(result[1].language, undefined, "not in the public list")
+  assert.equal(known.language, undefined, "input is not mutated")
+})
+
+test("articleUrl points at the site when the locale is known, else dev.to", () => {
+  assert.equal(
+    articleUrl(article({ id: 1, slug: "post-pt", language: "pt" })),
+    "/blog/post-pt"
+  )
+  assert.equal(
+    articleUrl(article({ id: 2, slug: "post-en", language: "en" })),
+    "/en/blog/post-en"
+  )
+  assert.equal(
+    articleUrl(article({ id: 3, slug: "new" })),
+    "https://dev.to/danielbergholz/new"
+  )
+})
+
+test("feed cards link Read to the site page and carry the post language", () => {
+  const v = video({ id: "vid1111aaaa" })
+  const paired = article({
+    id: 1,
+    slug: "paired",
+    body: "https://youtu.be/vid1111aaaa",
+    language: "en"
+  })
+  const solo = article({ id: 2, slug: "solo", language: "pt" })
+  const feed = buildContentFeed(
+    [v],
+    [paired, solo],
+    noCourses,
+    durations([["vid1111aaaa", 600]])
+  )
+  const byId = new Map(feed.map((i) => [i.id, i]))
+
+  assert.equal(byId.get("vid1111aaaa")?.articleUrl, "/en/blog/paired")
+  assert.equal(byId.get("article-2")?.articleUrl, "/blog/solo")
+  assert.equal(byId.get("article-2")?.language, "pt")
 })

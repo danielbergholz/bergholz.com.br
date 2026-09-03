@@ -1,6 +1,6 @@
 # bergholz.com.br
 
-Daniel Bergholz's personal website — built with Next.js 16 (App Router), TypeScript, and Tailwind CSS v4. It pulls in dynamic content from external APIs: videos and course playlists from the YouTube Data API and articles from Dev.to.
+Daniel Bergholz's personal website — built with Next.js 16 (App Router), TypeScript, and Tailwind CSS v4. It pulls in dynamic content from external APIs: videos and course playlists from the YouTube Data API, and blog posts from Dev.to (which acts as a headless CMS — see [Blog](#blog)).
 
 ## Getting Started
 
@@ -20,7 +20,8 @@ Copy `.env.example` to `.env` and fill in:
 - `YOUTUBE_API_KEY` — YouTube Data API key
 - `YOUTUBE_CHANNEL_ID` — channel ID for fetching videos and playlists
 - `YOUTUBE_CHANNEL_ID_BR` — (optional) Brazilian Portuguese channel; its uploads join the content feed and its stats are added to the totals
-- `DEV_TO_API_KEY` — Dev.to API key for articles
+- `DEV_TO_API_KEY` — Dev.to API key (only the authenticated list, which carries each post's markdown for video pairing, needs it; the blog itself uses the public API)
+- `REVALIDATE_SECRET` — (optional) enables `POST /api/revalidate` for on-demand revalidation; see [Blog](#blog)
 
 `YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, and `DEV_TO_API_KEY` are required. The data-access layer throws on a failed API response (so a broken or empty page is never cached), so the build will error if a required key is missing or invalid.
 
@@ -53,6 +54,26 @@ Copy `.env.example` to `.env` and fill in:
 ## Internationalization
 
 The site is bilingual: Brazilian Portuguese is the default and lives at the root (`/videos`), English lives under `/en` (`/en/videos`). There is no i18n library — routing is a `[lang]` segment plus a small proxy rewrite, and translations are two JSON dictionaries. Every page emits `hreflang` alternates and a locale-specific canonical URL, and the sitemap lists both URL sets.
+
+## Blog
+
+Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the site is their canonical home. The public Forem API is read with ISR (1 hour) and rendered at `/blog/<slug>` (Portuguese posts) and `/en/blog/<slug>` (English posts), split by the `language` field Dev.to reports. Each post's `canonical_url` on Dev.to points back to its page here (set per post in the Dev.to editor). Post bodies arrive as sanitized HTML with Rouge-highlighted code, so there is no Markdown or highlighting dependency — just CSS (`.article-body` in `globals.css`).
+
+Requests to Dev.to are kept to a minimum: the listing is fetched once per hour and shared (via the Data Cache) by the home page, `/videos`, `/blog`, every post page, the sitemap and the RSS feeds (`/blog/feed`, `/en/blog/feed`); each post body is fetched once per hour on top of that. Unknown slugs are answered from the cached listing without calling Dev.to. A new post appears on its first visit (or the next hourly revalidation of `/blog`).
+
+To update sooner than the hourly window, set `REVALIDATE_SECRET` (locally in `.env`, and in the Vercel project) and call:
+
+```bash
+curl -X POST "https://bergholz.com.br/api/revalidate?secret=$REVALIDATE_SECRET"
+```
+
+The same call can be triggered automatically by Dev.to on publish/update via its webhooks (creating one requires the API key):
+
+```bash
+curl -X POST https://dev.to/api/webhooks \
+  -H "api-key: $DEV_TO_API_KEY" -H "Content-Type: application/json" \
+  -d '{"webhook_endpoint":{"target_url":"https://bergholz.com.br/api/revalidate?secret=<REVALIDATE_SECRET>","source":"bergholz.com.br","events":["article_created","article_updated"]}}'
+```
 
 > Working in this repo with an AI coding agent? See [`AGENTS.md`](./AGENTS.md).
 

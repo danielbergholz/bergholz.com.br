@@ -1,9 +1,12 @@
+import { blogArticlePath } from "./blog.ts"
+import { siteLanguage } from "./i18n.ts"
 import type {
   Article,
   ContentItem,
   LatestVideo,
+  PublishedArticle,
   VideoDetails
-} from "@/lib/types"
+} from "./types.ts"
 
 // Videos at or under this length are treated as Shorts and dropped from the feed.
 // The API has no Shorts flag; this channel's Shorts are all <=65s and its shortest
@@ -46,13 +49,6 @@ export function firstMeaningfulLine(text: string): string | undefined {
   return undefined
 }
 
-// Collapse YouTube's BCP-47 tag ("en", "en-US", "pt-BR") to the site's two
-// languages; anything else (or unset) is unknown and gets no badge.
-export function siteLanguage(tag: string | undefined): "en" | "pt" | undefined {
-  const primary = tag?.split("-")[0].toLowerCase()
-  return primary === "en" || primary === "pt" ? primary : undefined
-}
-
 // Details map with a channel-level language fallback applied: videos that
 // don't declare a language on YouTube inherit their channel's language, so
 // e.g. BR-channel uploads still get a language badge. Pure — returns a new
@@ -75,6 +71,34 @@ export function withChannelLanguage(
   return result
 }
 
+// The authenticated list has the post bodies but no `language`/`social_image`;
+// the public list has those but no bodies. Merge the public metadata in by id
+// so the feed can link posts to their page on this site. Pure — returns new
+// objects, never mutates the input.
+export function withPublishedMetadata(
+  articles: Article[],
+  published: PublishedArticle[]
+): Article[] {
+  const byId = new Map(published.map((article) => [article.id, article]))
+  return articles.map((article) => {
+    const meta = byId.get(article.id)
+    if (!meta) return article
+    return {
+      ...article,
+      language: siteLanguage(meta.language),
+      social_image: meta.social_image || article.social_image
+    }
+  })
+}
+
+// Where "Read" goes: the post's page on this site when we know which locale
+// it belongs to, else its dev.to URL (a post not yet in the public list).
+export function articleUrl(article: Article): string {
+  return article.language
+    ? blogArticlePath(article.language, article.slug)
+    : article.url
+}
+
 function videoToItem(
   video: LatestVideo,
   article: Article | undefined,
@@ -94,7 +118,7 @@ function videoToItem(
     durationSeconds: details?.durationSeconds,
     language: siteLanguage(details?.language),
     videoUrl: `https://www.youtube.com/watch?v=${resourceId.videoId}`,
-    articleUrl: article?.url,
+    articleUrl: article ? articleUrl(article) : undefined,
     readingMinutes: article?.reading_time_minutes
   }
 }
@@ -104,14 +128,15 @@ function articleToItem(article: Article, videoId: string | null): ContentItem {
     id: `article-${article.id}`,
     title: article.title,
     date: article.published_at,
-    thumbnailUrl: article.cover_image || article.social_image,
+    thumbnailUrl: article.cover_image || article.social_image || "",
     description: article.description,
+    language: article.language,
     // The post may link a video that's older than the fetched window — still
     // offer "Watch" from the parsed id even though that video has no own card.
     videoUrl: videoId
       ? `https://www.youtube.com/watch?v=${videoId}`
       : undefined,
-    articleUrl: article.url,
+    articleUrl: articleUrl(article),
     readingMinutes: article.reading_time_minutes
   }
 }

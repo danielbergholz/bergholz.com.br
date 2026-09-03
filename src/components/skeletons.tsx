@@ -117,6 +117,27 @@ export function VideosLoadingSkeleton() {
   )
 }
 
+export function BlogLoadingSkeleton() {
+  return (
+    <div className="flex flex-col gap-4" aria-hidden="true">
+      {skeletonKeys.three.map((key) => (
+        <div
+          key={key}
+          className="flex flex-col md:flex-row gap-5 md:gap-6 p-5 md:p-6 rounded-lg border border-current/10 dark:border-current/20"
+        >
+          <Pulse className="aspect-[1000/420] w-full md:w-[360px] md:shrink-0" />
+          <div className="flex flex-1 flex-col gap-3">
+            <Pulse className="h-7 w-3/4" />
+            <Pulse className="h-4 w-full" />
+            <Pulse className="h-4 w-5/6" />
+            <Pulse className="h-3 w-1/3 mt-2" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function CoursesLoadingSkeleton() {
   return (
     <div className="my-14 md:my-28 max-w-[978px] mx-auto flex flex-col gap-6">

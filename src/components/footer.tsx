@@ -46,6 +46,7 @@ type Props = {
 export function Footer({ locale, t, nav }: Props) {
   const footerLinks = [
     { href: localePath(locale, "/videos"), label: nav.videos },
+    { href: localePath(locale, "/blog"), label: nav.blog },
     { href: localePath(locale, "/courses"), label: nav.courses },
     { href: localePath(locale, "/products"), label: nav.products },
     { href: localePath(locale, "/work-with-me"), label: nav.workWithMe },

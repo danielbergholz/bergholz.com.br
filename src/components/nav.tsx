@@ -41,6 +41,7 @@ export function Nav({ locale, t }: Props) {
 
   const navLinks = [
     { href: localePath(locale, "/videos"), label: t.videos, prefetch: true },
+    { href: localePath(locale, "/blog"), label: t.blog, prefetch: true },
     { href: localePath(locale, "/courses"), label: t.courses, prefetch: true },
     { href: localePath(locale, "/products"), label: t.products },
     { href: localePath(locale, "/work-with-me"), label: t.workWithMe }

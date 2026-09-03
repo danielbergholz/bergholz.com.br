@@ -9,6 +9,10 @@
       "title": "Vídeos | Daniel Bergholz",
       "description": "Assista aos vídeos do Daniel Bergholz ou leia a versão em artigo: tutoriais de desenvolvimento web fullstack, dicas de programação e conteúdo para devs"
     },
+    "blog": {
+      "title": "Blog | Daniel Bergholz",
+      "description": "Artigos do Daniel Bergholz sobre engenharia de software, ferramentas de IA, Elixir, React e construção de produtos SaaS"
+    },
     "courses": {
       "title": "Cursos | Daniel Bergholz",
       "description": "Cursos gratuitos e premium de desenvolvimento web fullstack"
@@ -29,6 +33,7 @@
   "nav": {
     "skipLink": "Pular para o conteúdo",
     "videos": "Vídeos",
+    "blog": "Blog",
     "courses": "Cursos",
     "products": "Produtos",
     "workWithMe": "Trabalhe comigo",
@@ -66,6 +71,17 @@
   "videos": {
     "title": "Vídeos",
     "intro": "Tudo que eu publico, do mais recente ao mais antigo — incluindo participações em outros canais. A maioria dos meus vídeos também tem versão escrita: assista no YouTube ou leia o artigo, como preferir."
+  },
+  "blog": {
+    "title": "Blog",
+    "intro": "Versões escritas dos meus vídeos e ensaios avulsos, do mais recente ao mais antigo. Os posts também vão para o DEV.to, mas a casa deles é aqui.",
+    "empty": "Nenhum post em português ainda. Volte em breve.",
+    "otherLocaleHint": "Também escrevo em inglês:",
+    "otherLocaleLink": "veja os posts em inglês",
+    "rss": "Feed RSS",
+    "backToBlog": "Todos os posts",
+    "discussOnDevto": "Comentar no DEV.to",
+    "tagsAria": "Tags"
   },
   "feed": {
     "searchLabel": "Buscar vídeos e artigos",

@@ -3,6 +3,7 @@ import { Instrument_Serif, Poppins } from "next/font/google"
 import Script from "next/script"
 
 import { Footer } from "@/components/footer"
+import { JsonLd } from "@/components/json-ld"
 import { Nav } from "@/components/nav"
 import { getDictionary } from "@/dictionaries"
 import {
@@ -11,7 +12,9 @@ import {
   languageTags,
   localePath,
   locales,
-  pageAlternates
+  openGraphLocales,
+  pageAlternates,
+  siteUrl
 } from "@/lib/i18n"
 import "../globals.css"
 
@@ -37,7 +40,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale)
 
   return {
-    metadataBase: new URL("https://bergholz.com.br"),
+    metadataBase: new URL(siteUrl),
     alternates: pageAlternates(locale, "/"),
     title: dict.meta.home.title,
     description: dict.meta.home.description,
@@ -75,7 +78,7 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       siteName: "Daniel Bergholz",
-      locale: locale === "pt" ? "pt_BR" : "en_US",
+      locale: openGraphLocales[locale],
       title: dict.meta.home.title,
       url: localePath(locale, "/"),
       description: dict.meta.home.ogDescription,
@@ -171,13 +174,7 @@ export default async function RootLayout({
         <meta name="color-scheme" content="light dark" />
 
         {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: Safe JSON-LD structured data
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(personSchema)
-          }}
-        />
+        <JsonLd data={personSchema} />
 
         {/* Analytics — next/script so client-side locale switches don't
             re-render a raw script tag React can't execute */}

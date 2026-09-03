@@ -1,11 +1,15 @@
-import { getArticles } from "@/data-access/blog"
+import { getArticles, getPublishedArticles } from "@/data-access/blog"
 import {
   getCourseVideoIds,
   getLatestVideos,
   getLatestVideosBr,
   getVideoDetails
 } from "@/data-access/youtube"
-import { buildContentFeed, withChannelLanguage } from "@/lib/feed"
+import {
+  buildContentFeed,
+  withChannelLanguage,
+  withPublishedMetadata
+} from "@/lib/feed"
 import type { ContentItem } from "@/lib/types"
 
 // Fetches everything the merged feed needs, then hands off to the pure
@@ -13,12 +17,14 @@ import type { ContentItem } from "@/lib/types"
 // `body_markdown` is consumed in there and never returned, so the large article
 // bodies don't reach the client.
 export const getContentFeed = async (): Promise<ContentItem[]> => {
-  const [videos, videosBr, articles, courseVideoIds] = await Promise.all([
-    getLatestVideos(50),
-    getLatestVideosBr(50),
-    getArticles(),
-    getCourseVideoIds()
-  ])
+  const [videos, videosBr, articles, publishedArticles, courseVideoIds] =
+    await Promise.all([
+      getLatestVideos(50),
+      getLatestVideosBr(50),
+      getArticles(),
+      getPublishedArticles(),
+      getCourseVideoIds()
+    ])
 
   const details = await getVideoDetails([
     ...new Set(
@@ -43,7 +49,9 @@ export const getContentFeed = async (): Promise<ContentItem[]> => {
 
   return buildContentFeed(
     [...videos, ...videosBr],
-    articles,
+    // The public list adds each post's language, which decides whether "Read"
+    // links to /blog/<slug> or /en/blog/<slug>.
+    withPublishedMetadata(articles, publishedArticles),
     courseVideoIds,
     detailsWithLanguage,
     brVideoIds
