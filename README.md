@@ -62,13 +62,11 @@ Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the 
 
 Requests to Dev.to are kept to a minimum: the listing is fetched once per hour and shared (via the Data Cache) by the home page, `/videos`, `/blog`, every post page, the sitemap and the RSS feeds (`/blog/feed`, `/en/blog/feed`); each post body is fetched once per hour on top of that. Unknown slugs are answered from the cached listing without calling Dev.to. A new post appears on its first visit (or the next hourly revalidation of `/blog`).
 
-To update sooner than the hourly window, `REVALIDATE_SECRET` (set on Vercel for Production and Preview; `vercel env pull` copies it into `.env.local`, or add it to `.env`) enables `POST /api/revalidate`. After publishing or editing a post on Dev.to, run:
+Publishing lives in the content repos (`~/conteudo` for Portuguese, `~/content` for English): their `scripts/sync-devto.sh`, run after a draft goes live on Dev.to, calls `POST /api/revalidate` here (with `REVALIDATE_SECRET`, set on Vercel for Production and Preview) and points the Dev.to `canonical_url` at the post's page on this site. Dev.to cannot call this itself: Forem removed its webhooks API. To refresh by hand, add the secret to `.env` (or `vercel env pull`) and run:
 
 ```bash
 npm run revalidate
 ```
-
-It sends the secret as a bearer token and expires every cached Dev.to response; each page regenerates on its next visit. Dev.to cannot call this automatically: Forem removed its webhooks API (`/api/webhooks` returns 404 and is gone from the v1 docs), so the script is the trigger.
 
 > Working in this repo with an AI coding agent? See [`AGENTS.md`](./AGENTS.md).
 
