@@ -86,7 +86,7 @@ function Actions({
   const { videoUrl, articleUrl, readingMinutes } = item
 
   const compactActionClass =
-    "inline-flex items-center justify-center gap-1 rounded-sm border border-current/20 min-h-11 px-3 py-2 text-[11px] uppercase tracking-wide opacity-70 hover:opacity-100 transition-opacity md:min-h-0 md:px-2 md:py-1"
+    "inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-sm border border-current/20 min-h-11 px-3 py-2 text-[11px] uppercase tracking-wide opacity-70 hover:opacity-100 transition-opacity md:min-h-0 md:px-2 md:py-1"
 
   if (featured) {
     return (
@@ -116,7 +116,7 @@ function Actions({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex shrink-0 items-center gap-2">
       {videoUrl && (
         <a
           href={videoUrl}
@@ -247,7 +247,7 @@ export function ContentCard({
           {title}
         </h2>
       </a>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs uppercase tracking-widest opacity-60">
           {readableDate(date, locale)}
         </span>
