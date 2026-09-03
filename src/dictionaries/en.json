@@ -19,7 +19,7 @@
     },
     "links": {
       "title": "Links | Daniel Bergholz",
-      "description": "Social media links: YouTube, Instagram, Twitter, Blog and GitHub"
+      "description": "Social media links: YouTube, Instagram, Twitter, LinkedIn and GitHub"
     },
     "products": {
       "title": "Products - Daniel Bergholz",
@@ -74,7 +74,7 @@
   },
   "blog": {
     "title": "Blog",
-    "intro": "Written versions of my videos and standalone essays, newest first. Posts are also cross-posted to DEV.to, but this is their home.",
+    "intro": "Written versions of my videos and standalone essays, newest first.",
     "empty": "No posts in English yet. Check back soon.",
     "otherLocaleHint": "I also write in Portuguese. That list is separate from this one.",
     "otherLocaleLink": "See the posts in Portuguese",
@@ -119,8 +119,7 @@
   },
   "links": {
     "title": "Links",
-    "sectionAria": "Social Media Links",
-    "blog": "Blog"
+    "sectionAria": "Social Media Links"
   },
   "products": {
     "title": "Products",

@@ -19,7 +19,7 @@
     },
     "links": {
       "title": "Links | Daniel Bergholz",
-      "description": "Links das redes sociais: YouTube, Instagram, Twitter, Blog e GitHub"
+      "description": "Links das redes sociais: YouTube, Instagram, Twitter, LinkedIn e GitHub"
     },
     "products": {
       "title": "Produtos - Daniel Bergholz",
@@ -74,7 +74,7 @@
   },
   "blog": {
     "title": "Blog",
-    "intro": "Versões escritas dos meus vídeos e ensaios avulsos, do mais recente ao mais antigo. Os posts também vão para o DEV.to, mas a casa deles é aqui.",
+    "intro": "Versões escritas dos meus vídeos e ensaios avulsos, do mais recente ao mais antigo.",
     "empty": "Nenhum post em português ainda. Volte em breve.",
     "otherLocaleHint": "Também escrevo em inglês. A lista lá é separada desta.",
     "otherLocaleLink": "Ver os posts em inglês",
@@ -119,8 +119,7 @@
   },
   "links": {
     "title": "Links",
-    "sectionAria": "Links das redes sociais",
-    "blog": "Blog"
+    "sectionAria": "Links das redes sociais"
   },
   "products": {
     "title": "Produtos",

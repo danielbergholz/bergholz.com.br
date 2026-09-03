@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import {
-  DevTo,
   GitHub,
   Instagram,
   LinkedIn,
@@ -71,10 +70,6 @@ export default async function Links({
           title="LinkedIn"
         >
           <LinkedIn width={28} height={28} />
-        </Link>
-
-        <Link href="https://dev.to/danielbergholz" title={t.blog}>
-          <DevTo width={23} height={23} />
         </Link>
 
         <Link href="https://github.com/danielbergholz" title="GitHub">
