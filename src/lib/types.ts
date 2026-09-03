@@ -67,10 +67,12 @@ export type ContentItem = {
 }
 
 // Per-video metadata from the videos endpoint, keyed by video id.
-// `language` is the raw BCP-47 tag YouTube reports (e.g. "en", "pt-BR").
+// `language` is the raw BCP-47 tag YouTube reports (e.g. "en", "pt-BR");
+// `thumbnailUrl` is the 16:9 thumbnail (maxres when generated, else medium).
 export type VideoDetails = {
   durationSeconds?: number
   language?: string
+  thumbnailUrl?: string
 }
 
 export type ChannelStats = {

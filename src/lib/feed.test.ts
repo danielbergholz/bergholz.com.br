@@ -3,6 +3,8 @@ import { test } from "node:test"
 import {
   articleSlugFromDescription,
   articleUrl,
+  articleVideoIds,
+  articleVideoThumbnails,
   buildContentFeed,
   firstMeaningfulLine,
   videoIdFromBody,
@@ -107,6 +109,52 @@ test("videoIdFromBody handles every link format", () => {
     "abcdefghijk"
   )
   assert.equal(videoIdFromBody("no video here"), null)
+})
+
+test("articleVideoIds maps each post to the video its body links", () => {
+  const paired = article({
+    id: 1,
+    slug: "a",
+    body: "https://youtu.be/vid1111aaaa"
+  })
+  const embed = article({ id: 2, slug: "b", body: "{% youtube vid2222bbbb %}" })
+  const solo = article({ id: 3, slug: "c", body: "no video" })
+
+  assert.deepEqual(
+    [...articleVideoIds([paired, embed, solo])],
+    [
+      [1, "vid1111aaaa"],
+      [2, "vid2222bbbb"]
+    ]
+  )
+})
+
+test("articleVideoThumbnails resolves a post's video thumbnail when known", () => {
+  const paired = article({
+    id: 1,
+    slug: "a",
+    body: "https://youtu.be/vid1111aaaa"
+  })
+  const unknownVideo = article({
+    id: 2,
+    slug: "b",
+    body: "https://youtu.be/vid2222bbbb"
+  })
+  const noThumb = article({
+    id: 3,
+    slug: "c",
+    body: "https://youtu.be/vid3333cccc"
+  })
+  const solo = article({ id: 4, slug: "d" })
+  const result = articleVideoThumbnails(
+    [paired, unknownVideo, noThumb, solo],
+    details([
+      ["vid1111aaaa", { thumbnailUrl: "thumb-1" }],
+      ["vid3333cccc", { durationSeconds: 10 }]
+    ])
+  )
+
+  assert.deepEqual([...result], [[1, "thumb-1"]])
 })
 
 test("articleSlugFromDescription extracts the dev.to slug", () => {

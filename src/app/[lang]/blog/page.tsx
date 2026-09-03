@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import { ArticleCard } from "@/components/article-card"
 import { BlogLoadingSkeleton } from "@/components/skeletons"
 import { getPublishedArticles } from "@/data-access/blog"
+import { getArticleVideoThumbnails } from "@/data-access/content"
 import { type Dictionary, getDictionary } from "@/dictionaries"
 import { articlesForLocale, blogFeedPath } from "@/lib/blog"
 import {
@@ -118,7 +119,11 @@ export default async function Blog({
 }
 
 async function ArticleList({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  const articles = articlesForLocale(await getPublishedArticles(), lang)
+  const [published, videoThumbnails] = await Promise.all([
+    getPublishedArticles(),
+    getArticleVideoThumbnails()
+  ])
+  const articles = articlesForLocale(published, lang)
 
   if (articles.length === 0) {
     return (
@@ -134,6 +139,7 @@ async function ArticleList({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         <ArticleCard
           key={article.id}
           article={article}
+          videoThumbnailUrl={videoThumbnails.get(article.id)}
           locale={lang}
           t={dict.card}
           priority={index === 0}

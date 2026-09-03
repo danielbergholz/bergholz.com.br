@@ -125,7 +125,7 @@ export function BlogLoadingSkeleton() {
           key={key}
           className="flex flex-col md:flex-row gap-5 md:gap-6 p-5 md:p-6 rounded-lg border border-current/10 dark:border-current/20"
         >
-          <Pulse className="aspect-[1000/420] w-full md:w-[360px] md:shrink-0" />
+          <Pulse className="aspect-video w-full md:w-[360px] md:shrink-0" />
           <div className="flex flex-1 flex-col gap-3">
             <Pulse className="h-7 w-3/4" />
             <Pulse className="h-4 w-full" />

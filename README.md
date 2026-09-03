@@ -20,7 +20,7 @@ Copy `.env.example` to `.env` and fill in:
 - `YOUTUBE_API_KEY` — YouTube Data API key
 - `YOUTUBE_CHANNEL_ID` — channel ID for fetching videos and playlists
 - `YOUTUBE_CHANNEL_ID_BR` — (optional) Brazilian Portuguese channel; its uploads join the content feed and its stats are added to the totals
-- `DEV_TO_API_KEY` — Dev.to API key (only the authenticated list, which carries each post's markdown for video pairing, needs it; the blog itself uses the public API)
+- `DEV_TO_API_KEY` — Dev.to API key (only the authenticated list, which carries each post's markdown for video pairing and for the video thumbnails on `/blog`, needs it; post pages use the public API)
 - `REVALIDATE_SECRET` — (optional) enables `POST /api/revalidate` for on-demand revalidation; see [Blog](#blog)
 
 `YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, and `DEV_TO_API_KEY` are required. The data-access layer throws on a failed API response (so a broken or empty page is never cached), so the build will error if a required key is missing or invalid.
@@ -59,6 +59,8 @@ The site is bilingual: Brazilian Portuguese is the default and lives at the root
 ## Blog
 
 Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the site is their canonical home. The public Forem API is read with ISR (1 hour) and rendered at `/blog/<slug>` (Portuguese posts) and `/en/blog/<slug>` (English posts), split by the `language` field Dev.to reports. Each post's `canonical_url` on Dev.to points back to its page here (set per post in the Dev.to editor). Post bodies arrive as sanitized HTML with Rouge-highlighted code, so there is no Markdown or highlighting dependency — just CSS (`.article-body` in `globals.css`).
+
+The `/blog` listing shows each post's YouTube thumbnail (16:9, from the video the post links in its body — the same pairing the content feed uses) instead of Dev.to's cover, which is that image cropped to 1000×420; posts with no video keep the Dev.to cover.
 
 Requests to Dev.to are kept to a minimum: the listing is fetched once per hour and shared (via the Data Cache) by the home page, `/videos`, `/blog`, every post page, the sitemap and the RSS feeds (`/blog/feed`, `/en/blog/feed`); each post body is fetched once per hour on top of that. Unknown slugs are answered from the cached listing without calling Dev.to. A new post appears on its first visit (or the next hourly revalidation of `/blog`).
 

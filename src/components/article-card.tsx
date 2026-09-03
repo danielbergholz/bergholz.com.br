@@ -8,18 +8,24 @@ import type { Locale } from "@/lib/i18n"
 import type { PublishedArticle } from "@/lib/types"
 import { readableDate } from "@/lib/utils"
 
-// dev.to cover banners are 1000×420. Decorative: the title sits next to it.
+// dev.to cover banners are 1000×420; YouTube thumbnails are 16:9. Decorative:
+// the title sits next to it.
 export function ArticleCover({
   src,
   sizes,
-  priority = false
+  priority = false,
+  aspect = "banner"
 }: {
   src: string
   sizes: string
   priority?: boolean
+  aspect?: "banner" | "video"
 }) {
+  const aspectClass = aspect === "video" ? "aspect-video" : "aspect-[1000/420]"
   return (
-    <div className="relative aspect-[1000/420] w-full overflow-hidden rounded-lg">
+    <div
+      className={`relative ${aspectClass} w-full overflow-hidden rounded-lg`}
+    >
       <Image
         src={src}
         alt=""
@@ -34,6 +40,10 @@ export function ArticleCover({
 
 type Props = {
   article: PublishedArticle
+  // Thumbnail of the video the post links, when it does (see
+  // getArticleVideoThumbnails). Preferred over the dev.to cover, which is the
+  // same image cropped to 1000×420.
+  videoThumbnailUrl?: string
   locale: Locale
   t: Dictionary["card"]
   priority?: boolean
@@ -41,9 +51,15 @@ type Props = {
 
 // One post in the /blog listing: cover on the left, title, excerpt and
 // date · reading time on the right, in the featured ContentCard's frame.
-export function ArticleCard({ article, locale, t, priority = false }: Props) {
+export function ArticleCard({
+  article,
+  videoThumbnailUrl,
+  locale,
+  t,
+  priority = false
+}: Props) {
   const href = blogArticlePath(locale, article.slug)
-  const image = article.cover_image || article.social_image
+  const image = videoThumbnailUrl || article.cover_image || article.social_image
 
   return (
     <article
@@ -61,6 +77,7 @@ export function ArticleCard({ article, locale, t, priority = false }: Props) {
             src={image}
             sizes="(max-width: 768px) 100vw, 360px"
             priority={priority}
+            aspect={videoThumbnailUrl ? "video" : "banner"}
           />
         </Link>
       )}

@@ -30,6 +30,32 @@ export function videoIdFromBody(body: string): string | null {
   return null
 }
 
+// The video each post links from its body, keyed by post id. Shared by the
+// feed pairing and by /blog (which shows that video's thumbnail).
+export function articleVideoIds(articles: Article[]): Map<number, string> {
+  const result = new Map<number, string>()
+  for (const article of articles) {
+    const videoId = videoIdFromBody(article.body_markdown ?? "")
+    if (videoId) result.set(article.id, videoId)
+  }
+  return result
+}
+
+// Thumbnail of each post's linked video, keyed by post id. Posts without a
+// video, or whose video the details map doesn't cover, are simply absent so
+// the caller falls back to the post's own cover.
+export function articleVideoThumbnails(
+  articles: Article[],
+  details: Map<string, VideoDetails>
+): Map<number, string> {
+  const result = new Map<number, string>()
+  for (const [articleId, videoId] of articleVideoIds(articles)) {
+    const url = details.get(videoId)?.thumbnailUrl
+    if (url) result.set(articleId, url)
+  }
+  return result
+}
+
 // Pull the dev.to article slug out of a video description (last path segment of
 // a dev.to/<user>/<slug> link).
 export function articleSlugFromDescription(description: string): string | null {
@@ -159,11 +185,12 @@ export function buildContentFeed(
   details: Map<string, VideoDetails>,
   shortsExemptIds: Set<string> = new Set()
 ): ContentItem[] {
+  const videoIds = articleVideoIds(articles)
   const articleByVideoId = new Map<string, Article>()
   const articleBySlug = new Map<string, Article>()
   for (const article of articles) {
     articleBySlug.set(article.slug, article)
-    const videoId = videoIdFromBody(article.body_markdown ?? "")
+    const videoId = videoIds.get(article.id)
     if (videoId) articleByVideoId.set(videoId, article)
   }
 
@@ -192,9 +219,7 @@ export function buildContentFeed(
   // video if the body references one outside the fetched window).
   for (const article of articles) {
     if (!usedArticleIds.has(article.id)) {
-      items.push(
-        articleToItem(article, videoIdFromBody(article.body_markdown ?? ""))
-      )
+      items.push(articleToItem(article, videoIds.get(article.id) ?? null))
     }
   }
 

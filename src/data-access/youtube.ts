@@ -123,7 +123,11 @@ type VideoDetailsResponse = {
   items?: {
     id: string
     contentDetails?: { duration?: string }
-    snippet?: { defaultAudioLanguage?: string; defaultLanguage?: string }
+    snippet?: {
+      defaultAudioLanguage?: string
+      defaultLanguage?: string
+      thumbnails?: { maxres?: { url: string }; medium?: { url: string } }
+    }
   }[]
 }
 
@@ -134,9 +138,10 @@ type PlaylistVideoIdResponse = {
 
 // Durations and language live on the videos endpoint, not playlistItems.
 // Durations show video length and detect Shorts (which the API has no flag
-// for); language drives the card badge. Batched 50 ids per call — extra
-// `part`s cost no additional quota. Neither changes after upload, so cache
-// for a day.
+// for); language drives the card badge; the thumbnail lets /blog show a
+// post's video image instead of dev.to's cropped cover. Batched 50 ids per
+// call — extra `part`s cost no additional quota. None of it changes after
+// upload, so cache for a day.
 export const getVideoDetails = async (videoIds: string[]) => {
   const details = new Map<string, VideoDetails>()
   for (let i = 0; i < videoIds.length; i += 50) {
@@ -154,10 +159,13 @@ export const getVideoDetails = async (videoIds: string[]) => {
 
     for (const item of data.items) {
       const duration = item.contentDetails?.duration
+      const thumbnails = item.snippet?.thumbnails
       details.set(item.id, {
         durationSeconds: duration ? parseIsoDuration(duration) : undefined,
         language:
-          item.snippet?.defaultAudioLanguage ?? item.snippet?.defaultLanguage
+          item.snippet?.defaultAudioLanguage ?? item.snippet?.defaultLanguage,
+        // `maxres` isn't generated for every upload; `medium` always is.
+        thumbnailUrl: thumbnails?.maxres?.url ?? thumbnails?.medium?.url
       })
     }
   }

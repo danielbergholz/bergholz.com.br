@@ -74,7 +74,8 @@ async function devtoFetchList<T>(
 }
 
 // Authenticated list: the only endpoint that returns `body_markdown` for every
-// post in one call (needed to pair posts with their videos in the feed).
+// post in one call (needed to pair posts with their videos in the feed and to
+// show a post's video thumbnail on /blog).
 // per_page=1000 so the merged feed sees every post (the default is only 30).
 export const getArticles = (): Promise<Article[]> =>
   devtoFetchList<Article>(
