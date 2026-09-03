@@ -9,6 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "revalidate": "node --env-file=.env scripts/revalidate.mjs",
     "lint": "biome lint ./src",
     "lint:fix": "biome check --write ./src",
     "typecheck": "tsc --noEmit",

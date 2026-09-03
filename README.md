@@ -33,6 +33,7 @@ Copy `.env.example` to `.env` and fill in:
 - `npm run format` — format with Biome
 - `npm run check` — run lint and typecheck
 - `npm test` — run unit tests (Node's built-in test runner)
+- `npm run revalidate` — expire the site's cached Dev.to data now (see [Blog](#blog))
 
 ## Tech Stack
 
@@ -61,19 +62,13 @@ Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the 
 
 Requests to Dev.to are kept to a minimum: the listing is fetched once per hour and shared (via the Data Cache) by the home page, `/videos`, `/blog`, every post page, the sitemap and the RSS feeds (`/blog/feed`, `/en/blog/feed`); each post body is fetched once per hour on top of that. Unknown slugs are answered from the cached listing without calling Dev.to. A new post appears on its first visit (or the next hourly revalidation of `/blog`).
 
-To update sooner than the hourly window, set `REVALIDATE_SECRET` (locally in `.env`, and in the Vercel project) and call:
+To update sooner than the hourly window, `REVALIDATE_SECRET` (set on Vercel for Production and Preview; `vercel env pull` copies it into `.env.local`, or add it to `.env`) enables `POST /api/revalidate`. After publishing or editing a post on Dev.to, run:
 
 ```bash
-curl -X POST "https://bergholz.com.br/api/revalidate?secret=$REVALIDATE_SECRET"
+npm run revalidate
 ```
 
-The same call can be triggered automatically by Dev.to on publish/update via its webhooks (creating one requires the API key):
-
-```bash
-curl -X POST https://dev.to/api/webhooks \
-  -H "api-key: $DEV_TO_API_KEY" -H "Content-Type: application/json" \
-  -d '{"webhook_endpoint":{"target_url":"https://bergholz.com.br/api/revalidate?secret=<REVALIDATE_SECRET>","source":"bergholz.com.br","events":["article_created","article_updated"]}}'
-```
+It sends the secret as a bearer token and expires every cached Dev.to response; each page regenerates on its next visit. Dev.to cannot call this automatically: Forem removed its webhooks API (`/api/webhooks` returns 404 and is gone from the v1 docs), so the script is the trigger.
 
 > Working in this repo with an AI coding agent? See [`AGENTS.md`](./AGENTS.md).
 
