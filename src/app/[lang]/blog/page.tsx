@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
 import { ArticleCard } from "@/components/article-card"
+import { CARD_BASE } from "@/components/content-card"
 import { BlogLoadingSkeleton } from "@/components/skeletons"
 import { getPublishedArticles } from "@/data-access/blog"
 import { getArticleVideoThumbnails } from "@/data-access/content"
@@ -13,6 +14,7 @@ import {
   type Locale,
   defaultLocale,
   hasLocale,
+  languageTags,
   localePath,
   locales,
   pageAlternates
@@ -94,26 +96,36 @@ export default async function Blog({
         <ArticleList lang={lang} dict={dict} />
       </Suspense>
 
-      <div className="mt-8 md:mt-10 flex flex-col gap-2 text-sm opacity-60">
-        <p>
-          {t.otherLocaleHint}{" "}
-          <Link
-            href={localePath(otherLocale, "/blog")}
-            className="underline underline-offset-4 hover:opacity-100"
-          >
+      <Link
+        href={localePath(otherLocale, "/blog")}
+        lang={languageTags[otherLocale]}
+        className={`${CARD_BASE} mt-8 md:mt-10 items-center justify-between gap-4 p-5 md:p-6`}
+      >
+        <div className="flex flex-col gap-1">
+          <span className="text-base md:text-lg font-bold group-hover:opacity-80 transition-opacity">
             {t.otherLocaleLink}
-          </Link>
-        </p>
-        <p>
-          <a
-            href={localePath(lang, blogFeedPath)}
-            className="underline underline-offset-4 hover:opacity-100"
-            type="application/rss+xml"
-          >
-            {t.rss}
-          </a>
-        </p>
-      </div>
+          </span>
+          <span className="text-xs md:text-sm opacity-50 leading-relaxed">
+            {t.otherLocaleHint}
+          </span>
+        </div>
+        <span
+          className="shrink-0 text-xl opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all motion-reduce:transition-none"
+          aria-hidden="true"
+        >
+          &rarr;
+        </span>
+      </Link>
+
+      <p className="mt-6 text-sm opacity-60">
+        <a
+          href={localePath(lang, blogFeedPath)}
+          className="underline underline-offset-4 hover:opacity-100"
+          type="application/rss+xml"
+        >
+          {t.rss}
+        </a>
+      </p>
     </main>
   )
 }
