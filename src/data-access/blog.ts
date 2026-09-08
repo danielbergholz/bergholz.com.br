@@ -3,6 +3,7 @@ import type {
   PublishedArticle,
   PublishedArticleWithBody
 } from "@/lib/types"
+import { articlesMissingFromPublicList } from "@/lib/blog"
 
 const BASE_URL = "https://dev.to/api"
 const USERNAME = "danielbergholz"
@@ -90,16 +91,34 @@ export const getArticles = (): Promise<Article[]> =>
 const PER_PAGE = 100
 
 export const getPublishedArticles = async (): Promise<PublishedArticle[]> => {
-  const articles: PublishedArticle[] = []
+  const publishedArticles: PublishedArticle[] = []
   for (let page = 1; ; page++) {
     const batch = await devtoFetchList<PublishedArticle>(
       `${BASE_URL}/articles?username=${USERNAME}&per_page=${PER_PAGE}&page=${page}`,
       "articles list"
     )
-    articles.push(...batch)
+    publishedArticles.push(...batch)
     if (batch.length < PER_PAGE) break
   }
-  return articles
+
+  // Forem's CDN can keep the public list stale for hours after publication.
+  // Its authenticated list is private and fresh, but lacks language and social
+  // image fields. Detect only the missing posts there, then recover their full
+  // public metadata from the final-slug endpoint (a new URL, so it is fresh).
+  // Unknown incoming slugs still never cause a dev.to request: recovery is
+  // limited to articles confirmed by /me/published.
+  const authenticatedArticles = await getArticles()
+  for (const missing of articlesMissingFromPublicList(
+    authenticatedArticles,
+    publishedArticles
+  )) {
+    const recovered = await getArticle(missing.slug)
+    if (recovered) {
+      publishedArticles.push({ ...recovered, tag_list: missing.tag_list })
+    }
+  }
+
+  return publishedArticles
 }
 
 // Single post with its rendered `body_html`. Resolves to null on 404 (the

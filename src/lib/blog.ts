@@ -5,7 +5,7 @@ import {
   siteLanguage,
   siteUrl
 } from "./i18n.ts"
-import type { PublishedArticle } from "./types.ts"
+import type { Article, PublishedArticle } from "./types.ts"
 
 // Pure helpers for the /blog routes (no I/O, unit-tested in blog.test.ts).
 
@@ -16,6 +16,19 @@ export function blogArticlePath(locale: Locale, slug: string): string {
 }
 
 export const blogFeedPath = "/blog/feed"
+
+// Forem caches the public author listing at its CDN for much longer than its
+// Cache-Control header suggests. The authenticated published list is private
+// and fresh, so use it to spot newly published posts that the public listing
+// has not propagated yet. The caller can then recover only those posts from
+// their final public slug instead of issuing one request per existing post.
+export function articlesMissingFromPublicList(
+  articles: Article[],
+  publishedArticles: PublishedArticle[]
+): Article[] {
+  const publishedIds = new Set(publishedArticles.map((article) => article.id))
+  return articles.filter((article) => !publishedIds.has(article.id))
+}
 
 // Posts for one locale, newest first (published_at is ISO-8601 UTC, so the
 // strings sort chronologically).

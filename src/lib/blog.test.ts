@@ -2,11 +2,12 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import {
   articleImage,
+  articlesMissingFromPublicList,
   articlesForLocale,
   blogArticlePath,
   buildRssFeed
 } from "./blog.ts"
-import type { PublishedArticle } from "./types.ts"
+import type { Article, PublishedArticle } from "./types.ts"
 
 function published(opts: {
   id: number
@@ -61,6 +62,21 @@ test("articlesForLocale filters by language and sorts newest first", () => {
   assert.deepEqual(
     articlesForLocale([older, pt, newer, es], "pt").map((a) => a.slug),
     ["pt-post"]
+  )
+})
+
+test("articlesMissingFromPublicList finds posts still missing from Forem's public CDN", () => {
+  const known = published({ id: 1, slug: "known", language: "pt" })
+  const authenticated = [
+    { id: 1, slug: "known" },
+    { id: 2, slug: "new-post" }
+  ] as Article[]
+
+  assert.deepEqual(
+    articlesMissingFromPublicList(authenticated, [known]).map(
+      (article) => article.slug
+    ),
+    ["new-post"]
   )
 })
 
