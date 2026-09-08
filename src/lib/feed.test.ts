@@ -380,26 +380,6 @@ test("sorts newest first across videos and articles", () => {
   )
 })
 
-test("shortsExemptIds keeps short videos that would otherwise be dropped", () => {
-  const exemptShort = video({ id: "brwelcome01" })
-  const normalShort = video({ id: "realshort01" })
-  const feed = buildContentFeed(
-    [exemptShort, normalShort],
-    [],
-    noCourses,
-    durations([
-      ["brwelcome01", 122],
-      ["realshort01", 60]
-    ]),
-    new Set(["brwelcome01"])
-  )
-
-  assert.deepEqual(
-    feed.map((i) => i.id),
-    ["brwelcome01"]
-  )
-})
-
 test("withPublishedMetadata merges language and social image by id", () => {
   const known = article({ id: 1, slug: "known" })
   const unknown = article({ id: 2, slug: "unknown" })

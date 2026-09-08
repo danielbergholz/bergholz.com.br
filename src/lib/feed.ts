@@ -175,15 +175,12 @@ function isShort(details: VideoDetails | undefined): boolean {
 // Merge YouTube uploads and dev.to posts into one deduped, newest-first feed.
 // Pairing is automatic: a post's body links its video, and a video's
 // description links its post — no manual mapping. Shorts and course-playlist
-// videos are excluded, except ids in shortsExemptIds (channels that post no
-// Shorts, where short uploads are real videos). Pure (no I/O) so it can be
-// unit-tested with fixtures.
+// videos are excluded. Pure (no I/O) so it can be unit-tested with fixtures.
 export function buildContentFeed(
   videos: LatestVideo[],
   articles: Article[],
   courseVideoIds: Set<string>,
-  details: Map<string, VideoDetails>,
-  shortsExemptIds: Set<string> = new Set()
+  details: Map<string, VideoDetails>
 ): ContentItem[] {
   const videoIds = articleVideoIds(articles)
   const articleByVideoId = new Map<string, Article>()
@@ -204,7 +201,7 @@ export function buildContentFeed(
     // keep anything whose duration is unknown rather than guess).
     if (courseVideoIds.has(videoId)) continue
     const videoDetails = details.get(videoId)
-    if (!shortsExemptIds.has(videoId) && isShort(videoDetails)) continue
+    if (isShort(videoDetails)) continue
 
     let article = articleByVideoId.get(videoId)
     if (!article) {
