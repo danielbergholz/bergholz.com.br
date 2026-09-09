@@ -1,0 +1,3 @@
+# Ignored local environment files copied into new worktrees.
+.env
+.env.local
