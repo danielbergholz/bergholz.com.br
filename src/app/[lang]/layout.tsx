@@ -18,6 +18,8 @@ import {
 } from "@/lib/i18n"
 import "../globals.css"
 
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");var d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;var v=d?"dark":"light";r.dataset.theme=v;r.style.colorScheme=v;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?"#000000":"#ffffff"}catch(e){}})()`
+
 const poppins = Poppins({ weight: ["400", "700"], subsets: ["latin"] })
 const instrumentSerif = Instrument_Serif({
   weight: "400",
@@ -156,22 +158,17 @@ export default async function RootLayout({
   const dict = await getDictionary(locale)
 
   return (
-    <html lang={languageTags[locale]}>
+    <html lang={languageTags[locale]} suppressHydrationWarning>
       <head>
         {/* SEO Meta Tags */}
         <link rel="sitemap" href="/sitemap.xml" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="theme-color"
-          content="#ffffff"
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          name="theme-color"
-          content="#000000"
-          media="(prefers-color-scheme: dark)"
-        />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="color-scheme" content="light dark" />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: static code with no user-controlled values
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
 
         {/* Structured Data */}
         <JsonLd data={personSchema} />

@@ -53,7 +53,13 @@
     "socialAria": "Redes sociais",
     "opensNewTab": "abre em nova aba",
     "links": "Links",
-    "vegan": "Luísa e Daniel"
+    "vegan": "Luísa e Daniel",
+    "theme": {
+      "label": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Escuro"
+    }
   },
   "home": {
     "hello": "Olá",

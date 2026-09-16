@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --color-foreground: rgb(var(--foreground-rgb));
   --color-background: rgb(var(--background-rgb));
@@ -55,8 +57,13 @@
     --background-rgb: 255, 255, 255;
   }
 
+  :root[data-theme="dark"] {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 0, 0, 0;
+  }
+
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme]) {
       --foreground-rgb: 255, 255, 255;
       --background-rgb: 0, 0, 0;
     }
@@ -130,8 +137,22 @@
     overflow-wrap: break-word;
   }
 
+  [data-theme="dark"] .article-body {
+    --code-bg: #0d1117;
+    --hl-comment: #8b949e;
+    --hl-keyword: #ff7b72;
+    --hl-string: #a5d6ff;
+    --hl-literal: #79c0ff;
+    --hl-name: #c9d1d9;
+    --hl-function: #d2a8ff;
+    --hl-tag: #7ee787;
+    --hl-variable: #ffa657;
+    --hl-deleted-bg: rgb(248 81 73 / 0.18);
+    --hl-inserted-bg: rgb(63 185 80 / 0.18);
+  }
+
   @media (prefers-color-scheme: dark) {
-    .article-body {
+    :root:not([data-theme]) .article-body {
       --code-bg: #0d1117;
       --hl-comment: #8b949e;
       --hl-keyword: #ff7b72;

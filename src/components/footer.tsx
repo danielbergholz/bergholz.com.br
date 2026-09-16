@@ -1,6 +1,7 @@
 import { ExternalLink } from "@/components/icons"
 import Link from "next/link"
 
+import { ThemeSwitcher } from "@/components/theme-switcher"
 import type { Dictionary } from "@/dictionaries"
 import { type Locale, localePath } from "@/lib/i18n"
 import { instagramUrl, youtubeChannels } from "@/lib/socials"
@@ -106,9 +107,12 @@ export function Footer({ locale, t, nav }: Props) {
           </div>
         </div>
 
-        <p className="text-xs text-foreground/50">
-          &copy; {new Date().getFullYear()} Daniel Bergholz
-        </p>
+        <div className="flex flex-col gap-5 border-t border-current/10 pt-6 dark:border-current/20 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-foreground/50">
+            &copy; {new Date().getFullYear()} Daniel Bergholz
+          </p>
+          <ThemeSwitcher t={t.theme} />
+        </div>
       </div>
     </footer>
   )

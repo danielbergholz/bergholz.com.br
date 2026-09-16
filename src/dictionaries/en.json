@@ -53,7 +53,13 @@
     "socialAria": "Social media",
     "opensNewTab": "opens in a new tab",
     "links": "Links",
-    "vegan": "Luísa and Daniel"
+    "vegan": "Luísa and Daniel",
+    "theme": {
+      "label": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "home": {
     "hello": "Hello",
