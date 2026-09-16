@@ -21,6 +21,10 @@
       "title": "Links | Daniel Bergholz",
       "description": "Links das redes sociais: YouTube, Instagram, Twitter, LinkedIn e GitHub"
     },
+    "vegan": {
+      "title": "Luísa e Daniel | Veganismo, esporte e vida real",
+      "description": "Veganismo com performance e sem complicação. Acompanhe Luísa e Daniel no YouTube e no Instagram."
+    },
     "products": {
       "title": "Produtos - Daniel Bergholz",
       "description": "Projetos criados por Daniel Bergholz - a comunidade de aprendizado CourseShelf, a plataforma gratuita de educação em tecnologia TechSchool e outras ferramentas para devs"
@@ -48,7 +52,8 @@
     "pagesAria": "Páginas do site",
     "socialAria": "Redes sociais",
     "opensNewTab": "abre em nova aba",
-    "links": "Links"
+    "links": "Links",
+    "vegan": "Luísa e Daniel"
   },
   "home": {
     "hello": "Olá",
@@ -66,7 +71,10 @@
     "viewAll": "Ver todos",
     "viewAllTitle": "Ver todos os vídeos e artigos",
     "noVideosBefore": "Nenhum vídeo disponível no momento. Volte em breve ou veja",
-    "noVideosLink": "todo o conteúdo"
+    "noVideosLink": "todo o conteúdo",
+    "veganEyebrow": "Vida fora do código",
+    "veganTitle": "Luísa & Daniel",
+    "veganDescription": "Veganismo, corrida, comida e viagens — com performance e sem complicação."
   },
   "videos": {
     "title": "Vídeos",
@@ -120,6 +128,24 @@
   "links": {
     "title": "Links",
     "sectionAria": "Links das redes sociais"
+  },
+  "vegan": {
+    "eyebrow": "Veganismo na vida real",
+    "title": "Luísa & Daniel",
+    "intro": "Um casal vegano que gosta de correr, comer bem e conhecer lugares novos — vivendo tudo com performance e sem complicação.",
+    "photoAlt": "Luísa e Daniel sorrindo juntos na praia",
+    "youtube": "Nosso canal no YouTube",
+    "youtubeDescription": "Vlogs, viagens, comida e esporte",
+    "luisaInstagram": "Instagram da Luísa",
+    "danielInstagram": "Instagram do Daniel",
+    "linksAria": "Links de Luísa e Daniel",
+    "latestEyebrow": "Saiu do forno",
+    "latestTitle": "Último vídeo",
+    "watch": "Assistir no YouTube",
+    "allVideos": "Ver todos os vídeos",
+    "contactTitle": "Quer falar com a gente?",
+    "contactBody": "Para convites, parcerias e outras conversas, mande um email.",
+    "sendEmail": "Enviar email"
   },
   "products": {
     "title": "Produtos",

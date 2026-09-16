@@ -13,6 +13,7 @@ import { HomeLoadingSkeleton } from "@/components/skeletons"
 import { type Locale, hasLocale, localePath } from "@/lib/i18n"
 import { instagramUrl, youtubeChannels } from "@/lib/socials"
 import { formatNumber } from "@/lib/utils"
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
@@ -200,6 +201,35 @@ async function HomeContent({ lang }: { lang: Locale }) {
           </div>
         )}
       </section>
+
+      <Link
+        href={localePath(lang, "/luisa-e-daniel")}
+        className="group flex flex-col gap-5 border-t border-current/10 pt-8 transition-opacity hover:opacity-70 dark:border-current/20 sm:flex-row sm:items-center motion-reduce:transition-none"
+      >
+        <div className="relative size-20 shrink-0 overflow-hidden rounded-full">
+          <Image
+            src="/luisa-daniel.jpg"
+            alt=""
+            fill
+            sizes="80px"
+            className="object-cover object-[58%_42%] scale-[1.35]"
+          />
+        </div>
+        <div className="flex flex-1 flex-col gap-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-[0.22em] opacity-50 md:text-xs">
+            {t.veganEyebrow}
+          </span>
+          <h2 className="font-serif text-2xl italic tracking-tight md:text-3xl">
+            {t.veganTitle}
+          </h2>
+          <p className="max-w-xl text-sm leading-relaxed opacity-60 md:text-base">
+            {t.veganDescription}
+          </p>
+        </div>
+        <span className="text-2xl transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+          &rarr;
+        </span>
+      </Link>
     </main>
   )
 }

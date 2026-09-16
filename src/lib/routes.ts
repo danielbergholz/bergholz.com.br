@@ -15,5 +15,6 @@ export const siteRoutes: SiteRoute[] = [
   { path: "/courses", changeFrequency: "monthly", priority: 0.8 },
   { path: "/products", changeFrequency: "monthly", priority: 0.7 },
   { path: "/work-with-me", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/luisa-e-daniel", changeFrequency: "weekly", priority: 0.7 },
   { path: "/links", changeFrequency: "monthly", priority: 0.5 }
 ]

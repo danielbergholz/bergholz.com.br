@@ -5,6 +5,7 @@ import type {
   Playlists,
   VideoDetails
 } from "@/lib/types"
+import { SHORTS_MAX_SECONDS } from "@/lib/feed"
 import { parseIsoDuration } from "@/lib/utils"
 
 const API_KEY = process.env.YOUTUBE_API_KEY
@@ -24,6 +25,7 @@ const CHANNEL_URL = `${BASE_URL}/channels?part=statistics&id=${STATS_CHANNEL_IDS
 // playlistItems call (1 quota unit) instead of an extra channels lookup.
 const UPLOADS_PLAYLIST_ID = CHANNEL_ID?.replace(/^UC/, "UU")
 const UPLOADS_PLAYLIST_ID_BR = CHANNEL_ID_BR?.replace(/^UC/, "UU")
+const VEGAN_CHANNEL_UPLOADS_PLAYLIST_ID = "UUlepFNn-FyiT5IgykIuYb7Q"
 
 const getPlaylists = async () => {
   const response = await fetch(PLAYLISTS_URL)
@@ -106,6 +108,22 @@ export const getLatestVideosBr = async (
   UPLOADS_PLAYLIST_ID_BR
     ? getUploads(UPLOADS_PLAYLIST_ID_BR, maxResults, { emptyOn404: true })
     : []
+
+export const getLatestVeganVideo = async (): Promise<
+  LatestVideo | undefined
+> => {
+  const videos = await getUploads(VEGAN_CHANNEL_UPLOADS_PLAYLIST_ID, 50)
+  const details = await getVideoDetails(
+    videos.map((video) => video.snippet.resourceId.videoId)
+  )
+
+  return videos.find((video) => {
+    const duration = details.get(
+      video.snippet.resourceId.videoId
+    )?.durationSeconds
+    return duration === undefined || duration > SHORTS_MAX_SECONDS
+  })
+}
 
 export const getCourses = async () => {
   const playlists = await getPlaylists()

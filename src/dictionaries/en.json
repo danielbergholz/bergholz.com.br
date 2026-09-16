@@ -21,6 +21,10 @@
       "title": "Links | Daniel Bergholz",
       "description": "Social media links: YouTube, Instagram, Twitter, LinkedIn and GitHub"
     },
+    "vegan": {
+      "title": "Luísa and Daniel | Vegan living, sports and real life",
+      "description": "High-performance vegan living, without the complications. Follow Luísa and Daniel on YouTube and Instagram."
+    },
     "products": {
       "title": "Products - Daniel Bergholz",
       "description": "Projects built by Daniel Bergholz - CourseShelf learning community, TechSchool free tech education platform and more developer tools"
@@ -48,7 +52,8 @@
     "pagesAria": "Site pages",
     "socialAria": "Social media",
     "opensNewTab": "opens in a new tab",
-    "links": "Links"
+    "links": "Links",
+    "vegan": "Luísa and Daniel"
   },
   "home": {
     "hello": "Hello",
@@ -66,7 +71,10 @@
     "viewAll": "View all",
     "viewAllTitle": "See all videos and articles",
     "noVideosBefore": "No videos available right now. Check back soon or browse",
-    "noVideosLink": "all content"
+    "noVideosLink": "all content",
+    "veganEyebrow": "Life beyond code",
+    "veganTitle": "Luísa & Daniel",
+    "veganDescription": "Vegan living, running, food and travel — high performance without the complications."
   },
   "videos": {
     "title": "Videos",
@@ -120,6 +128,24 @@
   "links": {
     "title": "Links",
     "sectionAria": "Social Media Links"
+  },
+  "vegan": {
+    "eyebrow": "Real-life veganism",
+    "title": "Luísa & Daniel",
+    "intro": "A vegan couple who loves running, good food and discovering new places — living it all with high performance and no complications.",
+    "photoAlt": "Luísa and Daniel smiling together at the beach",
+    "youtube": "Our YouTube channel",
+    "youtubeDescription": "Vlogs, travel, food and sports",
+    "luisaInstagram": "Luísa's Instagram",
+    "danielInstagram": "Daniel's Instagram",
+    "linksAria": "Luísa and Daniel links",
+    "latestEyebrow": "Fresh from the oven",
+    "latestTitle": "Latest video",
+    "watch": "Watch on YouTube",
+    "allVideos": "See all videos",
+    "contactTitle": "Want to talk?",
+    "contactBody": "For invitations, partnerships and everything else, send us an email.",
+    "sendEmail": "Send email"
   },
   "products": {
     "title": "Products",

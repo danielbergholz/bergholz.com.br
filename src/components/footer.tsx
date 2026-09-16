@@ -50,6 +50,7 @@ export function Footer({ locale, t, nav }: Props) {
     { href: localePath(locale, "/courses"), label: nav.courses },
     { href: localePath(locale, "/products"), label: nav.products },
     { href: localePath(locale, "/work-with-me"), label: nav.workWithMe },
+    { href: localePath(locale, "/luisa-e-daniel"), label: t.vegan },
     { href: localePath(locale, "/links"), label: t.links }
   ]
 

@@ -1,5 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  redirects() {
+    return [
+      {
+        source: "/vegan",
+        destination: "/luisa-e-daniel",
+        permanent: true
+      },
+      {
+        source: "/en/vegan",
+        destination: "/en/luisa-e-daniel",
+        permanent: true
+      }
+    ]
+  },
   experimental: {
     // Prerender pages one at a time in a single worker. Every blog post page
     // hits the dev.to API at build time, and the default 9 parallel workers
