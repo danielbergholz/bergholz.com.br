@@ -145,6 +145,16 @@
     "luisaInstagram": "Luísa's Instagram",
     "danielInstagram": "Daniel's Instagram",
     "linksAria": "Luísa and Daniel links",
+    "coupons": {
+      "eyebrow": "Partnerships",
+      "title": "Luísa's coupons",
+      "description": "Use code LUISASIMEI at our partner stores and enjoy the discounts.",
+      "codeLabel": "Coupon code",
+      "rakkauOffer": "40% off",
+      "rakkauDescription": "One of the best plant-based proteins we've tried — with excellent value for money.",
+      "eatCleanOffer": "15% off",
+      "eatCleanDescription": "We love their peanut and nut butters — the brand also makes bars and supplements."
+    },
     "latestEyebrow": "Fresh from the oven",
     "latestTitle": "Latest video",
     "watch": "Watch on YouTube",

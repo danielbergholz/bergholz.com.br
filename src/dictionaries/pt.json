@@ -145,6 +145,16 @@
     "luisaInstagram": "Instagram da Luísa",
     "danielInstagram": "Instagram do Daniel",
     "linksAria": "Links de Luísa e Daniel",
+    "coupons": {
+      "eyebrow": "Parcerias",
+      "title": "Cupons da Luísa",
+      "description": "Use o código LUISASIMEI nas lojas parceiras e aproveite os descontos.",
+      "codeLabel": "Código do cupom",
+      "rakkauOffer": "40% de desconto",
+      "rakkauDescription": "Uma das melhores proteínas vegetais que já provamos — e com um ótimo custo-benefício.",
+      "eatCleanOffer": "15% de desconto",
+      "eatCleanDescription": "Amamos as pastas de amendoim e castanhas — a marca também tem barrinhas e suplementos."
+    },
     "latestEyebrow": "Saiu do forno",
     "latestTitle": "Último vídeo",
     "watch": "Assistir no YouTube",

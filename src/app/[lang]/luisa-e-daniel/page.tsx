@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
-import { Instagram, Play, YouTube } from "@/components/icons"
+import { ExternalLink, Instagram, Play, YouTube } from "@/components/icons"
 import { getLatestVeganVideo } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
 import {
@@ -17,6 +17,11 @@ import { readableDate } from "@/lib/utils"
 const youtubeUrl = "https://www.youtube.com/@luisadanielbergholz"
 const luisaInstagramUrl = "https://www.instagram.com/veg.luisasimei/"
 const danielInstagramUrl = "https://www.instagram.com/bergholz.vegan/"
+const partnerTracking =
+  "utm_source=bergholz.com.br&utm_medium=referral&utm_campaign=cupons_luisa_bergholz"
+const rakkauUrl = `https://www.rakkau.com.br/?${partnerTracking}`
+const eatCleanUrl = `https://www.eatclean.com.br/?${partnerTracking}`
+const luisaCouponCode = "LUISASIMEI"
 const contactEmail = "contato@bergholz.com.br"
 
 export const revalidate = 3600
@@ -88,6 +93,59 @@ function ExternalCard({
   )
 }
 
+function CouponCard({
+  brand,
+  domain,
+  href,
+  offer,
+  description,
+  codeLabel
+}: {
+  brand: string
+  domain: string
+  href: string
+  offer: string
+  description: string
+  codeLabel: string
+}) {
+  return (
+    <article className="flex flex-col rounded-lg border border-current/10 p-6 dark:border-current/20 md:p-7">
+      <div className="flex items-start justify-between gap-4">
+        <a
+          href={href}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="group"
+        >
+          <h3 className="flex items-center gap-2 text-xl font-bold md:text-2xl">
+            {brand}
+            <ExternalLink className="opacity-40 transition-opacity group-hover:opacity-100" />
+          </h3>
+          <span className="mt-1 block text-xs opacity-50 transition-opacity group-hover:opacity-80 md:text-sm">
+            {domain}
+          </span>
+        </a>
+        <span className="rounded-full border border-current/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] md:text-xs">
+          {offer}
+        </span>
+      </div>
+
+      <p className="mt-5 text-sm leading-relaxed opacity-65 md:text-base">
+        {description}
+      </p>
+
+      <div className="mt-6 rounded-md border border-dashed border-current/25 px-4 py-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] opacity-50">
+          {codeLabel}
+        </p>
+        <code className="mt-1 block select-all font-sans text-xl font-bold tracking-[0.12em] md:text-2xl">
+          {luisaCouponCode}
+        </code>
+      </div>
+    </article>
+  )
+}
+
 export default async function VeganPage({
   params
 }: {
@@ -156,6 +214,42 @@ export default async function VeganPage({
       </section>
 
       {latestVideo && <LatestVideo video={latestVideo} locale={lang} t={t} />}
+
+      <section aria-labelledby="coupons-title">
+        <p className="text-xs font-bold uppercase tracking-[0.24em] opacity-50">
+          {t.coupons.eyebrow}
+        </p>
+        <div className="mt-3 max-w-2xl">
+          <h2
+            id="coupons-title"
+            className="font-serif text-3xl italic md:text-4xl"
+          >
+            {t.coupons.title}
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed opacity-60 md:text-base">
+            {t.coupons.description}
+          </p>
+        </div>
+
+        <div className="mt-7 grid gap-4 md:grid-cols-2">
+          <CouponCard
+            brand="Rakkau"
+            domain="rakkau.com.br"
+            href={rakkauUrl}
+            offer={t.coupons.rakkauOffer}
+            description={t.coupons.rakkauDescription}
+            codeLabel={t.coupons.codeLabel}
+          />
+          <CouponCard
+            brand="Eat Clean"
+            domain="eatclean.com.br"
+            href={eatCleanUrl}
+            offer={t.coupons.eatCleanOffer}
+            description={t.coupons.eatCleanDescription}
+            codeLabel={t.coupons.codeLabel}
+          />
+        </div>
+      </section>
 
       <section className="flex flex-col gap-5 border-y border-current/10 py-8 sm:flex-row sm:items-center sm:justify-between dark:border-current/20">
         <div>
