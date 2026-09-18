@@ -125,7 +125,7 @@ function CouponCard({
             {domain}
           </span>
         </a>
-        <span className="rounded-full border border-current/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] md:text-xs">
+        <span className="rounded-full border border-emerald-300 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-600 dark:border-emerald-800 dark:text-emerald-400 md:text-xs">
           {offer}
         </span>
       </div>
