@@ -162,7 +162,8 @@ export default async function RootLayout({
       <head>
         {/* SEO Meta Tags */}
         <link rel="sitemap" href="/sitemap.xml" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* No <meta name="viewport"> here: Next.js always emits one (alongside
+            charset), so a manual one only renders the tag twice. */}
         <meta name="theme-color" content="#ffffff" />
         <meta name="color-scheme" content="light dark" />
         <script
