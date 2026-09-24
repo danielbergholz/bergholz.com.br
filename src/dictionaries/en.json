@@ -37,7 +37,6 @@
   "nav": {
     "skipLink": "Skip to content",
     "videos": "Videos",
-    "blog": "Blog",
     "courses": "Courses",
     "products": "Products",
     "workWithMe": "Work with me",
@@ -93,7 +92,7 @@
     "otherLocaleHint": "I also write in Portuguese. That list is separate from this one.",
     "otherLocaleLink": "See the posts in Portuguese",
     "rss": "RSS feed",
-    "backToBlog": "All posts",
+    "backToVideos": "All videos",
     "discussOnDevto": "Comment on DEV.to",
     "tagsAria": "Tags"
   },

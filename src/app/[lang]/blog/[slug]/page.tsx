@@ -157,10 +157,10 @@ export default async function BlogArticle({
       <article className="flex flex-col gap-6 md:gap-8">
         <header className="flex flex-col gap-4 md:gap-5">
           <Link
-            href={localePath(lang, "/blog")}
+            href={localePath(lang, "/videos")}
             className="w-max text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity"
           >
-            &larr; {t.backToBlog}
+            &larr; {t.backToVideos}
           </Link>
           <h1 className="font-serif text-3xl md:text-5xl italic tracking-tight leading-tight">
             {article.title}

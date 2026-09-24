@@ -37,7 +37,6 @@
   "nav": {
     "skipLink": "Pular para o conteúdo",
     "videos": "Vídeos",
-    "blog": "Blog",
     "courses": "Cursos",
     "products": "Produtos",
     "workWithMe": "Trabalhe comigo",
@@ -93,7 +92,7 @@
     "otherLocaleHint": "Também escrevo em inglês. A lista lá é separada desta.",
     "otherLocaleLink": "Ver os posts em inglês",
     "rss": "Feed RSS",
-    "backToBlog": "Todos os posts",
+    "backToVideos": "Todos os vídeos",
     "discussOnDevto": "Comentar no DEV.to",
     "tagsAria": "Tags"
   },
