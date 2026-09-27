@@ -16,9 +16,10 @@ import {
   languageTags,
   localePath,
   openGraphLocales,
-  siteLanguage,
-  siteUrl
+  siteLanguage
 } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/metadata"
+import { site } from "@/lib/site"
 import type { PublishedArticle, PublishedArticleWithBody } from "@/lib/types"
 import { readableDate } from "@/lib/utils"
 
@@ -81,35 +82,23 @@ export async function generateMetadata({
     ? { width: 1200, height: 627 }
     : { width: 1000, height: 420 }
 
-  return {
-    title: `${article.title} | Daniel Bergholz`,
+  // A post exists in one language only, so there are no hreflang pairs: just
+  // the canonical, which is this page (dev.to's canonical_url points here too).
+  return pageMetadata({
+    title: `${article.title} | ${site.name}`,
     description: article.description,
-    // A post exists in one language only, so there are no hreflang pairs:
-    // just the canonical, which is this page (dev.to's canonical_url points
-    // here too).
-    alternates: { canonical: path },
+    path,
+    image: image ? { url: image, ...imageSize, alt: article.title } : undefined,
     openGraph: {
       type: "article",
-      siteName: "Daniel Bergholz",
-      locale: openGraphLocales[lang],
       title: article.title,
-      description: article.description,
-      url: path,
+      locale: openGraphLocales[lang],
       publishedTime: article.published_at,
       modifiedTime: article.edited_at ?? undefined,
-      authors: [siteUrl],
-      tags: listed.tag_list,
-      images: image ? [{ url: image, ...imageSize }] : undefined
-    },
-    twitter: {
-      site: "@danielbergholz",
-      creator: "@danielbergholz",
-      card: "summary_large_image",
-      title: article.title,
-      description: article.description,
-      images: image ? [image] : undefined
+      authors: [site.url],
+      tags: listed.tag_list
     }
-  }
+  })
 }
 
 export default async function BlogArticle({
@@ -129,7 +118,7 @@ export default async function BlogArticle({
 
   const { listed, article } = resolved
   const t = dict.blog
-  const url = `${siteUrl}${blogArticlePath(lang, slug)}`
+  const url = `${site.url}${blogArticlePath(lang, slug)}`
 
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -145,8 +134,8 @@ export default async function BlogArticle({
     mainEntityOfPage: url,
     author: {
       "@type": "Person",
-      name: "Daniel Bergholz",
-      url: siteUrl
+      name: site.author.name,
+      url: site.url
     }
   }
 

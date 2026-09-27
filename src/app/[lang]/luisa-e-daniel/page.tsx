@@ -6,13 +6,8 @@ import { ExternalLink, Instagram, Play, YouTube } from "@/components/icons"
 import { getLatestVeganVideo } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
 import { getCurrentYear } from "@/lib/current-year"
-import {
-  defaultLocale,
-  hasLocale,
-  type Locale,
-  pageAlternates,
-  siteUrl
-} from "@/lib/i18n"
+import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
 import { readableDate } from "@/lib/utils"
 
 const youtubeUrl = "https://www.youtube.com/@luisadanielbergholz"
@@ -34,30 +29,15 @@ export async function generateMetadata({
   const locale = hasLocale(lang) ? lang : defaultLocale
   const dict = await getDictionary(locale)
 
-  return {
-    title: dict.meta.vegan.title,
-    description: dict.meta.vegan.description,
-    alternates: pageAlternates(locale, "/luisa-e-daniel"),
-    openGraph: {
-      title: dict.meta.vegan.title,
-      description: dict.meta.vegan.description,
-      url: `${siteUrl}${locale === defaultLocale ? "" : `/${locale}`}/luisa-e-daniel`,
-      images: [
-        {
-          url: "/luisa-daniel.jpg",
-          width: 1200,
-          height: 1600,
-          alt: dict.vegan.photoAlt
-        }
-      ]
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: dict.meta.vegan.title,
-      description: dict.meta.vegan.description,
-      images: ["/luisa-daniel.jpg"]
+  return localizedMetadata(locale, "/luisa-e-daniel", {
+    ...dict.meta.vegan,
+    image: {
+      url: "/luisa-daniel.jpg",
+      width: 1200,
+      height: 1600,
+      alt: dict.vegan.photoAlt
     }
-  }
+  })
 }
 
 function ExternalCard({

@@ -4,17 +4,19 @@ import path from "node:path"
 import { test } from "node:test"
 import { siteRoutes } from "./routes.ts"
 
-const appDir = path.join(import.meta.dirname, "..", "app", "[lang]")
+// Where the site's pages live (under the [lang] segment on bilingual sites).
+const pagesDir = path.join(import.meta.dirname, "..", "app", "[lang]")
 
-// Collect every route that has a page.tsx under src/app/[lang]/, skipping
-// dynamic segments (the [...rest] catch-all is a 404 handler, not a page).
+// Collect every route that has a page.tsx, skipping dynamic segments (their
+// URLs come from data, not the filesystem) and route groups.
 function collectPages(dir: string, prefix: string): string[] {
   const routes: string[] = []
   if (fs.existsSync(path.join(dir, "page.tsx"))) {
     routes.push(prefix === "" ? "/" : prefix)
   }
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (!entry.isDirectory() || entry.name.startsWith("[")) continue
+    if (!entry.isDirectory() || /^[[(_]/.test(entry.name)) continue
+    if (entry.name === "api") continue
     routes.push(
       ...collectPages(path.join(dir, entry.name), `${prefix}/${entry.name}`)
     )
@@ -23,13 +25,13 @@ function collectPages(dir: string, prefix: string): string[] {
 }
 
 test("route registry matches the pages on disk", () => {
-  const onDisk = collectPages(appDir, "").sort()
+  const onDisk = collectPages(pagesDir, "").sort()
   const registered = siteRoutes.map((route) => route.path).sort()
 
   assert.deepEqual(
     registered,
     onDisk,
-    "src/lib/routes.ts must list exactly the pages under src/app/[lang]/ — add new pages to the registry (the sitemap is generated from it)"
+    "src/lib/routes.ts must list exactly the site's pages — add new pages to the registry (the sitemap is generated from it)"
   )
 })
 

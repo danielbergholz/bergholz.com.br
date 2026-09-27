@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getChannelStats } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale, pageAlternates } from "@/lib/i18n"
+import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
 import { formatNumber } from "@/lib/utils"
 
 export async function generateMetadata({
@@ -14,10 +15,8 @@ export async function generateMetadata({
   const locale = hasLocale(lang) ? lang : defaultLocale
   const dict = await getDictionary(locale)
 
-  return {
-    title: dict.meta.workWithMe.title,
-    description: dict.meta.workWithMe.description,
-    alternates: pageAlternates(locale, "/work-with-me"),
+  return localizedMetadata(locale, "/work-with-me", {
+    ...dict.meta.workWithMe,
     keywords: [
       "Daniel Bergholz",
       "Business Consulting",
@@ -32,7 +31,7 @@ export async function generateMetadata({
       "Content Creator",
       "Claude Code"
     ]
-  }
+  })
 }
 
 const track = [

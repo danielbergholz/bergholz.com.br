@@ -1,11 +1,6 @@
 import type { Route } from "next"
-import {
-  type Locale,
-  languageTags,
-  localePath,
-  siteLanguage,
-  siteUrl
-} from "./i18n.ts"
+import { type Locale, languageTags, localePath, siteLanguage } from "./i18n.ts"
+import { site } from "./site.ts"
 
 import type { Article, PublishedArticle } from "./types.ts"
 
@@ -112,13 +107,13 @@ export function buildRssFeed({
   description,
   articles
 }: RssFeedInput): string {
-  const channelUrl = `${siteUrl}${localePath(locale, "/blog")}`
-  const feedUrl = `${siteUrl}${localePath(locale, blogFeedPath)}`
+  const channelUrl = `${site.url}${localePath(locale, "/blog")}`
+  const feedUrl = `${site.url}${localePath(locale, blogFeedPath)}`
   const posts = articlesForLocale(articles, locale)
   const lastBuildDate = new Date(posts[0]?.published_at ?? 0).toUTCString()
 
   const items = posts.map((article) => {
-    const url = `${siteUrl}${blogArticlePath(locale, article.slug)}`
+    const url = `${site.url}${blogArticlePath(locale, article.slug)}`
     const categories = article.tag_list
       .map((tag) => `\n      <category>${escapeXml(tag)}</category>`)
       .join("")

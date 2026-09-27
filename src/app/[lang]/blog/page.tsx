@@ -17,9 +17,9 @@ import {
   type Locale,
   languageTags,
   localePath,
-  locales,
-  pageAlternates
+  locales
 } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
 
 export async function generateMetadata({
   params
@@ -29,40 +29,13 @@ export async function generateMetadata({
   const { lang } = await params
   const locale = hasLocale(lang) ? lang : defaultLocale
   const dict = await getDictionary(locale)
-  const t = dict.meta.blog
 
+  const metadata = localizedMetadata(locale, "/blog", dict.meta.blog)
   return {
-    title: t.title,
-    description: t.description,
+    ...metadata,
     alternates: {
-      ...pageAlternates(locale, "/blog"),
-      types: {
-        "application/rss+xml": localePath(locale, blogFeedPath)
-      }
-    },
-    openGraph: {
-      type: "website",
-      siteName: "Daniel Bergholz",
-      title: t.title,
-      url: localePath(locale, "/blog"),
-      description: t.description,
-      images: {
-        url: "https://bergholz.com.br/og.png",
-        width: 1200,
-        height: 630
-      }
-    },
-    twitter: {
-      site: "@danielbergholz",
-      creator: "@danielbergholz",
-      card: "summary_large_image",
-      title: t.title,
-      description: t.description,
-      images: {
-        url: "https://bergholz.com.br/og.png",
-        width: 1200,
-        height: 630
-      }
+      ...metadata.alternates,
+      types: { "application/rss+xml": localePath(locale, blogFeedPath) }
     }
   }
 }

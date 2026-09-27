@@ -94,19 +94,6 @@
   .skip-link:focus {
     transform: translateY(0);
   }
-
-  /*
-    The not-found boundary must stay fully static (no params, no headers() —
-    a dynamic API there would force every route out of static generation), so
-    it renders both languages and the layout's <html lang> picks one here.
-  */
-  html[lang="en"] [data-i18n-only="pt"] {
-    display: none;
-  }
-
-  html[lang="pt-BR"] [data-i18n-only="en"] {
-    display: none;
-  }
 }
 
 /*

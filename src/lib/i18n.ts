@@ -11,9 +11,6 @@ export type Locale = (typeof locales)[number]
 // to /pt internally, so "/pt" never appears in public URLs.
 export const defaultLocale: Locale = "pt"
 
-// Public origin, for absolute URLs (metadataBase, sitemap, feeds, JSON-LD).
-export const siteUrl = "https://bergholz.com.br"
-
 // BCP 47 tags for <html lang>, hreflang alternates, and Intl APIs.
 export const languageTags: Record<Locale, string> = {
   pt: "pt-BR",

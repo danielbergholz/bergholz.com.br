@@ -1,10 +1,12 @@
+import type { MetadataRoute } from "next"
+
 // Single source of truth for the site's public routes. The sitemap is
 // generated from this list (once per locale), and routes.test.ts fails if a
 // page exists under src/app/[lang]/ that isn't registered here — so the
 // sitemap can't silently drift from the filesystem.
 export type SiteRoute = {
   path: string
-  changeFrequency: "weekly" | "monthly"
+  changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>
   priority: number
 }
 

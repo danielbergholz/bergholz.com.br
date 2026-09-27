@@ -3,7 +3,8 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale, pageAlternates } from "@/lib/i18n"
+import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
 
 export async function generateMetadata({
   params
@@ -14,10 +15,8 @@ export async function generateMetadata({
   const locale = hasLocale(lang) ? lang : defaultLocale
   const dict = await getDictionary(locale)
 
-  return {
-    title: dict.meta.products.title,
-    description: dict.meta.products.description,
-    alternates: pageAlternates(locale, "/products"),
+  return localizedMetadata(locale, "/products", {
+    ...dict.meta.products,
     keywords: [
       "Daniel Bergholz",
       "Projects",
@@ -27,7 +26,7 @@ export async function generateMetadata({
       "Developer Tools",
       "Open Source"
     ]
-  }
+  })
 }
 
 export default async function Products({

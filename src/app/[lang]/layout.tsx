@@ -1,21 +1,15 @@
 import type { Metadata } from "next"
 import { Instrument_Serif, Poppins } from "next/font/google"
-import Script from "next/script"
 
+import { Analytics } from "@/components/analytics"
 import { Footer } from "@/components/footer"
 import { JsonLd } from "@/components/json-ld"
 import { Nav } from "@/components/nav"
 import { getDictionary } from "@/dictionaries"
-import {
-  defaultLocale,
-  hasLocale,
-  languageTags,
-  localePath,
-  locales,
-  openGraphLocales,
-  pageAlternates,
-  siteUrl
-} from "@/lib/i18n"
+import { defaultLocale, hasLocale, languageTags, locales } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
+import { rootMetadata } from "@/lib/metadata"
+import { site } from "@/lib/site"
 import "../globals.css"
 
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");var d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;var v=d?"dark":"light";r.dataset.theme=v;r.style.colorScheme=v;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?"#000000":"#ffffff"}catch(e){}})()`
@@ -42,66 +36,27 @@ export async function generateMetadata({
   const dict = await getDictionary(locale)
 
   return {
-    metadataBase: new URL(siteUrl),
-    alternates: pageAlternates(locale, "/"),
-    title: dict.meta.home.title,
-    description: dict.meta.home.description,
-    keywords: [
-      "Daniel Bergholz",
-      "Software Engineer",
-      "Content Creator",
-      "Solopreneur",
-      "SaaS Products",
-      "CourseShelf",
-      "Programming",
-      "Software Development",
-      "React.js",
-      "Next.js",
-      "Elixir",
-      "Phoenix",
-      "Web Development",
-      "JavaScript",
-      "TypeScript"
-    ],
-    authors: [{ name: "Daniel Bergholz", url: "https://bergholz.com.br" }],
-    creator: "Daniel Bergholz",
-    publisher: "Daniel Bergholz",
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1
-      }
-    },
-    openGraph: {
-      type: "website",
-      siteName: "Daniel Bergholz",
-      locale: openGraphLocales[locale],
-      title: dict.meta.home.title,
-      url: localePath(locale, "/"),
-      description: dict.meta.home.ogDescription,
-      images: {
-        url: "https://bergholz.com.br/og.png",
-        width: 1200,
-        height: 630
-      }
-    },
-    twitter: {
-      site: "@danielbergholz",
-      creator: "@danielbergholz",
-      card: "summary_large_image",
-      title: dict.meta.home.title,
-      description: dict.meta.home.ogDescription,
-      images: {
-        url: "https://bergholz.com.br/og.png",
-        width: 1200,
-        height: 630
-      }
-    }
+    ...rootMetadata,
+    ...localizedMetadata(locale, "/", {
+      ...dict.meta.home,
+      keywords: [
+        "Daniel Bergholz",
+        "Software Engineer",
+        "Content Creator",
+        "Solopreneur",
+        "SaaS Products",
+        "CourseShelf",
+        "Programming",
+        "Software Development",
+        "React.js",
+        "Next.js",
+        "Elixir",
+        "Phoenix",
+        "Web Development",
+        "JavaScript",
+        "TypeScript"
+      ]
+    })
   }
 }
 
@@ -109,9 +64,9 @@ export async function generateMetadata({
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Daniel Bergholz",
-  url: "https://bergholz.com.br",
-  image: "https://bergholz.com.br/og.png",
+  name: site.author.name,
+  url: site.url,
+  image: `${site.url}${site.ogImage.url}`,
   jobTitle: ["Software Engineer", "Content Creator", "Solopreneur"],
   description:
     "Software Engineer, Content Creator and Solopreneur from Brazil, building SaaS products while teaching programming to developers",
@@ -130,15 +85,7 @@ const personSchema = {
     "Content Creation",
     "Product Development"
   ],
-  sameAs: [
-    "https://www.youtube.com/@DanielBergholz",
-    "https://www.youtube.com/@DanielBergholzbr",
-    "https://www.instagram.com/bergholz.dev/",
-    "https://twitter.com/danielbergholz",
-    "https://www.linkedin.com/in/daniel-gobbi-bergholz/",
-    "https://github.com/danielbergholz",
-    "https://dev.to/danielbergholz"
-  ],
+  sameAs: site.socialLinks.map((link) => link.href),
   contactPoint: {
     "@type": "ContactPoint",
     email: "daniel@bergholz.com.br",
@@ -174,14 +121,7 @@ export default async function RootLayout({
         {/* Structured Data */}
         <JsonLd data={personSchema} />
 
-        {/* Analytics — next/script so client-side locale switches don't
-            re-render a raw script tag React can't execute */}
-        <Script
-          defer
-          data-domain="bergholz.com.br"
-          src="https://plausible.io/js/script.js"
-          strategy="afterInteractive"
-        />
+        <Analytics />
       </head>
       <body
         className={`${poppins.className} ${instrumentSerif.variable} px-6 md:px-10 py-5 md:py-6`}

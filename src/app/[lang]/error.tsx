@@ -6,13 +6,12 @@ import { useEffect } from "react"
 import { boundaryStrings } from "@/dictionaries/boundary"
 import { defaultLocale, hasLocale, localePath } from "@/lib/i18n"
 
-// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js error boundary convention
-export default function Error({
+export default function ErrorPage({
   error,
-  reset
+  retry
 }: {
   error: Error & { digest?: string }
-  reset: () => void
+  retry: () => void
 }) {
   const params = useParams<{ lang: string }>()
   const locale =
@@ -37,7 +36,7 @@ export default function Error({
       <div className="flex flex-wrap gap-4">
         <button
           type="button"
-          onClick={reset}
+          onClick={() => retry()}
           className="inline-flex items-center justify-center min-h-11 rounded-sm bg-foreground px-5 py-2.5 text-xs uppercase tracking-widest text-background hover:opacity-80 transition-opacity"
         >
           {t.tryAgain}

@@ -5,12 +5,8 @@ import { MembershipCTA } from "@/components/membership-cta"
 import { Video } from "@/components/video"
 import { getCourses } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
-import {
-  defaultLocale,
-  hasLocale,
-  localePath,
-  pageAlternates
-} from "@/lib/i18n"
+import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
 
 export async function generateMetadata({
   params
@@ -20,37 +16,16 @@ export async function generateMetadata({
   const { lang } = await params
   const locale = hasLocale(lang) ? lang : defaultLocale
   const dict = await getDictionary(locale)
-  const t = dict.meta.courses
 
-  return {
-    title: t.title,
-    description: t.description,
-    alternates: pageAlternates(locale, "/courses"),
-    openGraph: {
-      type: "website",
-      siteName: "Daniel Bergholz",
-      title: t.title,
-      url: localePath(locale, "/courses"),
-      description: t.description,
-      images: {
-        url: "https://bergholz.com.br/og_courses.png",
-        width: 1200,
-        height: 630
-      }
-    },
-    twitter: {
-      site: "@danielbergholz",
-      creator: "@danielbergholz",
-      card: "summary_large_image",
-      title: t.title,
-      description: t.description,
-      images: {
-        url: "https://bergholz.com.br/og_courses.png",
-        width: 1200,
-        height: 630
-      }
+  return localizedMetadata(locale, "/courses", {
+    ...dict.meta.courses,
+    image: {
+      url: "/og-courses.png",
+      width: 1200,
+      height: 630,
+      alt: dict.meta.courses.title
     }
-  }
+  })
 }
 
 export default async function Courses({

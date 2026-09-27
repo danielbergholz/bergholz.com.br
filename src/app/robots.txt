@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://bergholz.com.br/sitemap.xml
-
-# Disallow crawling of internal Next.js files and API routes
-Disallow: /api/
-Disallow: /_next/

@@ -10,7 +10,8 @@ import {
 } from "@/components/icons"
 import { Link } from "@/components/link"
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale, pageAlternates } from "@/lib/i18n"
+import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { localizedMetadata } from "@/lib/localized-metadata"
 import { instagramUrl, youtubeChannels } from "@/lib/socials"
 
 export async function generateMetadata({
@@ -22,11 +23,9 @@ export async function generateMetadata({
   const locale = hasLocale(lang) ? lang : defaultLocale
   const dict = await getDictionary(locale)
 
-  return {
-    title: dict.meta.links.title,
-    description: dict.meta.links.description,
-    alternates: pageAlternates(locale, "/links")
-  }
+  return localizedMetadata(locale, "/links", {
+    ...dict.meta.links
+  })
 }
 
 export default async function Links({
