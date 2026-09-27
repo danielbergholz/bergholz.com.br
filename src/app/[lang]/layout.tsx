@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 
 import { SiteDocument } from "@/components/site-document"
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale, locales } from "@/lib/i18n"
+import { locales } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
 import { rootMetadata } from "@/lib/metadata"
 
@@ -10,13 +11,8 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}): Promise<Metadata> {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const dict = await getDictionary(locale)
 
   return {
@@ -45,13 +41,7 @@ export async function generateMetadata({
 }
 
 export default async function RootLayout({
-  children,
-  params
-}: Readonly<{
-  children: React.ReactNode
-  params: Promise<{ lang: string }>
-}>) {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
-  return <SiteDocument locale={locale}>{children}</SiteDocument>
+  children
+}: Readonly<{ children: React.ReactNode }>) {
+  return <SiteDocument locale={await getLocale()}>{children}</SiteDocument>
 }

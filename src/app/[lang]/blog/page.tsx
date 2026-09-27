@@ -1,33 +1,19 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Suspense } from "react"
 
 import { ArticleCard } from "@/components/article-card"
 import { CARD_BASE } from "@/components/content-card"
-import { BlogLoadingSkeleton } from "@/components/skeletons"
 import { getPublishedArticles } from "@/data-access/blog"
 import { getArticleVideoThumbnails } from "@/data-access/content"
 import { type Dictionary, getDictionary } from "@/dictionaries"
 import { articlesForLocale, blogFeedPath } from "@/lib/blog"
 import { getCurrentYear } from "@/lib/current-year"
-import {
-  defaultLocale,
-  hasLocale,
-  type Locale,
-  languageTags,
-  localePath,
-  locales
-} from "@/lib/i18n"
+import { type Locale, languageTags, localePath, locales } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}): Promise<Metadata> {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const dict = await getDictionary(locale)
 
   const metadata = localizedMetadata(locale, "/blog", dict.meta.blog)
@@ -40,15 +26,8 @@ export async function generateMetadata({
   }
 }
 
-// The skeleton wraps only the post list (not a route-level loading.tsx), so
-// the heading and intro render right away.
-export default async function Blog({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-  if (!hasLocale(lang)) notFound()
+export default async function Blog() {
+  const lang = await getLocale()
   const dict = await getDictionary(lang)
   const t = dict.blog
   const otherLocale = locales.find((locale) => locale !== lang) ?? lang
@@ -63,9 +42,7 @@ export default async function Blog({
       </p>
       <hr className="w-12 border-t border-current opacity-20 mb-6 md:mb-8" />
 
-      <Suspense fallback={<BlogLoadingSkeleton />}>
-        <ArticleList lang={lang} dict={dict} />
-      </Suspense>
+      <ArticleList lang={lang} dict={dict} />
 
       <Link
         href={localePath(otherLocale, "/blog")}

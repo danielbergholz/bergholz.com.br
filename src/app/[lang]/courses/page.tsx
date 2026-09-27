@@ -1,20 +1,14 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 
 import { MembershipCTA } from "@/components/membership-cta"
 import { Video } from "@/components/video"
 import { getCourses } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}): Promise<Metadata> {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const dict = await getDictionary(locale)
 
   return localizedMetadata(locale, "/courses", {
@@ -28,13 +22,8 @@ export async function generateMetadata({
   })
 }
 
-export default async function Courses({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-  if (!hasLocale(lang)) notFound()
+export default async function Courses() {
+  const lang = await getLocale()
   const dict = await getDictionary(lang)
   const t = dict.courses
 

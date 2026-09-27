@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { notFound } from "next/navigation"
 
 import { ExternalLink, Instagram, Play, YouTube } from "@/components/icons"
 import { getLatestVeganVideo } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
 import { getCurrentYear } from "@/lib/current-year"
-import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
 import { readableDate } from "@/lib/utils"
 
@@ -20,13 +20,8 @@ const eatCleanUrl = `https://www.eatclean.com.br/?${partnerTracking}`
 const luisaCouponCode = "LUISASIMEI"
 const contactEmail = "contato@bergholz.com.br"
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}): Promise<Metadata> {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const dict = await getDictionary(locale)
 
   return localizedMetadata(locale, "/luisa-e-daniel", {
@@ -125,13 +120,8 @@ function CouponCard({
   )
 }
 
-export default async function VeganPage({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-  if (!hasLocale(lang)) notFound()
+export default async function VeganPage() {
+  const lang = await getLocale()
 
   const [dict, latestVideo, currentYear] = await Promise.all([
     getDictionary(lang),

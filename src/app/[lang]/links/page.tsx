@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 
 import {
   GitHub,
@@ -10,17 +9,12 @@ import {
 } from "@/components/icons"
 import { Link } from "@/components/link"
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
-import { instagramUrl, youtubeChannels } from "@/lib/socials"
+import { socialUrls, youtubeChannels } from "@/lib/socials"
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}): Promise<Metadata> {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const dict = await getDictionary(locale)
 
   return localizedMetadata(locale, "/links", {
@@ -28,13 +22,8 @@ export async function generateMetadata({
   })
 }
 
-export default async function Links({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-  if (!hasLocale(lang)) notFound()
+export default async function Links() {
+  const lang = await getLocale()
   const dict = await getDictionary(lang)
   const t = dict.links
 
@@ -56,22 +45,19 @@ export default async function Links({
           </Link>
         ))}
 
-        <Link href={instagramUrl} title="Instagram">
+        <Link href={socialUrls.instagram} title="Instagram">
           <Instagram width={26} height={26} />
         </Link>
 
-        <Link href="https://twitter.com/danielbergholz" title="Twitter">
+        <Link href={socialUrls.x} title="Twitter">
           <Twitter width={25} height={25} />
         </Link>
 
-        <Link
-          href="https://www.linkedin.com/in/daniel-gobbi-bergholz/"
-          title="LinkedIn"
-        >
+        <Link href={socialUrls.linkedin} title="LinkedIn">
           <LinkedIn width={28} height={28} />
         </Link>
 
-        <Link href="https://github.com/danielbergholz" title="GitHub">
+        <Link href={socialUrls.github} title="GitHub">
           <GitHub width={28} height={28} />
         </Link>
       </section>

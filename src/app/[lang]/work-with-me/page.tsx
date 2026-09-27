@@ -1,18 +1,12 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 import { getChannelStats } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
-import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
 import { formatNumber } from "@/lib/utils"
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}): Promise<Metadata> {
-  const { lang } = await params
-  const locale = hasLocale(lang) ? lang : defaultLocale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const dict = await getDictionary(locale)
 
   return localizedMetadata(locale, "/work-with-me", {
@@ -77,13 +71,8 @@ const comingSoonBadgeStyle =
 const openBadgeStyle =
   "text-violet-600 dark:text-violet-400 border-violet-300 dark:border-violet-800"
 
-export default async function WorkWithMe({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-  if (!hasLocale(lang)) notFound()
+export default async function WorkWithMe() {
+  const lang = await getLocale()
   const dict = await getDictionary(lang)
   const t = dict.workWithMe
 

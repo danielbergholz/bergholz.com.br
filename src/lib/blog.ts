@@ -92,7 +92,7 @@ function escapeXml(value: string): string {
     .replace(/"/g, "&quot;")
 }
 
-export type RssFeedInput = {
+type RssFeedInput = {
   locale: Locale
   title: string
   description: string

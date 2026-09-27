@@ -1,4 +1,5 @@
 import type { SiteConfig } from "./site-config.ts"
+import { socialUrls, youtubeChannels } from "./socials.ts"
 
 // Site-wide settings (see site-config.ts): the single source of truth for the
 // URL, names, colors and links used by metadata, JSON-LD, the manifest and the
@@ -26,15 +27,14 @@ export const site: SiteConfig = {
   plausibleScriptId: "pa-9A0EgjEzmGVOQiIyE6Zqc",
   maskableIcons: false,
   socialLinks: [
-    { name: "YouTube (EN)", href: "https://www.youtube.com/@DanielBergholz" },
-    { name: "YouTube (BR)", href: "https://www.youtube.com/@DanielBergholzbr" },
-    { name: "Instagram", href: "https://www.instagram.com/bergholz.dev/" },
-    { name: "X", href: "https://twitter.com/danielbergholz" },
-    {
-      name: "LinkedIn",
-      href: "https://www.linkedin.com/in/daniel-gobbi-bergholz/"
-    },
-    { name: "GitHub", href: "https://github.com/danielbergholz" },
-    { name: "DEV", href: "https://dev.to/danielbergholz" }
+    ...youtubeChannels("en").map(({ href, tag }) => ({
+      name: `YouTube (${tag})`,
+      href
+    })),
+    { name: "Instagram", href: socialUrls.instagram },
+    { name: "X", href: socialUrls.x },
+    { name: "LinkedIn", href: socialUrls.linkedin },
+    { name: "GitHub", href: socialUrls.github },
+    { name: "DEV", href: socialUrls.devto }
   ]
 }

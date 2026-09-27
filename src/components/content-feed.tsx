@@ -1,13 +1,10 @@
 "use client"
 
-import type { Route } from "next"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { Suspense, useEffect, useId, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 
 import { ContentCard } from "@/components/content-card"
-import { ContentFeedSkeleton } from "@/components/skeletons"
 import type { Dictionary } from "@/dictionaries"
-import { type Locale, localePath } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n"
 import type { ContentItem } from "@/lib/types"
 
 type Props = {
@@ -106,66 +103,54 @@ function SearchInput({
   )
 }
 
-function ContentFeedInner({
+// The search query lives in ?q= so results can be shared, but it's read after
+// mount and written with history.replaceState: reading it during render
+// (useSearchParams) would opt the whole feed out of server rendering. The
+// server-rendered list is the unfiltered one, so a ?q= link shows every item
+// for a moment before the filter applies.
+function readQuery() {
+  return new URLSearchParams(window.location.search).get("q") ?? ""
+}
+
+function writeQuery(value: string) {
+  const url = new URL(window.location.href)
+  if (value.trim()) {
+    url.searchParams.set("q", value.trim())
+  } else {
+    url.searchParams.delete("q")
+  }
+  window.history.replaceState(window.history.state, "", url)
+}
+
+export function ContentFeed({
   items,
   locale,
   currentYear,
   t,
   cardLabels
 }: Props) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const queryFromUrl = searchParams?.get("q") ?? ""
-
-  const [inputValue, setInputValue] = useState(queryFromUrl)
+  const [inputValue, setInputValue] = useState("")
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const resultsId = useId()
 
-  // Keep input in sync when navigating back/forward. Skip when the URL already
-  // reflects the current input so the visible value doesn't shift mid-typing.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: only re-sync on URL changes, not every keystroke
   useEffect(() => {
-    if (queryFromUrl === inputValue.trim()) return
-    setInputValue(queryFromUrl)
-  }, [queryFromUrl])
-
-  const updateUrl = (value: string) => {
-    const params = new URLSearchParams(searchParams?.toString() ?? "")
-    if (value.trim()) {
-      params.set("q", value.trim())
-    } else {
-      params.delete("q")
+    setInputValue(readQuery())
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
     }
-    const queryString = params.toString()
-    const basePath = pathname ?? localePath(locale, "/videos")
-    router.replace(
-      (queryString ? `${basePath}?${queryString}` : basePath) as Route,
-      {
-        scroll: false
-      }
-    )
-  }
+  }, [])
 
   const handleChange = (value: string) => {
     setInputValue(value)
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(() => {
-      updateUrl(value)
-    }, 300)
+    debounceRef.current = setTimeout(() => writeQuery(value), 300)
   }
 
   const handleClear = () => {
     setInputValue("")
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    updateUrl("")
+    writeQuery("")
   }
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-    }
-  }, [])
 
   const isSearching = inputValue.trim().length > 0
   const filtered = isSearching
@@ -253,13 +238,5 @@ function ContentFeedInner({
         </>
       )}
     </div>
-  )
-}
-
-export function ContentFeed(props: Props) {
-  return (
-    <Suspense fallback={<ContentFeedSkeleton />}>
-      <ContentFeedInner {...props} />
-    </Suspense>
   )
 }

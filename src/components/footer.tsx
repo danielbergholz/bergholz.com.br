@@ -4,7 +4,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher"
 import type { Dictionary } from "@/dictionaries"
 import { getCurrentYear } from "@/lib/current-year"
 import { type Locale, localePath } from "@/lib/i18n"
-import { instagramUrl, youtubeChannels } from "@/lib/socials"
+import { socialUrls, youtubeChannels } from "@/lib/socials"
 
 const socialLinks = (locale: Locale) => [
   ...youtubeChannels(locale).map(({ href, tag }) => ({
@@ -12,19 +12,19 @@ const socialLinks = (locale: Locale) => [
     label: `YouTube · ${tag}`
   })),
   {
-    href: instagramUrl,
+    href: socialUrls.instagram,
     label: "Instagram"
   },
   {
-    href: "https://twitter.com/danielbergholz",
+    href: socialUrls.x,
     label: "X"
   },
   {
-    href: "https://www.linkedin.com/in/daniel-gobbi-bergholz/",
+    href: socialUrls.linkedin,
     label: "LinkedIn"
   },
   {
-    href: "https://github.com/danielbergholz",
+    href: socialUrls.github,
     label: "GitHub"
   }
 ]

@@ -18,6 +18,7 @@ import {
   openGraphLocales,
   siteLanguage
 } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 import { pageMetadata } from "@/lib/metadata"
 import { site } from "@/lib/site"
 import type { PublishedArticle, PublishedArticleWithBody } from "@/lib/types"
@@ -66,10 +67,9 @@ const resolveArticle = cache(
 export async function generateMetadata({
   params
 }: {
-  params: Promise<{ lang: string; slug: string }>
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const { lang, slug } = await params
-  if (!hasLocale(lang)) notFound()
+  const [{ slug }, lang] = await Promise.all([params, getLocale()])
 
   const resolved = await resolveArticle(lang, slug)
   if ("redirectTo" in resolved) return {}
@@ -104,10 +104,9 @@ export async function generateMetadata({
 export default async function BlogArticle({
   params
 }: {
-  params: Promise<{ lang: string; slug: string }>
+  params: Promise<{ slug: string }>
 }) {
-  const { lang, slug } = await params
-  if (!hasLocale(lang)) notFound()
+  const [{ slug }, lang] = await Promise.all([params, getLocale()])
 
   const [resolved, dict, currentYear] = await Promise.all([
     resolveArticle(lang, slug),

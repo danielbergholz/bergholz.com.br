@@ -1,7 +1,5 @@
 import Image from "next/image"
 import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Suspense } from "react"
 import { ContentCard } from "@/components/content-card"
 import {
   GitHub,
@@ -10,31 +8,17 @@ import {
   Twitter,
   YouTube
 } from "@/components/icons"
-import { HomeLoadingSkeleton } from "@/components/skeletons"
 import { getContentFeed } from "@/data-access/content"
 import { getChannelStats } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
 import { getCurrentYear } from "@/lib/current-year"
-import { hasLocale, type Locale, localePath } from "@/lib/i18n"
-import { instagramUrl, youtubeChannels } from "@/lib/socials"
+import { localePath } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
+import { socialUrls, youtubeChannels } from "@/lib/socials"
 import { formatNumber } from "@/lib/utils"
 
-export default async function Home({
-  params
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-  if (!hasLocale(lang)) notFound()
-
-  return (
-    <Suspense fallback={<HomeLoadingSkeleton />}>
-      <HomeContent lang={lang} />
-    </Suspense>
-  )
-}
-
-async function HomeContent({ lang }: { lang: Locale }) {
+export default async function Home() {
+  const lang = await getLocale()
   const dict = await getDictionary(lang)
   const t = dict.home
 
@@ -90,7 +74,7 @@ async function HomeContent({ lang }: { lang: Locale }) {
           ))}
 
           <a
-            href={instagramUrl}
+            href={socialUrls.instagram}
             aria-label="Instagram"
             target="_blank"
             rel="noreferrer noopener"
@@ -100,7 +84,7 @@ async function HomeContent({ lang }: { lang: Locale }) {
           </a>
 
           <a
-            href="https://twitter.com/danielbergholz"
+            href={socialUrls.x}
             aria-label="X (formerly Twitter)"
             target="_blank"
             rel="noreferrer noopener"
@@ -110,7 +94,7 @@ async function HomeContent({ lang }: { lang: Locale }) {
           </a>
 
           <a
-            href="https://www.linkedin.com/in/daniel-gobbi-bergholz/"
+            href={socialUrls.linkedin}
             aria-label="LinkedIn"
             target="_blank"
             rel="noreferrer noopener"
@@ -120,7 +104,7 @@ async function HomeContent({ lang }: { lang: Locale }) {
           </a>
 
           <a
-            href="https://github.com/danielbergholz"
+            href={socialUrls.github}
             aria-label="GitHub"
             target="_blank"
             rel="noreferrer noopener"

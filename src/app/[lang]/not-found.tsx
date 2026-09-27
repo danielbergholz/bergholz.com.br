@@ -1,11 +1,8 @@
-import { lang } from "next/root-params"
-
 import { NotFoundContent } from "@/components/not-found-content"
-import { defaultLocale, hasLocale } from "@/lib/i18n"
+import { getLocale } from "@/lib/locale"
 
-// not-found boundaries receive no params, so the locale comes from the root
-// [lang] segment through next/root-params.
+// Covers a notFound() thrown inside a page; unknown URLs get
+// app/global-not-found.tsx instead.
 export default async function NotFound() {
-  const value = await lang()
-  return <NotFoundContent locale={hasLocale(value) ? value : defaultLocale} />
+  return <NotFoundContent locale={await getLocale()} />
 }
