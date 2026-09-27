@@ -19,9 +19,6 @@ import { hasLocale, type Locale, localePath } from "@/lib/i18n"
 import { instagramUrl, youtubeChannels } from "@/lib/socials"
 import { formatNumber } from "@/lib/utils"
 
-// The skeleton lives in an in-page Suspense boundary instead of a route-level
-// loading.tsx: a loading boundary above the [...rest] catch-all would flush a
-// 200 shell before its notFound() runs, turning real 404s into soft 404s.
 export default async function Home({
   params
 }: {

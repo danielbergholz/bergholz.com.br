@@ -1,13 +1,13 @@
 import { timingSafeEqual } from "node:crypto"
 import { revalidateTag } from "next/cache"
-import type { NextRequest } from "next/server"
 
 import { DEVTO_CACHE_TAG } from "@/data-access/blog"
 
-// On-demand revalidation for everything built from dev.to data. Protected by
-// REVALIDATE_SECRET (query `?secret=` or `Authorization: Bearer`); see the
-// README for wiring it to dev.to's article_created/article_updated webhooks.
-// Without the env var the endpoint is disabled (always 401).
+// On-demand revalidation for everything built from dev.to data, called by the
+// content repos' sync script and `npm run revalidate` (see the README).
+// Protected by REVALIDATE_SECRET, sent only as `Authorization: Bearer` — never
+// in the URL, where it would end up in access logs. Without the env var the
+// endpoint is disabled (always 401).
 
 function secretMatches(provided: string | null, expected: string | undefined) {
   if (!provided || !expected) return false
@@ -16,10 +16,9 @@ function secretMatches(provided: string | null, expected: string | undefined) {
   return a.length === b.length && timingSafeEqual(a, b)
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   const provided =
-    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
-    request.nextUrl.searchParams.get("secret")
+    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ?? null
 
   if (!secretMatches(provided, process.env.REVALIDATE_SECRET)) {
     return Response.json(

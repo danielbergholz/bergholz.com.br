@@ -40,9 +40,8 @@ export async function generateMetadata({
   }
 }
 
-// The skeleton lives in an in-page Suspense boundary instead of a route-level
-// loading.tsx: a loading boundary here would also wrap /blog/[slug] and flush
-// a 200 shell before its notFound() runs, turning real 404s into soft 404s.
+// The skeleton wraps only the post list (not a route-level loading.tsx), so
+// the heading and intro render right away.
 export default async function Blog({
   params
 }: {

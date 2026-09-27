@@ -10,9 +10,11 @@ import { defaultLocale, type Locale } from "@/lib/i18n"
 // never exists at two public URLs. No Accept-Language auto-redirects — they
 // hurt indexing (Googlebot crawls from the US); the nav has a language switcher.
 //
-// Blog posts are also checked here (see blogPostRouting): an unknown slug gets
-// a real 404 and a post under the wrong locale a 308, which the page itself
-// can't do on a first visit once its static shell has started streaming.
+// Blog post status codes are decided here too, before anything renders: an
+// unknown slug gets a real 404 and a post under the wrong locale a 308 (see
+// blogPostRouting). The page can't do either on a first visit once its static
+// shell has started streaming. Other unknown paths match no route and get the
+// 404 from app/global-not-found.tsx.
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -38,20 +40,37 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL(routing.redirect, request.url), 308)
     }
     if (routing && "notFound" in routing) {
-      // Any path the [...rest] catch-all handles renders the localized 404.
-      const url = request.nextUrl.clone()
-      url.pathname = `/${routing.notFound}/404`
-      return NextResponse.rewrite(url, { status: 404 })
+      return notFoundResponse(request, routing.notFound)
     }
   }
 
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return
+  const locale: Locale =
+    pathname === "/en" || pathname.startsWith("/en/") ? "en" : defaultLocale
+
+  if (locale === "en") {
+    return NextResponse.next(withLocale(request, locale))
   }
 
   const url = request.nextUrl.clone()
   url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`
-  return NextResponse.rewrite(url)
+  return NextResponse.rewrite(url, withLocale(request, locale))
+}
+
+// Passes the locale to the render as the x-locale request header: the global
+// 404 page (app/global-not-found.tsx) renders outside [lang] and has no other
+// way to know it.
+function withLocale(request: NextRequest, locale: Locale) {
+  const headers = new Headers(request.headers)
+  headers.set("x-locale", locale)
+  return { request: { headers } }
+}
+
+// Rewrites to a path no route matches, so app/global-not-found.tsx renders the
+// localized 404 page.
+function notFoundResponse(request: NextRequest, locale: Locale) {
+  const url = request.nextUrl.clone()
+  url.pathname = `/${locale}/404`
+  return NextResponse.rewrite(url, withLocale(request, locale))
 }
 
 // The slug → locale map from /api/blog/posts (a prerendered route, so the

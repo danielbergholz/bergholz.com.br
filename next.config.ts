@@ -59,6 +59,10 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   poweredByHeader: false,
   experimental: {
+    // The root layout lives under [lang], so a notFound() can't be caught by
+    // [lang]/not-found.tsx while server rendering; app/global-not-found.tsx
+    // renders the 404 instead of Next's client-rendered error page.
+    globalNotFound: true,
     // Prerender pages one at a time in a single worker. Every blog post page
     // hits the dev.to API at build time, and the default 9 parallel workers
     // burst enough requests to get throttled (429) — and each worker fetches

@@ -151,7 +151,8 @@ export default async function VeganPage({
             src="/luisa-daniel.jpg"
             alt={t.photoAlt}
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             sizes="(max-width: 1024px) 100vw, 440px"
             className="object-cover object-[50%_46%]"
           />

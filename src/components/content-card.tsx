@@ -70,11 +70,12 @@ function Thumbnail({
         src={thumbnailUrl}
         alt={title}
         fill
-        priority={priority}
+        loading={priority ? "eager" : undefined}
+        fetchPriority={priority ? "high" : undefined}
         sizes={
           featured
             ? "(max-width: 768px) 100vw, 440px"
-            : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 330px"
         }
         className="object-cover"
       />
@@ -160,7 +161,7 @@ function Actions({
         <CardLink href={articleUrl} className={compactActionClass}>
           <Read width={12} height={12} /> {t.read}
           {readingMinutes != null && (
-            <span className="opacity-60">· {readingMinutes}m</span>
+            <span className="opacity-80">· {readingMinutes}m</span>
           )}
         </CardLink>
       )}

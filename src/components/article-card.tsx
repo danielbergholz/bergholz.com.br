@@ -30,7 +30,8 @@ export function ArticleCover({
         src={src}
         alt=""
         fill
-        priority={priority}
+        loading={priority ? "eager" : undefined}
+        fetchPriority={priority ? "high" : undefined}
         sizes={sizes}
         className="object-cover"
       />
