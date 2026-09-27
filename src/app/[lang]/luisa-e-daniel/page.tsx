@@ -5,12 +5,13 @@ import { notFound } from "next/navigation"
 import { ExternalLink, Instagram, Play, YouTube } from "@/components/icons"
 import { getLatestVeganVideo } from "@/data-access/youtube"
 import { getDictionary } from "@/dictionaries"
+import { getCurrentYear } from "@/lib/current-year"
 import {
   defaultLocale,
   hasLocale,
+  type Locale,
   pageAlternates,
-  siteUrl,
-  type Locale
+  siteUrl
 } from "@/lib/i18n"
 import { readableDate } from "@/lib/utils"
 
@@ -23,8 +24,6 @@ const rakkauUrl = `https://www.rakkau.com.br/?${partnerTracking}`
 const eatCleanUrl = `https://www.eatclean.com.br/?${partnerTracking}`
 const luisaCouponCode = "LUISASIMEI"
 const contactEmail = "contato@bergholz.com.br"
-
-export const revalidate = 3600
 
 export async function generateMetadata({
   params
@@ -154,9 +153,10 @@ export default async function VeganPage({
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
 
-  const [dict, latestVideo] = await Promise.all([
+  const [dict, latestVideo, currentYear] = await Promise.all([
     getDictionary(lang),
-    getLatestVeganVideo()
+    getLatestVeganVideo(),
+    getCurrentYear()
   ])
   const t = dict.vegan
 
@@ -213,7 +213,14 @@ export default async function VeganPage({
         </div>
       </section>
 
-      {latestVideo && <LatestVideo video={latestVideo} locale={lang} t={t} />}
+      {latestVideo && (
+        <LatestVideo
+          video={latestVideo}
+          locale={lang}
+          currentYear={currentYear}
+          t={t}
+        />
+      )}
 
       <section aria-labelledby="coupons-title">
         <p className="text-xs font-bold uppercase tracking-[0.24em] opacity-50">
@@ -277,10 +284,12 @@ export default async function VeganPage({
 function LatestVideo({
   video,
   locale,
+  currentYear,
   t
 }: {
   video: NonNullable<Awaited<ReturnType<typeof getLatestVeganVideo>>>
   locale: Locale
+  currentYear: number
   t: Awaited<ReturnType<typeof getDictionary>>["vegan"]
 }) {
   const { snippet } = video
@@ -331,7 +340,7 @@ function LatestVideo({
         </div>
         <div className="flex flex-col justify-center p-6 md:p-8">
           <time className="text-[10px] font-bold uppercase tracking-[0.18em] opacity-50">
-            {readableDate(snippet.publishedAt, locale)}
+            {readableDate(snippet.publishedAt, locale, currentYear)}
           </time>
           <h3 className="mt-3 text-xl font-bold leading-tight md:text-2xl">
             {snippet.title}

@@ -1,3 +1,7 @@
+import Image from "next/image"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { Suspense } from "react"
 import { ContentCard } from "@/components/content-card"
 import {
   GitHub,
@@ -6,19 +10,14 @@ import {
   Twitter,
   YouTube
 } from "@/components/icons"
-import { getDictionary } from "@/dictionaries"
+import { HomeLoadingSkeleton } from "@/components/skeletons"
 import { getContentFeed } from "@/data-access/content"
 import { getChannelStats } from "@/data-access/youtube"
-import { HomeLoadingSkeleton } from "@/components/skeletons"
-import { type Locale, hasLocale, localePath } from "@/lib/i18n"
+import { getDictionary } from "@/dictionaries"
+import { getCurrentYear } from "@/lib/current-year"
+import { hasLocale, type Locale, localePath } from "@/lib/i18n"
 import { instagramUrl, youtubeChannels } from "@/lib/socials"
 import { formatNumber } from "@/lib/utils"
-import Image from "next/image"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Suspense } from "react"
-
-export const revalidate = 3600 // 1 hour
 
 // The skeleton lives in an in-page Suspense boundary instead of a route-level
 // loading.tsx: a loading boundary above the [...rest] catch-all would flush a
@@ -42,10 +41,8 @@ async function HomeContent({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)
   const t = dict.home
 
-  const [{ subscriberCount, viewCount }, content] = await Promise.all([
-    getChannelStats(),
-    getContentFeed()
-  ])
+  const [{ subscriberCount, viewCount }, content, currentYear] =
+    await Promise.all([getChannelStats(), getContentFeed(), getCurrentYear()])
   const latestVideos = content.filter((item) => item.videoUrl).slice(0, 3)
 
   return (
@@ -194,6 +191,7 @@ async function HomeContent({ lang }: { lang: Locale }) {
                 key={item.id}
                 item={item}
                 locale={lang}
+                currentYear={currentYear}
                 t={dict.card}
                 priority={index === 0}
               />

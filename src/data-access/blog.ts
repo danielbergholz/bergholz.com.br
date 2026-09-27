@@ -1,19 +1,25 @@
+import { cacheLife, cacheTag } from "next/cache"
+
+import { articlesMissingFromPublicList } from "@/lib/blog"
 import type {
   Article,
   PublishedArticle,
   PublishedArticleWithBody
 } from "@/lib/types"
-import { articlesMissingFromPublicList } from "@/lib/blog"
 
 const BASE_URL = "https://dev.to/api"
 const USERNAME = "danielbergholz"
 const API_KEY = process.env.DEV_TO_API_KEY
 
-// Every dev.to fetch is cached in the Data Cache for an hour and tagged, so:
-// - the listing is fetched once per hour no matter how many routes use it
-//   (home, /videos, /blog, every /blog/[slug], the sitemap and the RSS feed
-//   all share the same cache entry);
-// - POST /api/revalidate can expire everything at once with revalidateTag.
+// Two cache layers, both an hour long and both tagged "devto":
+// - each exported function is a "use cache" function, which lets the pages
+//   that read it prerender into the static shell (Cache Components);
+// - each fetch also sets `next: { revalidate, tags }`. "use cache" entries
+//   live in memory per instance and deployment, while the fetch Data Cache
+//   persists across deploys — so a cold instance or a fresh deploy reads the
+//   listing from there instead of calling dev.to again.
+// The listing is fetched once per hour no matter how many routes use it, and
+// POST /api/revalidate expires both layers at once with revalidateTag.
 export const DEVTO_CACHE_TAG = "devto"
 
 const cacheOptions = { next: { revalidate: 3600, tags: [DEVTO_CACHE_TAG] } }
@@ -78,12 +84,17 @@ async function devtoFetchList<T>(
 // post in one call (needed to pair posts with their videos in the feed and to
 // show a post's video thumbnail on /blog).
 // per_page=1000 so the merged feed sees every post (the default is only 30).
-export const getArticles = (): Promise<Article[]> =>
-  devtoFetchList<Article>(
+export const getArticles = async (): Promise<Article[]> => {
+  "use cache"
+  cacheLife("hours")
+  cacheTag(DEVTO_CACHE_TAG)
+
+  return devtoFetchList<Article>(
     `${BASE_URL}/articles/me/published?per_page=1000`,
     "me/published",
     { "api-key": API_KEY ?? "" }
   )
+}
 
 // Public list (no API key): every published post with `language` and
 // `social_image` but no body. Paginates only if a page comes back full, so
@@ -91,6 +102,10 @@ export const getArticles = (): Promise<Article[]> =>
 const PER_PAGE = 100
 
 export const getPublishedArticles = async (): Promise<PublishedArticle[]> => {
+  "use cache"
+  cacheLife("hours")
+  cacheTag(DEVTO_CACHE_TAG)
+
   const publishedArticles: PublishedArticle[] = []
   for (let page = 1; ; page++) {
     const batch = await devtoFetchList<PublishedArticle>(
@@ -127,6 +142,10 @@ export const getPublishedArticles = async (): Promise<PublishedArticle[]> => {
 export const getArticle = async (
   slug: string
 ): Promise<PublishedArticleWithBody | null> => {
+  "use cache"
+  cacheLife("hours")
+  cacheTag(DEVTO_CACHE_TAG)
+
   const response = await devtoFetch(
     `${BASE_URL}/articles/${USERNAME}/${encodeURIComponent(slug)}`
   )

@@ -9,13 +9,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "revalidate": "node --env-file=.env scripts/revalidate.mjs",
-    "lint": "biome lint ./src",
-    "lint:fix": "biome check --write ./src",
-    "typecheck": "tsc --noEmit",
-    "format": "biome format --write ./src",
-    "check": "npm run lint && npm run typecheck",
-    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"src/**/*.test.ts\""
+    "lint": "biome lint",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"src/**/*.test.ts\"",
+    "check": "biome check && npm run typecheck",
+    "verify": "npm run check && npm test && npm run build",
+    "revalidate": "node --env-file=.env scripts/revalidate.mjs"
   },
   "dependencies": {
     "next": "^16.3.6",

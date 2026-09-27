@@ -10,10 +10,11 @@ import { getPublishedArticles } from "@/data-access/blog"
 import { getArticleVideoThumbnails } from "@/data-access/content"
 import { type Dictionary, getDictionary } from "@/dictionaries"
 import { articlesForLocale, blogFeedPath } from "@/lib/blog"
+import { getCurrentYear } from "@/lib/current-year"
 import {
-  type Locale,
   defaultLocale,
   hasLocale,
+  type Locale,
   languageTags,
   localePath,
   locales,
@@ -65,8 +66,6 @@ export async function generateMetadata({
     }
   }
 }
-
-export const revalidate = 3600 // 1 hour
 
 // The skeleton lives in an in-page Suspense boundary instead of a route-level
 // loading.tsx: a loading boundary here would also wrap /blog/[slug] and flush
@@ -131,9 +130,10 @@ export default async function Blog({
 }
 
 async function ArticleList({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  const [published, videoThumbnails] = await Promise.all([
+  const [published, videoThumbnails, currentYear] = await Promise.all([
     getPublishedArticles(),
-    getArticleVideoThumbnails()
+    getArticleVideoThumbnails(),
+    getCurrentYear()
   ])
   const articles = articlesForLocale(published, lang)
 
@@ -153,6 +153,7 @@ async function ArticleList({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           article={article}
           videoThumbnailUrl={videoThumbnails.get(article.id)}
           locale={lang}
+          currentYear={currentYear}
           t={dict.card}
           priority={index === 0}
         />

@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useId, useRef, useState } from "react"
 
@@ -12,6 +13,7 @@ import type { ContentItem } from "@/lib/types"
 type Props = {
   items: ContentItem[]
   locale: Locale
+  currentYear: number
   t: Dictionary["feed"]
   cardLabels: Dictionary["card"]
 }
@@ -104,7 +106,13 @@ function SearchInput({
   )
 }
 
-function ContentFeedInner({ items, locale, t, cardLabels }: Props) {
+function ContentFeedInner({
+  items,
+  locale,
+  currentYear,
+  t,
+  cardLabels
+}: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -131,9 +139,12 @@ function ContentFeedInner({ items, locale, t, cardLabels }: Props) {
     }
     const queryString = params.toString()
     const basePath = pathname ?? localePath(locale, "/videos")
-    router.replace(queryString ? `${basePath}?${queryString}` : basePath, {
-      scroll: false
-    })
+    router.replace(
+      (queryString ? `${basePath}?${queryString}` : basePath) as Route,
+      {
+        scroll: false
+      }
+    )
   }
 
   const handleChange = (value: string) => {
@@ -206,6 +217,7 @@ function ContentFeedInner({ items, locale, t, cardLabels }: Props) {
                 key={item.id}
                 item={item}
                 locale={locale}
+                currentYear={currentYear}
                 t={cardLabels}
               />
             ))}
@@ -219,6 +231,7 @@ function ContentFeedInner({ items, locale, t, cardLabels }: Props) {
                 key={item.id}
                 item={item}
                 locale={locale}
+                currentYear={currentYear}
                 t={cardLabels}
                 featured
               />
@@ -231,6 +244,7 @@ function ContentFeedInner({ items, locale, t, cardLabels }: Props) {
                   key={item.id}
                   item={item}
                   locale={locale}
+                  currentYear={currentYear}
                   t={cardLabels}
                 />
               ))}

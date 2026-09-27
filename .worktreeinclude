@@ -1,3 +1,6 @@
-# Ignored local environment files copied into new worktrees.
+# Untracked files copied into each new worktree (gitignore-syntax allowlist).
+# These hold secrets/config the dev server and build need but git never tracks.
+# node_modules is intentionally absent — the session-start hook reinstalls it.
 .env
 .env.local
+.env.development.local

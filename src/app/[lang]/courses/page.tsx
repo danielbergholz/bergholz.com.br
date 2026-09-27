@@ -3,8 +3,8 @@ import { notFound } from "next/navigation"
 
 import { MembershipCTA } from "@/components/membership-cta"
 import { Video } from "@/components/video"
-import { getDictionary } from "@/dictionaries"
 import { getCourses } from "@/data-access/youtube"
+import { getDictionary } from "@/dictionaries"
 import {
   defaultLocale,
   hasLocale,
@@ -52,8 +52,6 @@ export async function generateMetadata({
     }
   }
 }
-
-export const revalidate = 86400 // 1 day
 
 export default async function Courses({
   params

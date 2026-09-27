@@ -1,10 +1,11 @@
+import type { Route } from "next"
+import Image from "next/image"
+import Link from "next/link"
 import { Play, Read } from "@/components/icons"
 import type { Dictionary } from "@/dictionaries"
 import type { Locale } from "@/lib/i18n"
 import type { ContentItem } from "@/lib/types"
 import { formatDuration, readableDate } from "@/lib/utils"
-import Image from "next/image"
-import Link from "next/link"
 
 export const CARD_BASE =
   "group flex rounded-lg border border-current/10 dark:border-current/20 hover:border-current/30 dark:hover:border-current/40 transition-all duration-300 motion-reduce:transition-none"
@@ -39,8 +40,9 @@ function CardLink({
       </a>
     )
   }
+  // Internal hrefs come from blogArticlePath() via the feed data.
   return (
-    <Link href={href} title={title} className={className}>
+    <Link href={href as Route} title={title} className={className}>
       {children}
     </Link>
   )
@@ -169,6 +171,7 @@ function Actions({
 type Props = {
   item: ContentItem
   locale: Locale
+  currentYear: number
   t: CardLabels
   featured?: boolean
   priority?: boolean
@@ -177,6 +180,7 @@ type Props = {
 export function ContentCard({
   item,
   locale,
+  currentYear,
   t,
   featured = false,
   priority = false
@@ -227,7 +231,7 @@ export function ContentCard({
             </p>
           )}
           <div className="flex flex-wrap items-center gap-x-2 text-xs uppercase tracking-widest opacity-60">
-            <span>{readableDate(date, locale)}</span>
+            <span>{readableDate(date, locale, currentYear)}</span>
             {readingMinutes != null && (
               <span>
                 · {readingMinutes} {t.minRead}
@@ -258,7 +262,7 @@ export function ContentCard({
       </CardLink>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs uppercase tracking-widest opacity-60">
-          {readableDate(date, locale)}
+          {readableDate(date, locale, currentYear)}
         </span>
         <Actions item={item} featured={false} t={t} />
       </div>

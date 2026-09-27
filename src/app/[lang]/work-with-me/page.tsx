@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-
-import { getDictionary } from "@/dictionaries"
 import { getChannelStats } from "@/data-access/youtube"
+import { getDictionary } from "@/dictionaries"
 import { defaultLocale, hasLocale, pageAlternates } from "@/lib/i18n"
 import { formatNumber } from "@/lib/utils"
 

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for AI coding agents working in this repo. For the human-facing overview (stack, scripts, structure, env vars), see [README.md](./README.md).
+Guidance for AI coding agents working in this repo: the personal site of Daniel Bergholz. For the human-facing overview (env vars, structure, the dev.to webhook), see [README.md](./README.md).
 
 <!-- BEGIN:nextjs-agent-rules -->
 
@@ -12,22 +12,66 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## After any code change
+## Shared template
 
-Run in order:
+This site shares one setup with bergholz.com.br, cristinagobbi.com.br and evirtual.com.br. Everything down to "Site-specific notes" is identical in all three repos — when you change the stack, tooling or a convention here, make the same change in the other two.
 
-1. `npm run format` — format with Biome
-2. `npm run check` — lint + typecheck
-3. `npm test` — unit tests (Node's built-in runner)
-4. `npm run build` — production build
+## Stack
 
-Don't skip the build. Lint and typecheck miss Next.js structural rules (e.g. `pages/` and `app/` colocation); only the build catches them. This matters most when adding or moving files, adding dependencies, or touching `next.config.mjs`.
+- Next.js 16 App Router with Cache Components, Partial Prefetching and typed routes (`next.config.ts`)
+- React 19, TypeScript (strict), Tailwind CSS v4
+- Biome for linting and formatting — no ESLint or Prettier
+- Node 24 LTS and npm; deployed on Vercel from `main`
+- Tests: Node's built-in runner (`node --test`), co-located as `src/**/*.test.ts`
+- Analytics: Plausible
+
+## Verifying changes
+
+- While iterating: `npm run lint:fix`, then `npm run check`.
+- Before calling a task done or committing: `npm run verify` must pass.
+
+`npm run check` does NOT catch build-time errors. Only the production build surfaces Server/Client boundary violations, invalid `metadata` exports, and Cache Components prerender errors (uncached data or `new Date()` outside a cached scope).
+
+## Scripts
+
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Development server (Turbopack) |
+| `npm run build` / `npm start` | Production build / serve it |
+| `npm run lint` | Biome lint (report only) |
+| `npm run lint:fix` | Biome format + safe lint fixes |
+| `npm run format` | Biome format only |
+| `npm run typecheck` | `next typegen` (route types) + `tsc --noEmit` |
+| `npm test` | Unit tests (`node --test`) |
+| `npm run check` | Biome check + typecheck |
+| `npm run verify` | check + test + build |
+
+## Caching and rendering
+
+- Fetchers live in `src/data-access/`. Each is a `"use cache"` function with `cacheLife` (plus `cacheTag` when it can be revalidated on demand). Route segment configs like `export const revalidate` or `dynamic` are errors under Cache Components.
+- Keep `next: { revalidate }` on the `fetch` itself too: `"use cache"` entries live in memory per instance and deployment, while the fetch Data Cache persists across deploys.
+- Never read the clock while rendering (`new Date()`, `Date.now()`): use `getCurrentYear()` from `src/lib/current-year.ts` or another cached helper.
+- Pages stream a static shell first, so `notFound()` or `redirect()` inside a page can't set a 404/308 status on the first visit to a URL. Decide status codes in `src/proxy.ts` or `next.config.ts` redirects.
+
+## Security headers
+
+`next.config.ts` sends a Content-Security-Policy and the other security headers from a block that is identical across the three sites. Each site's third-party origins go in the `allow` object at the top of the file — a new script, image host or embed has to be added there, or the browser blocks it.
 
 ## Conventions
 
-- Data is fetched in Server Components at the page level (with ISR), then passed to components as props. API integrations live in `src/data-access/` (YouTube Data API, Dev.to).
-- Blog: Dev.to is the headless CMS. Every Dev.to `fetch` in `src/data-access/blog.ts` uses `next: { revalidate: 3600, tags: ["devto"] }` so the listing is fetched once per hour and shared across routes — keep it that way (the API has no published rate limit; treat it as scarce). Posts live under the locale matching their Dev.to `language` (`/blog/<slug>` for `pt`, `/en/blog/<slug>` for `en`); the post page gates on the cached listing before fetching a body, so unknown slugs never hit Dev.to. Throw on API errors (never `notFound()` on a failure) so ISR keeps the last good page. `body_html` is rendered as-is and styled by `.article-body` in `globals.css` — no Markdown/highlighting libraries.
-- i18n: the site is bilingual (pt-BR default at the root, English under `/en`), hand-rolled with no i18n library. Pages live under `src/app/[lang]/`; `src/proxy.ts` rewrites unprefixed paths to `/pt` internally and 308-redirects public `/pt/...` URLs. UI strings live in `src/dictionaries/{pt,en}.json` (loaded server-side only — client components receive strings as props); locale helpers are in `src/lib/i18n.ts`. When you add or change a string, update BOTH dictionaries — a unit test fails if their shapes diverge.
+- Style (Biome): 2-space indent, double quotes, no semicolons, no trailing commas, 80 columns.
+- Suppress a rule inline with `// biome-ignore lint/<rule>: <reason>` and a real reason.
+- Use the `@/*` alias for `src/*`, except in modules imported by tests: `node --test` doesn't resolve the alias, so those use relative `.ts` imports.
+- Use `import type` for type-only imports.
+- Links are typed routes: type computed hrefs as `Route` (from `next`) and check them against real pages.
+- JSON-LD goes through `<JsonLd data={...} />` (`src/components/json-ld.tsx`), which escapes `<`.
+- `.env*` files are git-ignored; secrets live in Vercel. `.worktreeinclude` copies them into new worktrees, and the SessionStart hook (`.claude/hooks/session-start.sh`) syncs `main` and runs `npm ci`.
+
+## Site-specific notes
+
+- Data is fetched in Server Components at the page level, then passed to components as props. API integrations live in `src/data-access/` (YouTube Data API, Dev.to); pure logic lives in `src/lib/`.
+- Blog: Dev.to is the headless CMS. Every Dev.to fetcher in `src/data-access/blog.ts` is cached for an hour and tagged `devto` (both `"use cache"` and the fetch Data Cache), so the listing is fetched once per hour and shared across routes — keep it that way (the API has no published rate limit; treat it as scarce). `POST /api/revalidate` expires the tag. Posts live under the locale matching their Dev.to `language` (`/blog/<slug>` for `pt`, `/en/blog/<slug>` for `en`). `src/proxy.ts` answers unknown slugs with a 404 and wrong-locale URLs with a 308, using the slug map served at `/api/blog/posts`; the page keeps its own `notFound()`/redirect as a fallback and gates on the cached listing, so unknown slugs never hit Dev.to. Throw on API errors (never `notFound()` on a failure) so the last good page keeps being served. `body_html` is rendered as-is and styled by `.article-body` in `globals.css` — no Markdown/highlighting libraries; its CDN images and YouTube/Twitter embeds are allowed in the CSP.
+- i18n: the site is bilingual (pt-BR default at the root, English under `/en`), hand-rolled with no i18n library. Pages live under `src/app/[lang]/`; `src/proxy.ts` rewrites unprefixed paths to `/pt` internally and 308-redirects public `/pt/...` URLs. UI strings live in `src/dictionaries/{pt,en}.json` (loaded server-side only — client components receive strings as props); locale helpers are in `src/lib/i18n.ts`, and `localePath()` returns a typed `Route`. When you add or change a string, update BOTH dictionaries — a unit test fails if their shapes diverge.
 - The sitemap is generated from the route registry in `src/lib/routes.ts` — when you add a page under `src/app/[lang]/`, register it there (a unit test fails if the registry and the filesystem disagree).
 - Do not add a route-level `loading.tsx` above `src/app/[lang]/[...rest]/` — an early-flushed loading shell turns real 404s into soft 404s (status 200). Page skeletons go in per-page `<Suspense>` boundaries instead.
-- Tests use Node's built-in runner (`node --test`, no extra deps; needs Node 24+, which runs TypeScript directly). Keep business logic pure and I/O-free — e.g. the feed pairing/filtering lives in `src/lib/feed.ts` and is unit-tested with fixtures, while `src/data-access/` modules stay thin `fetch` wrappers. Co-locate tests as `*.test.ts`. Note: Node's runner doesn't resolve the `@/` path alias, so modules imported by tests must use relative imports (`./i18n.ts`).
+- Tests: keep business logic pure and I/O-free — e.g. the feed pairing/filtering lives in `src/lib/feed.ts` and is unit-tested with fixtures, while `src/data-access/` modules stay thin `fetch` wrappers.

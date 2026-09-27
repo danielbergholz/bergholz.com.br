@@ -8,9 +8,15 @@ export function formatNumber(num: number, locale: Locale = "en"): string {
   }).format(num)
 }
 
-export function readableDate(date: string, locale: Locale = "en") {
+// `currentYear` comes from getCurrentYear() (src/lib/current-year.ts): the year
+// is dropped for dates in the current one, and reading the clock here would
+// break prerendering.
+export function readableDate(
+  date: string,
+  locale: Locale,
+  currentYear: number
+) {
   const parsedDate = new Date(date)
-  const currentYear = new Date().getFullYear()
   const options: Intl.DateTimeFormatOptions = {
     month: "long",
     day: "numeric"

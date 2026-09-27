@@ -1,5 +1,7 @@
 // Locale core: pure and dependency-free so the proxy, server components,
 // client components, and tests can all import it.
+import type { Route } from "next"
+
 export const locales = ["pt", "en"] as const
 
 export type Locale = (typeof locales)[number]
@@ -39,9 +41,12 @@ export function siteLanguage(tag: string | undefined): Locale | undefined {
 // localePath("pt", "/videos") -> "/videos"
 // localePath("en", "/videos") -> "/en/videos"
 // localePath("en", "/") -> "/en"
-export function localePath(locale: Locale, path: string): string {
-  if (locale === defaultLocale) return path
-  return path === "/" ? `/${locale}` : `/${locale}${path}`
+// Typed as a Route for typedRoutes: every page lives under the dynamic
+// [lang] segment, so the checker can't validate unprefixed paths itself —
+// routes.test.ts keeps the registry in sync with the pages on disk instead.
+export function localePath(locale: Locale, path: string): Route {
+  if (locale === defaultLocale) return path as Route
+  return (path === "/" ? `/${locale}` : `/${locale}${path}`) as Route
 }
 
 // Metadata `alternates` for a page: locale-specific canonical plus hreflang

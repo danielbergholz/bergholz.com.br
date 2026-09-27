@@ -31,13 +31,14 @@ Copy `.env.example` to `.env` and fill in:
 - `npm run build` — build for production
 - `npm run start` — run the production build
 - `npm run format` — format with Biome
-- `npm run check` — run lint and typecheck
+- `npm run check` — Biome (lint + format check) and typecheck
 - `npm test` — run unit tests (Node's built-in test runner)
+- `npm run verify` — check + test + production build
 - `npm run revalidate` — expire the site's cached Dev.to data now (see [Blog](#blog))
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router) with Server Components and ISR
+- **Framework:** Next.js 16 (App Router) with Server Components and Cache Components
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS v4 (Instrument Serif + Poppins via `next/font`)
 - **Tooling:** Biome for linting and formatting
@@ -58,7 +59,7 @@ The site is bilingual: Brazilian Portuguese is the default and lives at the root
 
 ## Blog
 
-Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the site is their canonical home. The public Forem API is read with ISR (1 hour) and rendered at `/blog/<slug>` (Portuguese posts) and `/en/blog/<slug>` (English posts), split by the `language` field Dev.to reports. Each post's `canonical_url` on Dev.to points back to its page here (set per post in the Dev.to editor). Post bodies arrive as sanitized HTML with Rouge-highlighted code, so there is no Markdown or highlighting dependency — just CSS (`.article-body` in `globals.css`).
+Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the site is their canonical home. The public Forem API is cached for an hour (`"use cache"` plus the fetch Data Cache) and rendered at `/blog/<slug>` (Portuguese posts) and `/en/blog/<slug>` (English posts), split by the `language` field Dev.to reports. Each post's `canonical_url` on Dev.to points back to its page here (set per post in the Dev.to editor). Post bodies arrive as sanitized HTML with Rouge-highlighted code, so there is no Markdown or highlighting dependency — just CSS (`.article-body` in `globals.css`).
 
 The `/blog` listing shows each post's YouTube thumbnail (16:9, from the video the post links in its body — the same pairing the content feed uses) instead of Dev.to's cover, which is that image cropped to 1000×420; posts with no video keep the Dev.to cover.
 

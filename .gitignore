@@ -1,20 +1,11 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
-
-# testing
-/coverage
 
 # next.js
 /.next/
 /out/
-
-# production
 /build
+/coverage
 
 # misc
 .DS_Store
@@ -22,11 +13,10 @@
 
 # debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# local env files
-.env*.local
+# env files (secrets live in Vercel; only the example is committed)
+.env*
+!.env.example
 
 # vercel
 .vercel
@@ -34,9 +24,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env
 
-# claude
+# claude code
 .claude/worktrees/
 .claude/settings.local.json
-.env*
+
+# playwright mcp
+.playwright-mcp

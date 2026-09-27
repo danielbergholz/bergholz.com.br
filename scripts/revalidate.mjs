@@ -9,7 +9,9 @@ const target = process.env.REVALIDATE_TARGET ?? "https://bergholz.com.br"
 const secret = process.env.REVALIDATE_SECRET
 
 if (!secret) {
-  console.error("REVALIDATE_SECRET is not set (add it to .env or run `vercel env pull`)")
+  console.error(
+    "REVALIDATE_SECRET is not set (add it to .env or run `vercel env pull`)"
+  )
   process.exit(1)
 }
 

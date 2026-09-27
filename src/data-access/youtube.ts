@@ -1,3 +1,6 @@
+import { cacheLife } from "next/cache"
+
+import { SHORTS_MAX_SECONDS } from "@/lib/feed"
 import type {
   ChannelStats,
   LatestVideo,
@@ -5,7 +8,6 @@ import type {
   Playlists,
   VideoDetails
 } from "@/lib/types"
-import { SHORTS_MAX_SECONDS } from "@/lib/feed"
 import { parseIsoDuration } from "@/lib/utils"
 
 const API_KEY = process.env.YOUTUBE_API_KEY
@@ -28,7 +30,10 @@ const UPLOADS_PLAYLIST_ID_BR = CHANNEL_ID_BR?.replace(/^UC/, "UU")
 const VEGAN_CHANNEL_UPLOADS_PLAYLIST_ID = "UUlepFNn-FyiT5IgykIuYb7Q"
 
 const getPlaylists = async () => {
-  const response = await fetch(PLAYLISTS_URL)
+  "use cache"
+  cacheLife("days")
+
+  const response = await fetch(PLAYLISTS_URL, { next: { revalidate: 86400 } })
 
   // Throw on any bad response so ISR keeps serving the last healthy page.
   // YouTube returns 403 on quota exhaustion with a parseable error body that
@@ -48,6 +53,9 @@ const getPlaylists = async () => {
 
 // Combined totals across every configured channel (main + BR).
 export const getChannelStats = async () => {
+  "use cache"
+  cacheLife("days")
+
   const response = await fetch(CHANNEL_URL, { next: { revalidate: 86400 } })
   if (!response.ok) {
     throw new Error(`YouTube API error: ${response.status}`)
@@ -73,6 +81,9 @@ const getUploads = async (
   maxResults: number,
   { emptyOn404 = false } = {}
 ): Promise<LatestVideo[]> => {
+  "use cache"
+  cacheLife("hours")
+
   const url = `${BASE_URL}/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId}&key=${API_KEY}`
   const response = await fetch(url, { next: { revalidate: 3600 } })
 
@@ -161,6 +172,9 @@ type PlaylistVideoIdResponse = {
 // call — extra `part`s cost no additional quota. None of it changes after
 // upload, so cache for a day.
 export const getVideoDetails = async (videoIds: string[]) => {
+  "use cache"
+  cacheLife("days")
+
   const details = new Map<string, VideoDetails>()
   for (let i = 0; i < videoIds.length; i += 50) {
     const batch = videoIds.slice(i, i + 50)
@@ -191,6 +205,9 @@ export const getVideoDetails = async (videoIds: string[]) => {
 }
 
 const getPlaylistVideoIds = async (playlistId: string): Promise<string[]> => {
+  "use cache"
+  cacheLife("days")
+
   const ids: string[] = []
   let pageToken = ""
   do {

@@ -45,6 +45,7 @@ type Props = {
   // same image cropped to 1000×420.
   videoThumbnailUrl?: string
   locale: Locale
+  currentYear: number
   t: Dictionary["card"]
   priority?: boolean
 }
@@ -55,6 +56,7 @@ export function ArticleCard({
   article,
   videoThumbnailUrl,
   locale,
+  currentYear,
   t,
   priority = false
 }: Props) {
@@ -94,7 +96,7 @@ export function ArticleCard({
         )}
         <div className="mt-auto flex flex-wrap items-center gap-x-2 text-xs uppercase tracking-widest opacity-60">
           <time dateTime={article.published_at}>
-            {readableDate(article.published_at, locale)}
+            {readableDate(article.published_at, locale, currentYear)}
           </time>
           <span>
             · {article.reading_time_minutes} {t.minRead}

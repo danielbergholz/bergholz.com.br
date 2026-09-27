@@ -2,10 +2,12 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import {
   articleImage,
-  articlesMissingFromPublicList,
   articlesForLocale,
+  articlesMissingFromPublicList,
   blogArticlePath,
-  buildRssFeed
+  blogPostRouting,
+  buildRssFeed,
+  postLocales
 } from "./blog.ts"
 import type { Article, PublishedArticle } from "./types.ts"
 
@@ -124,4 +126,44 @@ test("buildRssFeed lists only the locale's posts, escaped, linking the site", ()
   assert.match(xml, /<\/rss>\n$/)
   assert.doesNotMatch(xml, /ola/, "Portuguese post is not in the English feed")
   assert.doesNotMatch(xml, /dev\.to/, "items link to the site, not dev.to")
+})
+
+test("postLocales maps each post's slug to its site locale", () => {
+  const posts = postLocales([
+    published({ id: 1, slug: "ola", language: "pt" }),
+    published({ id: 2, slug: "hello", language: "en" }),
+    published({ id: 3, slug: "hola", language: "es" })
+  ])
+  assert.deepEqual(posts, { ola: "pt", hello: "en" })
+})
+
+test("blogPostRouting 404s unknown posts and redirects wrong locales", () => {
+  const posts = { ola: "pt", hello: "en" } as const
+
+  // Posts under their own locale render normally.
+  assert.equal(blogPostRouting("/blog/ola", posts), undefined)
+  assert.equal(blogPostRouting("/en/blog/hello", posts), undefined)
+
+  // Unknown slugs 404 in the locale of the URL.
+  assert.deepEqual(blogPostRouting("/blog/nope", posts), { notFound: "pt" })
+  assert.deepEqual(blogPostRouting("/en/blog/nope", posts), {
+    notFound: "en"
+  })
+  assert.deepEqual(blogPostRouting("/blog/constructor", posts), {
+    notFound: "pt"
+  })
+
+  // A post under the other locale redirects to its real URL.
+  assert.deepEqual(blogPostRouting("/blog/hello", posts), {
+    redirect: "/en/blog/hello"
+  })
+  assert.deepEqual(blogPostRouting("/en/blog/ola", posts), {
+    redirect: "/blog/ola"
+  })
+
+  // Anything that isn't a single post path is left alone.
+  for (const path of ["/blog", "/blog/feed", "/en/blog/feed", "/videos"]) {
+    assert.equal(blogPostRouting(path, posts), undefined)
+  }
+  assert.equal(blogPostRouting("/blog/ola/extra", posts), undefined)
 })

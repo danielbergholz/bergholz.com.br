@@ -3,8 +3,6 @@ import { getDictionary } from "@/dictionaries"
 import { buildRssFeed } from "@/lib/blog"
 import { hasLocale, locales } from "@/lib/i18n"
 
-export const revalidate = 3600 // 1 hour
-
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }))
 }

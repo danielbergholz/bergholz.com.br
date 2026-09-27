@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
@@ -40,8 +41,8 @@ export function Nav({ locale, t }: Props) {
   const toggleRef = useRef<HTMLButtonElement>(null)
 
   const navLinks = [
-    { href: localePath(locale, "/videos"), label: t.videos, prefetch: true },
-    { href: localePath(locale, "/courses"), label: t.courses, prefetch: true },
+    { href: localePath(locale, "/videos"), label: t.videos },
+    { href: localePath(locale, "/courses"), label: t.courses },
     { href: localePath(locale, "/products"), label: t.products },
     { href: localePath(locale, "/work-with-me"), label: t.workWithMe }
   ]
@@ -123,7 +124,7 @@ export function Nav({ locale, t }: Props) {
                 }
                 event.preventDefault()
                 router.push(
-                  localePath(target, basePath) + window.location.search
+                  `${localePath(target, basePath)}${window.location.search}` as Route
                 )
               }}
               className="opacity-50 hover:opacity-100 transition-opacity"
@@ -154,12 +155,11 @@ export function Nav({ locale, t }: Props) {
 
         <div className="hidden md:flex items-center gap-6">
           <ul className="flex items-center gap-6">
-            {navLinks.map(({ href, label, prefetch }) => (
+            {navLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
                   className={linkStyle(href)}
-                  prefetch={prefetch}
                   aria-current={isActive(href) ? "page" : undefined}
                 >
                   {label}
@@ -221,13 +221,12 @@ export function Nav({ locale, t }: Props) {
                   {t.pages}
                 </p>
                 <ul className="flex flex-col gap-3">
-                  {navLinks.map(({ href, label, prefetch }) => (
+                  {navLinks.map(({ href, label }) => (
                     <li key={href}>
                       <Link
                         href={href}
                         className={`block py-1 ${linkStyle(href)}`}
                         onClick={closeMenu}
-                        prefetch={prefetch}
                         aria-current={isActive(href) ? "page" : undefined}
                       >
                         {label}

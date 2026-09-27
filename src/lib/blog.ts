@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import {
   type Locale,
   languageTags,
@@ -5,17 +6,55 @@ import {
   siteLanguage,
   siteUrl
 } from "./i18n.ts"
+
 import type { Article, PublishedArticle } from "./types.ts"
 
 // Pure helpers for the /blog routes (no I/O, unit-tested in blog.test.ts).
 
 // Site path of a post. Posts live under the locale matching their language,
 // so a Portuguese post is /blog/<slug> and an English one /en/blog/<slug>.
-export function blogArticlePath(locale: Locale, slug: string): string {
+export function blogArticlePath(locale: Locale, slug: string): Route {
   return localePath(locale, `/blog/${slug}`)
 }
 
 export const blogFeedPath = "/blog/feed"
+
+// slug → locale for every post with a site language. Served at
+// /api/blog/posts for the proxy (see blogPostRouting).
+export function postLocales(
+  articles: PublishedArticle[]
+): Record<string, Locale> {
+  const posts: Record<string, Locale> = {}
+  for (const article of articles) {
+    const locale = siteLanguage(article.language)
+    if (locale) posts[article.slug] = locale
+  }
+  return posts
+}
+
+// What the proxy should answer for a public post URL (/blog/<slug> or
+// /en/blog/<slug>) before the page renders: a 404 for an unknown post, a 308
+// to the post's real locale, or undefined to let the page render. This has
+// to happen in the proxy: with Cache Components the page streams a static
+// shell first, so a notFound()/redirect() in the page can no longer change
+// the status code on the first visit to a URL.
+export function blogPostRouting(
+  pathname: string,
+  posts: Record<string, Locale>
+): { notFound: Locale } | { redirect: Route } | undefined {
+  const match = pathname.match(/^(?:\/(en))?\/blog\/([^/]+)$/)
+  if (!match) return undefined
+  const [, prefix, slug] = match
+  if (`/blog/${slug}` === blogFeedPath) return undefined
+
+  const locale: Locale = prefix === "en" ? "en" : "pt"
+  const postLocale = Object.hasOwn(posts, slug) ? posts[slug] : undefined
+  if (!postLocale) return { notFound: locale }
+  if (postLocale !== locale) {
+    return { redirect: blogArticlePath(postLocale, slug) }
+  }
+  return undefined
+}
 
 // Forem caches the public author listing at its CDN for much longer than its
 // Cache-Control header suggests. The authenticated published list is private

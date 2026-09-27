@@ -1,9 +1,13 @@
 {
-  "css": {
-    "parser": {
-      "cssModules": true,
-      "tailwindDirectives": true
-    }
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["**", "!public", "!**/*.svg"]
   },
   "formatter": {
     "enabled": true,
@@ -14,16 +18,15 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "suspicious": {
         "noExplicitAny": "off",
         "noUnknownAtRules": "off"
-      },
-      "complexity": {
-        "noUselessSwitchCase": "off",
-        "noForEach": "off",
-        "noBannedTypes": "off"
       }
+    },
+    "domains": {
+      "react": "recommended",
+      "next": "recommended"
     }
   },
   "javascript": {
@@ -31,6 +34,12 @@
       "quoteStyle": "double",
       "semicolons": "asNeeded",
       "trailingCommas": "none"
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
     }
   }
 }

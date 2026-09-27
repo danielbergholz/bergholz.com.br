@@ -1,6 +1,6 @@
+import Image from "next/image"
 import type { Dictionary } from "@/dictionaries"
 import type { Video as VideoType } from "@/lib/types"
-import Image from "next/image"
 
 type Props = {
   video: VideoType

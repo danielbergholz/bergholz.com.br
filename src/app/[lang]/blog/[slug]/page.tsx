@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Route } from "next"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import { cache } from "react"
@@ -9,9 +9,10 @@ import { JsonLd } from "@/components/json-ld"
 import { getArticle, getPublishedArticles } from "@/data-access/blog"
 import { getDictionary } from "@/dictionaries"
 import { articleImage, articlesForLocale, blogArticlePath } from "@/lib/blog"
+import { getCurrentYear } from "@/lib/current-year"
 import {
-  type Locale,
   hasLocale,
+  type Locale,
   languageTags,
   localePath,
   openGraphLocales,
@@ -20,8 +21,6 @@ import {
 } from "@/lib/i18n"
 import type { PublishedArticle, PublishedArticleWithBody } from "@/lib/types"
 import { readableDate } from "@/lib/utils"
-
-export const revalidate = 3600 // 1 hour
 
 // Prerender every post under the locale matching its language. Runs once per
 // `lang` from the layout's generateStaticParams; the listing fetch is cached
@@ -45,7 +44,7 @@ export async function generateStaticParams({
 // of duplicating the page. React `cache` so generateMetadata and the page
 // share one parse of the responses.
 type ResolvedArticle =
-  | { redirectTo: string }
+  | { redirectTo: Route }
   | { listed: PublishedArticle; article: PublishedArticleWithBody }
 
 const resolveArticle = cache(
@@ -121,9 +120,10 @@ export default async function BlogArticle({
   const { lang, slug } = await params
   if (!hasLocale(lang)) notFound()
 
-  const [resolved, dict] = await Promise.all([
+  const [resolved, dict, currentYear] = await Promise.all([
     resolveArticle(lang, slug),
-    getDictionary(lang)
+    getDictionary(lang),
+    getCurrentYear()
   ])
   if ("redirectTo" in resolved) permanentRedirect(resolved.redirectTo)
 
@@ -167,7 +167,7 @@ export default async function BlogArticle({
           </h1>
           <div className="flex flex-wrap items-center gap-x-2 text-xs uppercase tracking-widest opacity-60">
             <time dateTime={article.published_at}>
-              {readableDate(article.published_at, lang)}
+              {readableDate(article.published_at, lang, currentYear)}
             </time>
             <span>
               · {article.reading_time_minutes} {dict.card.minRead}

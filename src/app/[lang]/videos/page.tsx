@@ -3,8 +3,9 @@ import { notFound } from "next/navigation"
 
 import { ContentFeed } from "@/components/content-feed"
 import { MembershipCTA } from "@/components/membership-cta"
-import { getDictionary } from "@/dictionaries"
 import { getContentFeed } from "@/data-access/content"
+import { getDictionary } from "@/dictionaries"
+import { getCurrentYear } from "@/lib/current-year"
 import {
   defaultLocale,
   hasLocale,
@@ -53,8 +54,6 @@ export async function generateMetadata({
   }
 }
 
-export const revalidate = 3600 // 1 hour
-
 export default async function Videos({
   params
 }: {
@@ -64,7 +63,10 @@ export default async function Videos({
   if (!hasLocale(lang)) notFound()
   const dict = await getDictionary(lang)
 
-  const items = await getContentFeed()
+  const [items, currentYear] = await Promise.all([
+    getContentFeed(),
+    getCurrentYear()
+  ])
 
   return (
     <main id="main" className="my-14 md:my-28 max-w-5xl mx-auto flex flex-col">
@@ -79,6 +81,7 @@ export default async function Videos({
       <ContentFeed
         items={items}
         locale={lang}
+        currentYear={currentYear}
         t={dict.feed}
         cardLabels={dict.card}
       />
