@@ -1,6 +1,5 @@
 "use client"
 
-import { Instrument_Serif, Poppins } from "next/font/google"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
@@ -10,16 +9,10 @@ import { defaultLocale, hasLocale, languageTags, localePath } from "@/lib/i18n"
 import "./globals.css"
 
 // Global error boundary — the last line of defence. Next.js renders its own
-// document here (this replaces the ROOT LAYOUT when it throws), so everything
-// has to be provided locally: <html>, <body>, global styles and fonts. Nav,
-// Footer and the dictionaries are not available.
-const poppins = Poppins({ weight: ["400", "700"], subsets: ["latin"] })
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-serif"
-})
+// document here (this replaces the ROOT LAYOUT when it throws), so it brings
+// its own <html>, <body> and global styles. Nav, Footer and the web fonts
+// are left out (this page uses the system fonts); its strings come from
+// dictionaries/boundary.
 
 // The locale comes from the pathname because this boundary sits above [lang]
 // and so has no params to read. English is the only prefixed locale
@@ -59,9 +52,7 @@ export default function GlobalError({
       <head>
         <title>{`${t.errorTitle} | Daniel Bergholz`}</title>
       </head>
-      <body
-        className={`${poppins.className} ${instrumentSerif.variable} px-6 md:px-10 py-5 md:py-6`}
-      >
+      <body className="px-6 md:px-10 py-5 md:py-6">
         <main
           id="main"
           className="my-14 md:my-28 max-w-2xl mx-auto flex flex-col gap-5 text-left"

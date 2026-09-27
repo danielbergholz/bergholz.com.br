@@ -30,6 +30,8 @@ This site shares one setup with bergholz.com.br, cristinagobbi.com.br and evirtu
 - While iterating: `npm run lint:fix`, then `npm run check`.
 - Before calling a task done or committing: `npm run verify` must pass.
 
+Vercel builds run `npm run check && npm test` before `next build` (`vercel.json`), so a lint, type or test failure stops the deploy instead of shipping.
+
 `npm run check` does NOT catch build-time errors. Only the production build surfaces Server/Client boundary violations, invalid `metadata` exports, and Cache Components prerender errors (uncached data or `new Date()` outside a cached scope).
 
 ## Scripts
@@ -60,7 +62,7 @@ This site shares one setup with bergholz.com.br, cristinagobbi.com.br and evirtu
 - Public pages are registered in `src/lib/routes.ts`. `sitemap.ts` is generated from it (pages carry no `lastModified` — it would just be the build date), and `routes.test.ts` fails when the registry and the pages on disk disagree.
 - Every site has the same files in `src/app/`: `robots.ts`, `manifest.ts`, `sitemap.ts`, `error.tsx` and `global-error.tsx` (recover with `retry`, not `reset`) and `not-found.tsx`. Icons are `favicon.ico`, `apple-icon.png` and `icon.png` (or `icon0.svg` + `icon1.png` when there's also an SVG); `public/` has `web-app-manifest-192x192.png`, `web-app-manifest-512x512.png` and a 1200×630 `og.png`.
 - `<Analytics />` (`src/components/analytics.tsx`) loads Plausible from the root layout's `<head>`.
-- These files are identical in all three repos: `biome.json`, `tsconfig.json`, `postcss.config.mjs`, `.gitignore`, `.worktreeinclude`, `.claude/`, `src/lib/{site-config,metadata,current-year}.ts`, `src/lib/routes.test.ts` (except its `pagesDir`), `src/app/{robots,manifest}.ts` and `src/components/{analytics,json-ld}.tsx`.
+- These files are identical in all three repos: `biome.json`, `vercel.json`, `tsconfig.json`, `postcss.config.mjs`, `.gitignore`, `.worktreeinclude`, `.claude/`, `src/lib/{site-config,metadata,current-year}.ts`, `src/lib/routes.test.ts` (except its `pagesDir`), `src/app/{robots,manifest}.ts` and `src/components/{analytics,json-ld}.tsx`.
 
 ## Security headers
 

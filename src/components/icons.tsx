@@ -110,28 +110,6 @@ export function Instagram({ fill, ...rest }: React.SVGProps<SVGSVGElement>) {
   )
 }
 
-export function X(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="size-8"
-      role="img"
-      aria-label="Close"
-      {...props}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6 18 18 6M6 6l12 12"
-      />
-    </svg>
-  )
-}
-
 export function Play({ fill, ...rest }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
