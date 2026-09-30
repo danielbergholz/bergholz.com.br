@@ -5,7 +5,7 @@ import { Play, Read } from "@/components/icons"
 import type { Dictionary } from "@/dictionaries"
 import type { Locale } from "@/lib/i18n"
 import type { ContentItem } from "@/lib/types"
-import { formatDuration, readableDate } from "@/lib/utils"
+import { formatDuration, isYouTubeThumbnail, readableDate } from "@/lib/utils"
 
 export const CARD_BASE =
   "group flex rounded-lg border border-current/10 dark:border-current/20 hover:border-current/30 dark:hover:border-current/40 transition-all duration-300 motion-reduce:transition-none"
@@ -68,6 +68,7 @@ function Thumbnail({
     <div className="relative aspect-video w-full overflow-hidden rounded-lg">
       <Image
         src={thumbnailUrl}
+        unoptimized={isYouTubeThumbnail(thumbnailUrl)}
         alt={title}
         fill
         loading={priority ? "eager" : undefined}

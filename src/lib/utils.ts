@@ -54,3 +54,11 @@ export function parseIsoDuration(iso: string): number {
     Number(match[3] || 0)
   )
 }
+
+// YouTube already serves right-sized JPEGs from its own CDN, so routing them
+// through /_next/image only burns image-optimization transformations (one per
+// width). Rendering them unoptimized also means a thumbnail changed on YouTube
+// shows up as soon as YouTube's CDN serves it, with no cache of ours in between.
+export function isYouTubeThumbnail(url: string): boolean {
+  return url.startsWith("https://i.ytimg.com/")
+}

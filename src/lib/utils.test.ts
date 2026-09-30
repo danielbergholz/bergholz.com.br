@@ -1,6 +1,11 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { formatDuration, formatNumber, parseIsoDuration } from "./utils.ts"
+import {
+  formatDuration,
+  formatNumber,
+  isYouTubeThumbnail,
+  parseIsoDuration
+} from "./utils.ts"
 
 test("formatNumber abbreviates thousands and millions in English", () => {
   assert.equal(formatNumber(950), "950")
@@ -34,4 +39,14 @@ test("parseIsoDuration parses ISO-8601 durations", () => {
   assert.equal(parseIsoDuration("PT3M"), 180)
   assert.equal(parseIsoDuration("PT2H"), 7200)
   assert.equal(parseIsoDuration("nonsense"), 0)
+})
+
+test("isYouTubeThumbnail only matches YouTube's image CDN", () => {
+  assert.equal(
+    isYouTubeThumbnail("https://i.ytimg.com/vi/abc/maxresdefault.jpg"),
+    true
+  )
+  assert.equal(isYouTubeThumbnail("https://dev.to/cover.png"), false)
+  assert.equal(isYouTubeThumbnail("/luisa-daniel.jpg"), false)
+  assert.equal(isYouTubeThumbnail(""), false)
 })

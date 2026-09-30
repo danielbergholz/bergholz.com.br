@@ -73,6 +73,13 @@ const nextConfig: NextConfig = {
     staticGenerationMaxConcurrency: 1
   },
   images: {
+    // What's still optimized is local and dev.to art that rarely changes, so
+    // keep it for a day instead of the 4h default. YouTube thumbnails skip the
+    // optimizer (unoptimized), so a changed one is never held back by this.
+    minimumCacheTTL: 60 * 60 * 24,
+    // Layouts are at most ~1152px wide, so drop the 3840px/2048px widths (and
+    // 750px, which 640/828 already cover): fewer variants per image.
+    deviceSizes: [640, 828, 1080, 1200, 1920],
     remotePatterns: [
       { protocol: "https", hostname: "i.ytimg.com" },
       { protocol: "https", hostname: "**.dev.to" }

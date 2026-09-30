@@ -8,7 +8,7 @@ import { getCurrentYear } from "@/lib/current-year"
 import type { Locale } from "@/lib/i18n"
 import { getLocale } from "@/lib/locale"
 import { localizedMetadata } from "@/lib/localized-metadata"
-import { readableDate } from "@/lib/utils"
+import { isYouTubeThumbnail, readableDate } from "@/lib/utils"
 
 const youtubeUrl = "https://www.youtube.com/@luisadanielbergholz"
 const luisaInstagramUrl = "https://www.instagram.com/veg.luisasimei/"
@@ -298,6 +298,7 @@ function LatestVideo({
         <div className="relative aspect-video overflow-hidden">
           <Image
             src={thumbnail}
+            unoptimized={isYouTubeThumbnail(thumbnail)}
             alt={snippet.title}
             fill
             sizes="(max-width: 768px) 100vw, 560px"

@@ -6,7 +6,7 @@ import type { Dictionary } from "@/dictionaries"
 import { blogArticlePath } from "@/lib/blog"
 import type { Locale } from "@/lib/i18n"
 import type { PublishedArticle } from "@/lib/types"
-import { readableDate } from "@/lib/utils"
+import { isYouTubeThumbnail, readableDate } from "@/lib/utils"
 
 // dev.to cover banners are 1000×420; YouTube thumbnails are 16:9. Decorative:
 // the title sits next to it.
@@ -28,6 +28,7 @@ export function ArticleCover({
     >
       <Image
         src={src}
+        unoptimized={isYouTubeThumbnail(src)}
         alt=""
         fill
         loading={priority ? "eager" : undefined}

@@ -1,6 +1,7 @@
 import Image from "next/image"
 import type { Dictionary } from "@/dictionaries"
 import type { Video as VideoType } from "@/lib/types"
+import { isYouTubeThumbnail } from "@/lib/utils"
 
 type Props = {
   video: VideoType
@@ -72,6 +73,7 @@ export function Video({
       </div>
       <Image
         src={thumbnail.url}
+        unoptimized={isYouTubeThumbnail(thumbnail.url)}
         alt={title}
         width={displayWidth}
         height={displayHeight}
@@ -88,6 +90,7 @@ export function Video({
     >
       <Image
         src={thumbnail.url}
+        unoptimized={isYouTubeThumbnail(thumbnail.url)}
         alt={title}
         width={displayWidth}
         height={displayHeight}
