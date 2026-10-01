@@ -65,7 +65,7 @@ The `/blog` listing shows each post's YouTube thumbnail (16:9, from the video th
 
 Requests to Dev.to are kept to a minimum: the listing is fetched once per hour and shared (via the Data Cache) by the home page, `/videos`, `/blog`, every post page, the sitemap and the RSS feeds (`/blog/feed`, `/en/blog/feed`); each post body is fetched once per hour on top of that. Unknown slugs are answered from the cached listing without calling Dev.to. A new post appears on its first visit (or the next hourly revalidation of `/blog`).
 
-Publishing lives in the content repos (`~/conteudo` for Portuguese, `~/content` for English): their `scripts/sync-devto.sh`, run after a draft goes live on Dev.to, calls `POST /api/revalidate` here (with `REVALIDATE_SECRET`, set on Vercel for Production and Preview) and points the Dev.to `canonical_url` at the post's page on this site. Dev.to cannot call this itself: Forem removed its webhooks API. To refresh by hand, add the secret to `.env` (or `vercel env pull`) and run:
+Publishing lives in the private `estudio` repo: its `tools/scripts/sync-devto.sh`, run after a draft goes live on Dev.to, calls `POST /api/revalidate` here (with `REVALIDATE_SECRET`, set on Vercel for Production and Preview) and points the Dev.to `canonical_url` at the post's page on this site. Dev.to cannot call this itself: Forem removed its webhooks API. To refresh by hand, add the secret to `.env` (or `vercel env pull`) and run:
 
 ```bash
 npm run revalidate
