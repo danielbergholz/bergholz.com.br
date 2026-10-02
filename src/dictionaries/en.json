@@ -26,7 +26,7 @@
     },
     "products": {
       "title": "Products - Daniel Bergholz",
-      "description": "Projects built by Daniel Bergholz - CourseShelf learning community, TechSchool free tech education platform and more developer tools"
+      "description": "Products built by Daniel Bergholz - the CourseShelf learning community and the TechSchool free tech education platform - plus websites he built for clients and partners"
     },
     "workWithMe": {
       "title": "Work With Me - Daniel Bergholz",
@@ -163,6 +163,7 @@
   },
   "products": {
     "title": "Products",
+    "ownHeading": "My products",
     "courseshelf": {
       "badge": "Beta",
       "description": "The community where self-taught learners discover, review, and recommend online courses across every subject. Think of it as your personal learning library, curated by people who've actually taken the courses.",
@@ -184,6 +185,19 @@
         "Courses in Go, Elixir, Python, Ruby, React, Node.js and more",
         "Community-driven platform with open source contributions"
       ]
+    },
+    "clientsHeading": "Built for others",
+    "clientsIntro": "Websites I built for clients and partners.",
+    "clients": {
+      "cristinagobbi": {
+        "description": "Mentoring, courses, workshops and meditation retreats based on Mindfulness and the Contemplative Sciences."
+      },
+      "evirtual": {
+        "description": "A digital strategy consultancy that, since 1992, has helped entrepreneurs organize their businesses and take them online."
+      },
+      "openshelter": {
+        "description": "Open-source pet adoption software for rescue organizations, which each one hosts on its own server under its own brand. A project by Lucas Bergholz."
+      }
     }
   },
   "workWithMe": {
