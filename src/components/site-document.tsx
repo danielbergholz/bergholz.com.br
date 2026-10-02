@@ -2,6 +2,7 @@ import { Instrument_Serif, Poppins } from "next/font/google"
 
 import { Analytics } from "@/components/analytics"
 import { Footer } from "@/components/footer"
+import { InlineScript } from "@/components/inline-script"
 import { JsonLd } from "@/components/json-ld"
 import { Nav } from "@/components/nav"
 import { getDictionary } from "@/dictionaries"
@@ -75,10 +76,7 @@ export async function SiteDocument({
             charset), so a manual one only renders the tag twice. */}
         <meta name="theme-color" content="#ffffff" />
         <meta name="color-scheme" content="light dark" />
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: static code with no user-controlled values
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-        />
+        <InlineScript html={themeScript} />
 
         {/* Structured Data */}
         <JsonLd data={personSchema} />
