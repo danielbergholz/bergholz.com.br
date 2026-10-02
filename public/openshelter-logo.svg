@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="openshelter-mark-title">
+  <title id="openshelter-mark-title">OpenShelter</title>
+  <!-- The tag a shelter hands over with the animal, with a house engraved on
+       it. The hole is masked out rather than painted over, so the mark sits on
+       any ground. There is no protruding tab: a disc with a shackle on top
+       reads as a padlock, which is the wrong idea for this product. -->
+  <mask id="openshelter-mark-hole">
+    <rect width="64" height="64" fill="#fff" />
+    <circle cx="32" cy="13" r="4" fill="#000" />
+  </mask>
+  <circle cx="32" cy="32" r="28" fill="#E39A17" mask="url(#openshelter-mark-hole)" />
+  <g fill="none" stroke="#1E2757" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 41 32 29 45 41" />
+    <path d="M24 42v9h16v-9" />
+  </g>
+</svg>

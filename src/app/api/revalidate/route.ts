@@ -4,7 +4,7 @@ import { revalidateTag } from "next/cache"
 import { DEVTO_CACHE_TAG } from "@/data-access/blog"
 
 // On-demand revalidation for everything built from dev.to data, called by the
-// content repos' sync script and `npm run revalidate` (see the README).
+// estudio repo's sync script and `npm run revalidate` (see the README).
 // Protected by REVALIDATE_SECRET, sent only as `Authorization: Bearer` — never
 // in the URL, where it would end up in access logs. Without the env var the
 // endpoint is disabled (always 401).

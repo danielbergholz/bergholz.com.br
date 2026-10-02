@@ -18,7 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
       "TechSchool",
       "Free Education",
       "Developer Tools",
-      "Open Source"
+      "Open Source",
+      "OpenShelter",
+      "Espaço Virtual",
+      "Cristina Gobbi"
     ]
   })
 }
@@ -47,6 +50,27 @@ export default async function Products() {
     }
   ]
 
+  const clientProjects = [
+    {
+      name: "OpenShelter",
+      url: "https://openshelter.pet/",
+      logo: "/openshelter-logo.svg",
+      ...t.clients.openshelter
+    },
+    {
+      name: "Espaço Virtual",
+      url: "https://www.evirtual.com.br/",
+      logo: "/evirtual-logo.png",
+      ...t.clients.evirtual
+    },
+    {
+      name: "Cristina Gobbi",
+      url: "https://www.cristinagobbi.com.br/",
+      logo: "/cristinagobbi-logo.png",
+      ...t.clients.cristinagobbi
+    }
+  ]
+
   return (
     <main id="main" className="w-auto md:max-w-3xl mx-auto my-14 md:my-28">
       <h1 className="font-serif text-3xl md:text-4xl italic tracking-tight mb-4">
@@ -54,6 +78,9 @@ export default async function Products() {
       </h1>
       <hr className="w-12 border-t border-current opacity-20 mb-6 md:mb-8" />
 
+      <h2 className="text-sm uppercase tracking-widest opacity-60 mb-4">
+        {t.ownHeading}
+      </h2>
       <div className="space-y-5 md:space-y-6">
         {products.map((product) => (
           <a
@@ -100,6 +127,49 @@ export default async function Products() {
           </a>
         ))}
       </div>
+
+      <section className="mt-14 md:mt-20" aria-labelledby="client-projects">
+        <h2
+          id="client-projects"
+          className="text-sm uppercase tracking-widest opacity-60 mb-2"
+        >
+          {t.clientsHeading}
+        </h2>
+        <p className="mb-4 opacity-60 text-sm md:text-base">{t.clientsIntro}</p>
+
+        <div className="space-y-3 md:space-y-4">
+          {clientProjects.map((project) => (
+            <a
+              key={project.name}
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex gap-4 border border-current/10 dark:border-current/20 rounded-lg p-4 md:p-5 hover:border-current/30 dark:hover:border-current/40 transition-all duration-300"
+            >
+              <Image
+                src={project.logo}
+                alt={`${project.name} logo`}
+                width={36}
+                height={36}
+                className="w-8 h-8 md:w-9 md:h-9 rounded-md object-contain flex-shrink-0"
+              />
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-baseline gap-x-2 mb-1">
+                  <h3 className="font-bold group-hover:opacity-80 transition-opacity">
+                    {project.name}
+                  </h3>
+                  <span className="text-xs opacity-50">
+                    {new URL(project.url).hostname.replace(/^www\./, "")}
+                  </span>
+                </div>
+                <p className="leading-relaxed opacity-60 text-sm">
+                  {project.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }
