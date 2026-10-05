@@ -92,7 +92,9 @@
     "otherLocaleLink": "See the posts in Portuguese",
     "rss": "RSS feed",
     "backToVideos": "All videos",
-    "tagsAria": "Tags"
+    "tagsAria": "Tags",
+    "videoSoon": "Video coming soon",
+    "videoSoonDescription": "You can already read the article. The video will be available here once it is published."
   },
   "feed": {
     "searchLabel": "Search videos and articles",

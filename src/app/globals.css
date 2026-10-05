@@ -305,6 +305,18 @@
     opacity: 0.6;
   }
 
+  .article-body .article-video-notice {
+    padding: 1.5rem;
+    border: 1px solid rgba(var(--foreground-rgb), 0.15);
+    border-radius: 0.5rem;
+  }
+
+  .article-body .article-video-notice p {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    opacity: 0.65;
+  }
+
   .article-body iframe.tweet-embed {
     max-width: 550px;
     height: 450px;

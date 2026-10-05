@@ -1,4 +1,4 @@
-import { getArticles } from "@/data-access/blog"
+import { getArticles, getPublishedArticles } from "@/data-access/blog"
 import {
   getCourseVideoIds,
   getLatestVideos,
@@ -9,22 +9,39 @@ import {
   articleVideoIds,
   articleVideoThumbnails,
   buildContentFeed,
+  discoverableArticles,
   withChannelLanguage
 } from "@/lib/feed"
-import type { ContentItem } from "@/lib/types"
+import type { ContentItem, PublishedArticle } from "@/lib/types"
+
+// All article routes share one batched lookup, including videos that are still
+// private or too old for the recent uploads window. No owner OAuth is needed.
+export const getArticleVideoDetails = async () => {
+  const articles = await getPublishedArticles()
+  return getVideoDetails([...new Set(articleVideoIds(articles).values())])
+}
+
+export const getDiscoverableArticles = async (): Promise<
+  PublishedArticle[]
+> => {
+  const [articles, details] = await Promise.all([
+    getPublishedArticles(),
+    getArticleVideoDetails()
+  ])
+  return discoverableArticles(articles, details)
+}
 
 // Fetches everything the merged feed needs, then hands off to the pure
 // buildContentFeed (which does the pairing/filtering/sorting and is unit-tested).
 // Only feed summaries are returned, so article bodies don't reach the client.
 // Thumbnail of the video each post links, keyed by post id, for the /blog
 // listing: prefer the video thumbnail to the article cover. Local posts are
-// compiled once per build; YouTube details retain their existing daily cache.
+// compiled once per build; YouTube publication state refreshes independently.
 export const getArticleVideoThumbnails = async (): Promise<
   Map<number | string, string>
 > => {
   const articles = await getArticles()
-  const videoIds = [...new Set(articleVideoIds(articles).values())]
-  const details = await getVideoDetails(videoIds)
+  const details = await getArticleVideoDetails()
   return articleVideoThumbnails(articles, details)
 }
 
@@ -37,9 +54,12 @@ export const getContentFeed = async (): Promise<ContentItem[]> => {
   ])
 
   const details = await getVideoDetails([
-    ...new Set(
-      [...videos, ...videosBr].map((video) => video.snippet.resourceId.videoId)
-    )
+    ...new Set([
+      ...[...videos, ...videosBr].map(
+        (video) => video.snippet.resourceId.videoId
+      ),
+      ...articleVideoIds(articles).values()
+    ])
   ])
 
   // Channel-level language fallback: uploads that don't declare a language on

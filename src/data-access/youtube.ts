@@ -153,10 +153,12 @@ type VideoDetailsResponse = {
     id: string
     contentDetails?: { duration?: string }
     snippet?: {
+      liveBroadcastContent?: string
       defaultAudioLanguage?: string
       defaultLanguage?: string
       thumbnails?: { maxres?: { url: string }; medium?: { url: string } }
     }
+    status?: { privacyStatus?: string }
   }[]
 }
 
@@ -169,17 +171,18 @@ type PlaylistVideoIdResponse = {
 // Durations show video length and detect Shorts (which the API has no flag
 // for); language drives the card badge; the thumbnail lets /blog show a
 // post's video thumbnail instead of its cropped cover. Batched 50 ids per
-// call — extra `part`s cost no additional quota. None of it changes after
-// upload, so cache for a day.
+// call — extra `part`s cost no additional quota. Publication and premiere
+// state also drive article discovery and embeds, so use the uploads' hourly
+// cadence instead of keeping details unchanged for a full day.
 export const getVideoDetails = async (videoIds: string[]) => {
   "use cache"
-  cacheLife("days")
+  cacheLife("hours")
 
   const details = new Map<string, VideoDetails>()
   for (let i = 0; i < videoIds.length; i += 50) {
     const batch = videoIds.slice(i, i + 50)
-    const url = `${BASE_URL}/videos?part=contentDetails,snippet&id=${batch.join(",")}&key=${API_KEY}`
-    const response = await fetch(url, { next: { revalidate: 86400 } })
+    const url = `${BASE_URL}/videos?part=contentDetails,snippet,status&id=${batch.join(",")}&key=${API_KEY}`
+    const response = await fetch(url, { next: { revalidate: 3600 } })
     if (!response.ok) {
       throw new Error(`YouTube API error: ${response.status}`)
     }
@@ -197,7 +200,9 @@ export const getVideoDetails = async (videoIds: string[]) => {
         language:
           item.snippet?.defaultAudioLanguage ?? item.snippet?.defaultLanguage,
         // `maxres` isn't generated for every upload; `medium` always is.
-        thumbnailUrl: thumbnails?.maxres?.url ?? thumbnails?.medium?.url
+        thumbnailUrl: thumbnails?.maxres?.url ?? thumbnails?.medium?.url,
+        isPublic: item.status?.privacyStatus === "public",
+        isUpcoming: item.snippet?.liveBroadcastContent === "upcoming"
       })
     }
   }

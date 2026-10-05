@@ -1,4 +1,4 @@
-import { getPublishedArticles } from "@/data-access/blog"
+import { getDiscoverableArticles } from "@/data-access/content"
 import { getDictionary } from "@/dictionaries"
 import { buildRssFeed } from "@/lib/blog"
 import { hasLocale, locales } from "@/lib/i18n"
@@ -18,7 +18,7 @@ export async function GET(
 
   const [dict, articles] = await Promise.all([
     getDictionary(lang),
-    getPublishedArticles()
+    getDiscoverableArticles()
   ])
 
   return new Response(

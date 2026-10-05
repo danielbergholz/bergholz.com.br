@@ -53,6 +53,8 @@ export type VideoDetails = {
   durationSeconds?: number
   language?: string
   thumbnailUrl?: string
+  isPublic?: boolean
+  isUpcoming?: boolean
 }
 
 export type ChannelStats = {

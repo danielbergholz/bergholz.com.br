@@ -92,7 +92,9 @@
     "otherLocaleLink": "Ver os posts em inglês",
     "rss": "Feed RSS",
     "backToVideos": "Todos os vídeos",
-    "tagsAria": "Tags"
+    "tagsAria": "Tags",
+    "videoSoon": "Vídeo sai em breve",
+    "videoSoonDescription": "Você já pode ler o artigo. O vídeo estará disponível aqui quando for publicado."
   },
   "feed": {
     "searchLabel": "Buscar vídeos e artigos",

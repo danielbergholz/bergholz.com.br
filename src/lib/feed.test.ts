@@ -6,7 +6,9 @@ import {
   articleVideoIds,
   articleVideoThumbnails,
   buildContentFeed,
+  discoverableArticles,
   firstMeaningfulLine,
+  isVideoPublished,
   withChannelLanguage
 } from "./feed.ts"
 import { siteLanguage } from "./i18n.ts"
@@ -65,7 +67,8 @@ function article(opts: {
 }
 
 const noCourses = new Set<string>()
-const details = (entries: [string, VideoDetails][]) => new Map(entries)
+const details = (entries: [string, VideoDetails][]) =>
+  new Map(entries.map(([id, value]) => [id, { isPublic: true, ...value }]))
 const durations = (entries: [string, number][]) =>
   details(entries.map(([id, s]) => [id, { durationSeconds: s }]))
 
@@ -293,7 +296,12 @@ test("an article with an out-of-window originating video still offers Watch", ()
     slug: "old",
     videoId: "oldvideo111"
   })
-  const feed = buildContentFeed([], [a], noCourses, new Map())
+  const feed = buildContentFeed(
+    [],
+    [a],
+    noCourses,
+    durations([["oldvideo111", 600]])
+  )
 
   assert.equal(feed.length, 1)
   assert.equal(feed[0].videoUrl, "https://www.youtube.com/watch?v=oldvideo111")
@@ -426,4 +434,78 @@ test("cited videos do not become the article's originating video", () => {
   const feed = buildContentFeed([], [essay], noCourses, new Map())
   assert.equal(feed[0].videoUrl, undefined)
   assert.equal(feed[0].articleUrl, "/en/blog/essay")
+})
+
+test("private, missing, unlisted and upcoming videos do not expose their posts", () => {
+  const cases: (VideoDetails | undefined)[] = [
+    undefined,
+    { isPublic: false },
+    { isPublic: true, isUpcoming: true },
+    { durationSeconds: 600 }
+  ]
+  const pending = article({ id: 1, slug: "pending", videoId: "pending0001" })
+  const essay = article({ id: 2, slug: "essay" })
+  for (const state of cases) {
+    const videoDetails = new Map<string, VideoDetails>()
+    if (state) videoDetails.set("pending0001", state)
+    assert.equal(isVideoPublished(state), false)
+    assert.deepEqual(discoverableArticles([pending, essay], videoDetails), [
+      essay
+    ])
+    const feed = buildContentFeed([], [pending, essay], noCourses, videoDetails)
+    assert.deepEqual(
+      feed.map((item) => item.id),
+      ["article-2"]
+    )
+  }
+})
+
+test("publication reveals a prewritten article without changing its Markdown or requiring recent uploads", () => {
+  const post = article({ id: 1, slug: "prewritten", videoId: "pending0001" })
+  assert.deepEqual(buildContentFeed([], [post], noCourses, new Map()), [])
+  const released = details([["pending0001", { isUpcoming: false }]])
+  assert.deepEqual(discoverableArticles([post], released), [post])
+  const feed = buildContentFeed([], [post], noCourses, released)
+  assert.equal(feed.length, 1)
+  assert.equal(feed[0].articleUrl, post.url)
+  assert.equal(feed[0].videoUrl, "https://www.youtube.com/watch?v=pending0001")
+})
+
+test("description pairing cannot advertise a post whose originating video is pending", () => {
+  const pending = article({ id: 1, slug: "pending", videoId: "pending0001" })
+  const unrelated = video({
+    id: "released001",
+    description: "Read: https://bergholz.com.br/en/blog/pending"
+  })
+  const feed = buildContentFeed(
+    [unrelated],
+    [pending],
+    noCourses,
+    durations([["released001", 600]])
+  )
+  assert.equal(feed.length, 1)
+  assert.equal(feed[0].articleUrl, undefined)
+})
+
+test("upcoming premiere cards are excluded until the premiere starts", () => {
+  const upcoming = video({ id: "pending0001" })
+  const post = article({ id: 1, slug: "pending", videoId: "pending0001" })
+  assert.deepEqual(
+    buildContentFeed(
+      [upcoming],
+      [post],
+      noCourses,
+      details([["pending0001", { isUpcoming: true, durationSeconds: 600 }]])
+    ),
+    []
+  )
+  const live = buildContentFeed(
+    [upcoming],
+    [post],
+    noCourses,
+    durations([["pending0001", 600]])
+  )
+  assert.equal(live.length, 1)
+  assert.equal(live[0].id, "pending0001")
+  assert.equal(live[0].articleUrl, post.url)
 })

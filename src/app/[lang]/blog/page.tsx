@@ -3,8 +3,10 @@ import Link from "next/link"
 
 import { ArticleCard } from "@/components/article-card"
 import { CARD_BASE } from "@/components/content-card"
-import { getPublishedArticles } from "@/data-access/blog"
-import { getArticleVideoThumbnails } from "@/data-access/content"
+import {
+  getArticleVideoThumbnails,
+  getDiscoverableArticles
+} from "@/data-access/content"
 import { type Dictionary, getDictionary } from "@/dictionaries"
 import { articlesForLocale, blogFeedPath } from "@/lib/blog"
 import { getCurrentYear } from "@/lib/current-year"
@@ -80,7 +82,7 @@ export default async function Blog() {
 
 async function ArticleList({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   const [published, videoThumbnails, currentYear] = await Promise.all([
-    getPublishedArticles(),
+    getDiscoverableArticles(),
     getArticleVideoThumbnails(),
     getCurrentYear()
   ])

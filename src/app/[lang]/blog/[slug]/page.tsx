@@ -6,9 +6,12 @@ import { cache } from "react"
 import { ArticleCover } from "@/components/article-card"
 import { JsonLd } from "@/components/json-ld"
 import { getArticle, getPublishedArticles } from "@/data-access/blog"
+import { getArticleVideoDetails } from "@/data-access/content"
 import { getDictionary } from "@/dictionaries"
 import { articleImage, articlesForLocale, blogArticlePath } from "@/lib/blog"
+import { renderArticleVideo } from "@/lib/blog-video"
 import { getCurrentYear } from "@/lib/current-year"
+import { isVideoPublished } from "@/lib/feed"
 import {
   hasLocale,
   type Locale,
@@ -78,6 +81,9 @@ export async function generateMetadata({
   const { listed, article } = resolved
   const path = blogArticlePath(lang, slug)
   const image = articleImage(article)
+  const pendingVideo =
+    article.videoId &&
+    !isVideoPublished((await getArticleVideoDetails()).get(article.videoId))
   // Imported social cards preserve their original 1200×627 dimensions.
   const imageSize = article.social_image
     ? { width: 1200, height: 627 }
@@ -90,6 +96,7 @@ export async function generateMetadata({
     description: article.description,
     path,
     image: image ? { url: image, ...imageSize, alt: article.title } : undefined,
+    noIndex: Boolean(pendingVideo),
     openGraph: {
       type: "article",
       title: article.title,
@@ -119,6 +126,15 @@ export default async function BlogArticle({
   const { listed, article } = resolved
   const t = dict.blog
   const url = `${site.url}${blogArticlePath(lang, slug)}`
+  const videoDetails = article.videoId
+    ? (await getArticleVideoDetails()).get(article.videoId)
+    : undefined
+  const bodyHtml = renderArticleVideo(
+    article.body_html,
+    article.videoId,
+    videoDetails,
+    t
+  )
 
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -175,7 +191,7 @@ export default async function BlogArticle({
           className="article-body"
           lang={languageTags[lang]}
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Markdown HTML is sanitized at build time before trusted embed/highlight transforms
-          dangerouslySetInnerHTML={{ __html: article.body_html }}
+          dangerouslySetInnerHTML={{ __html: bodyHtml }}
         />
 
         <footer className="flex flex-col gap-5 border-t border-current/10 dark:border-current/20 pt-6">

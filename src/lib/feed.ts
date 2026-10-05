@@ -17,7 +17,7 @@ export const SHORTS_MAX_SECONDS = 180
 // The originating video is explicit: body links may cite other creators or
 // earlier videos. Shared by feed pairing and the /blog thumbnail lookup.
 export function articleVideoIds(
-  articles: Article[]
+  articles: { id: number | string; videoId?: string }[]
 ): Map<number | string, string> {
   const result = new Map<number | string, string>()
   for (const article of articles) {
@@ -25,6 +25,22 @@ export function articleVideoIds(
     if (videoId) result.set(article.id, videoId)
   }
   return result
+}
+
+// A linked post can exist before release without being advertised. Missing
+// video items (private videos are omitted by the public API) stay hidden too.
+export function isVideoPublished(details: VideoDetails | undefined): boolean {
+  return details?.isPublic === true && details.isUpcoming !== true
+}
+
+export function discoverableArticles<T extends { videoId?: string }>(
+  articles: T[],
+  details: Map<string, VideoDetails>
+): T[] {
+  return articles.filter(
+    (article) =>
+      !article.videoId || isVideoPublished(details.get(article.videoId))
+  )
 }
 
 // Thumbnail of each post's linked video, keyed by post id. Posts without a
@@ -158,10 +174,11 @@ export function buildContentFeed(
   courseVideoIds: Set<string>,
   details: Map<string, VideoDetails>
 ): ContentItem[] {
-  const videoIds = articleVideoIds(articles)
+  const visibleArticles = discoverableArticles(articles, details)
+  const videoIds = articleVideoIds(visibleArticles)
   const articleByVideoId = new Map<string, Article>()
   const articleBySlug = new Map<string, Article>()
-  for (const article of articles) {
+  for (const article of visibleArticles) {
     articleBySlug.set(article.slug, article)
     const videoId = videoIds.get(article.id)
     if (videoId) articleByVideoId.set(videoId, article)
@@ -177,6 +194,7 @@ export function buildContentFeed(
     // keep anything whose duration is unknown rather than guess).
     if (courseVideoIds.has(videoId)) continue
     const videoDetails = details.get(videoId)
+    if (videoDetails?.isPublic === false || videoDetails?.isUpcoming) continue
     if (isShort(videoDetails)) continue
 
     let article = articleByVideoId.get(videoId)
@@ -188,9 +206,9 @@ export function buildContentFeed(
     items.push(videoToItem(video, article, videoDetails))
   }
 
-  // Posts with no matching video card become their own cards (still linking a
-  // video if the body references one outside the fetched window).
-  for (const article of articles) {
+  // Released posts outside the uploads window still get a card; pending posts
+  // never reach this fallback. Standalone essays remain independent.
+  for (const article of visibleArticles) {
     if (!usedArticleIds.has(article.id)) {
       items.push(articleToItem(article, videoIds.get(article.id) ?? null))
     }

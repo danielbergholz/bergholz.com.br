@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-import { getPublishedArticles } from "@/data-access/blog"
+import { getDiscoverableArticles } from "@/data-access/content"
 import { blogArticlePath } from "@/lib/blog"
 import { localePath, locales, siteLanguage } from "@/lib/i18n"
 import { siteRoutes } from "@/lib/routes"
@@ -28,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   })
 
-  const articles = await getPublishedArticles()
+  const articles = await getDiscoverableArticles()
   const posts = articles.flatMap((article) => {
     const locale = siteLanguage(article.language)
     if (!locale) return []
