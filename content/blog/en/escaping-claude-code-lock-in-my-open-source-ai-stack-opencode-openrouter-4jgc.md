@@ -240,6 +240,6 @@ To be clear, this is not a "Claude is bad" post. Claude is great, and I will kee
 
 If you want to copy my setup: grab [OpenCode](https://opencode.ai/?utm_source=danielbergholz&utm_medium=blog&utm_campaign=alternatives-to-claude-code), point it at [OpenRouter](https://openrouter.ai/?utm_source=danielbergholz&utm_medium=blog&utm_campaign=alternatives-to-claude-code), add a few dollars of credit, and pick an open model like DeepSeek or GLM. That is the whole stack.
 
-If you made it all the way down here, you are awesome, thank you for reading. Let me know in the comments which harness and which models you are running. See you in the next one.
+If you made it all the way down here, you are awesome, thank you for reading. See you in the next one.
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

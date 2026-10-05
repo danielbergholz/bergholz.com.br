@@ -192,6 +192,6 @@ O seu trabalho agora é construir e cuidar do sistema que revisa: checagem que n
 
 Conheça meu trabalho: https://bergholz.com.br/
 
-Valeu por ler até o final! E você, ainda lê cada linha que o agente escreve? Me conta nos comentários.
+Valeu por ler até o final! E você, ainda lê cada linha que o agente escreve?
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

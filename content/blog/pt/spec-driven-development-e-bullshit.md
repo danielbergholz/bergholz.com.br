@@ -116,6 +116,6 @@ Conheça meu trabalho: https://bergholz.com.br/
 - [OpenSpec: Getting Started](https://github.com/Fission-AI/OpenSpec/blob/main/docs/getting-started.md)
 - [Thoughtworks Technology Radar: Spec-driven development](https://www.thoughtworks.com/radar/techniques/spec-driven-development)
 
-Se você chegou até aqui, obrigado pelo seu tempo. Você usa specs de verdade no seu projeto, ou elas também viraram um cemitério de Markdown? Me conta nos comentários.
+Se você chegou até aqui, obrigado pelo seu tempo. Você usa specs de verdade no seu projeto, ou elas também viraram um cemitério de Markdown?
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

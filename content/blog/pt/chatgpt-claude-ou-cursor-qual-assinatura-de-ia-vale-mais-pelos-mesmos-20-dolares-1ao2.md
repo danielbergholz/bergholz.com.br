@@ -178,6 +178,6 @@ Conheça meu trabalho: https://bergholz.com.br/
 - [GLM-5.3](https://z.ai/blog/glm-5.3)
 - [DeepSeek V4](https://api-docs.deepseek.com/news)
 
-Se você chegou até aqui, você é demais. Obrigado pelo seu tempo. Me conta nos comentários qual assinatura você paga hoje e se ela já te deixou na mão no meio de uma tarefa. Até a próxima.
+Se você chegou até aqui, você é demais. Obrigado pelo seu tempo. Até a próxima.
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

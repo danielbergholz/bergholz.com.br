@@ -278,6 +278,6 @@ Here's the sentence I didn't expect to write: **this is the first time an open-w
 
 If you want to try it yourself: grab [OpenCode](https://opencode.ai/), point it at [OpenRouter](https://openrouter.ai/), select GLM 5.2, and give it a real task instead of a benchmark. The [z.ai docs](https://docs.z.ai/guides/llm/glm-5.2) have the rest of the details.
 
-If you made it all the way down here, you're awesome, thank you for reading. Let me know in the comments whether you've tested GLM 5.2 and whether it impressed you as much as it impressed me. See you in the next one.
+If you made it all the way down here, you're awesome, thank you for reading. See you in the next one.
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

@@ -148,6 +148,6 @@ Conheça meu trabalho: https://bergholz.com.br/
 - [OpenAI — orientação do GPT-6 Astra](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra)
 - [Anthropic — prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 
-Se você chegou até aqui, você é demais. Obrigado pelo seu tempo. Me conta nos comentários qual é a regra mais estranha que você já colocou — ou encontrou — num `AGENTS.md`. Até a próxima.
+Se você chegou até aqui, você é demais. Obrigado pelo seu tempo. Até a próxima.
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

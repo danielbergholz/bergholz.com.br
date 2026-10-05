@@ -268,6 +268,6 @@ But because the code quality is a solid 10, I feel completely comfortable mainta
 
 So would I love to one day get a great result on the first lazy attempt? Absolutely. But I don't think we're there yet — not if you have high standards for code quality. The AI wrote almost every line of CourseShelf v2. It just needed me sitting right next to it, reviewing every page, writing a new skill every time it drifted. That's the part Twitter leaves out.
 
-If you made it this far, you're awesome. Let me know what other questions you have about how I did this, and I'll see you in the next one.
+If you made it this far, you're awesome. I'll see you in the next one.
 
 ![The end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

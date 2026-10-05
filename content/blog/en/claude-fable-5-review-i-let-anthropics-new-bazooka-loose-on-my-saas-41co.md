@@ -218,6 +218,6 @@ But it is *extremely* token hungry. My honest recommendation for right now:
 
 My read on the industry: both Anthropic and OpenAI are shipping the best models they possibly can first, and optimizing for cost later. First we achieve AGI, *then* we make it cheap. I'd bet that in six months to a year we get a Fable 5.5 or 5.6 at the same level of performance for a fraction of the price. That's the moment this becomes everyone's default.
 
-If you made it all the way down here, you're awesome, thank you for reading! Do you think Fable 5 is really the best model available, or is it just hype? Let me know in the comments. And if you skipped the video at the top, it's worth watching just for the moment Claude pushes back on me.
+If you made it all the way down here, you're awesome, thank you for reading! Do you think Fable 5 is really the best model available, or is it just hype? And if you skipped the video at the top, it's worth watching just for the moment Claude pushes back on me.
 
 ![thats all folks](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTV1ano1azh6NzZxNnhyNHFuaDFlZXM0cTV4dngwbWZ5MDRnZHhydyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5IT69msgpaOcg/giphy.gif)

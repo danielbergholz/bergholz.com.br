@@ -210,6 +210,6 @@ Conheça meu trabalho: https://bergholz.com.br/
 - [Codex, sandbox e approval policy](https://learn.chatgpt.com/codex/sandboxing)
 - [pi coding agent, system-prompt.ts](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts)
 
-Se você chegou até aqui, você é demais. Obrigado pelo seu tempo. Me conta nos comentários qual combinação de harness e LLM você está usando hoje, e em qual tipo de tarefa ela te deixou na mão. Até a próxima.
+Se você chegou até aqui, você é demais. Obrigado pelo seu tempo. Até a próxima.
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)

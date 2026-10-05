@@ -76,6 +76,6 @@ O Rails não morreu. O que morreu foi a ideia de escolher stack pela beleza do c
 
 Conheça meu trabalho: https://bergholz.com.br/
 
-Obrigado por ter lido até aqui. Me conta nos comentários: você ainda escreve código na mão toda semana?
+Obrigado por ter lido até aqui. E você, ainda escreve código na mão toda semana?
 
 ![the end](https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif)
