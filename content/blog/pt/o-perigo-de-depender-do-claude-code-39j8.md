@@ -6,8 +6,6 @@ updatedAt: 2026-09-24T16:53:43Z
 tags: []
 videoId: SrvWenpdRZY
 socialImage: /blog/db7d1808883d2ee7ead0.png
-devtoUrl: https://dev.to/danielbergholz/o-perigo-de-depender-do-claude-code-39j8
-devtoId: 4670588
 estudioSource: canais/br/youtube/2026-09-11-depender-claude-code
 ---
 

@@ -4,7 +4,6 @@ import { notFound, permanentRedirect } from "next/navigation"
 import { cache } from "react"
 
 import { ArticleCover } from "@/components/article-card"
-import { ExternalLink } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
 import { getArticle, getPublishedArticles } from "@/data-access/blog"
 import { getDictionary } from "@/dictionaries"
@@ -191,17 +190,6 @@ export default async function BlogArticle({
                 </li>
               ))}
             </ul>
-          )}
-          {article.devtoUrl && (
-            <a
-              href={article.devtoUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="inline-flex w-max items-center gap-1.5 rounded-sm border border-current/15 dark:border-current/25 px-2.5 py-1.5 text-xs uppercase tracking-[0.15em] text-foreground/60 hover:text-foreground transition-colors"
-            >
-              {t.discussOnDevto}
-              <ExternalLink />
-            </a>
           )}
         </footer>
       </article>

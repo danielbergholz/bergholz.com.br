@@ -11,8 +11,6 @@ tags:
 videoId: PSOskeYqvhE
 cover: /blog/90348cb44450f8ef0da0.webp
 socialImage: /blog/61f5f35f00ece3fbb443.png
-devtoUrl: https://dev.to/danielbergholz/testing-glm-52-on-opencode-im-impressed-1780
-devtoId: 3931200
 estudioSource: canais/en/videos/2026-06-18-glm-5-2-review-and-demo
 ---
 

@@ -10,8 +10,6 @@ tags:
   - python
 cover: /blog/5443587d65fac2af4102.webp
 socialImage: /blog/4036d7a75574a9e5094a.png
-devtoUrl: https://dev.to/danielbergholz/announcing-techschool-a-free-and-open-source-platform-to-learn-programming-47fk
-devtoId: 1781389
 ---
 
 Since 2019 I have published free courses on my [YouTube channel](https://youtube.com/@DanielBergholz?si=WsZ062ZtA5MV3kX_). Many times, people have commented on my videos something like "Wow, this course is amazing! It's a lot better than the expensive course I purchased!". I started reflecting after that. Why on earth is someone getting paid thousands of dollars selling a course that is worse than the one I made for **free**? Also, why does my course only have 100 views on YouTube? This isn't fair.

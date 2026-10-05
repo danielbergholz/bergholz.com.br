@@ -27,8 +27,8 @@ export function hasLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value)
 }
 
-// Collapse a BCP-47 tag as reported by YouTube ("en", "en-US", "pt-BR") or
-// dev.to ("en", "pt") to a site locale; anything else (or unset) is unknown.
+// Collapse a BCP-47 tag ("en", "en-US", "pt-BR") to a site locale;
+// anything else (or unset) is unknown.
 export function siteLanguage(tag: string | undefined): Locale | undefined {
   const primary = tag?.split("-")[0].toLowerCase()
   return primary === "en" || primary === "pt" ? primary : undefined

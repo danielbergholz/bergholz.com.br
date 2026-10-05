@@ -7,8 +7,6 @@ tags: []
 videoId: 0OJIXFTcg44
 cover: /blog/6b6dab343b8afd77522f.webp
 socialImage: /blog/e9b95a6b339079aa57a0.png
-devtoUrl: https://dev.to/danielbergholz/chatgpt-claude-ou-cursor-qual-assinatura-de-ia-vale-mais-pelos-mesmos-20-dolares-1ao2
-devtoId: 4550205
 estudioSource: canais/br/youtube/2026-08-31-assinaturas-ia
 ---
 

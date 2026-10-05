@@ -15,8 +15,7 @@ import { hasLocale, type Locale } from "./i18n.ts"
 import { site } from "./site.ts"
 import type { Article, PublishedArticleWithBody } from "./types.ts"
 
-export type LocalArticle = Article &
-  PublishedArticleWithBody & { devtoUrl?: string }
+export type LocalArticle = Article & PublishedArticleWithBody
 
 export function youtubeId(value: string): string | undefined {
   try {
@@ -206,12 +205,6 @@ export async function parsePost(
     if (image && !/^\/blog\/[\w.-]+$/.test(image))
       throw new Error("Images must be local /blog/ assets")
   }
-  const devtoUrl = optional("devtoUrl")
-  if (
-    devtoUrl &&
-    !/^https:\/\/dev\.to\/danielbergholz\/[a-z0-9-]+$/.test(devtoUrl)
-  )
-    throw new Error("Invalid devtoUrl")
   const markdown = match[2].trim()
   if (
     !markdown ||
@@ -223,7 +216,7 @@ export async function parsePost(
       "Body must be nonempty; title belongs in frontmatter, headings start at ##"
     )
   if (/\{%/.test(markdown))
-    throw new Error("Replace Dev.to liquid tags with [embed](https://…)")
+    throw new Error("Use [embed](https://…) instead of Liquid tags")
   const url = `${site.url}${blogArticlePath(locale, slug)}`
   return {
     id: `${locale}/${slug}`,
@@ -239,7 +232,6 @@ export async function parsePost(
     social_image: socialImage ?? "",
     url,
     canonical_url: url,
-    devtoUrl,
     reading_time_minutes: Math.max(
       1,
       Math.ceil(markdown.split(/\s+/).length / 220)

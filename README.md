@@ -21,7 +21,7 @@ Copy `.env.example` to `.env` and fill in:
 - `YOUTUBE_CHANNEL_ID` — channel ID for fetching videos and playlists
 - `YOUTUBE_CHANNEL_ID_BR` — (optional) Brazilian Portuguese channel; its uploads join the content feed and its stats are added to the totals
 
-`YOUTUBE_API_KEY` and `YOUTUBE_CHANNEL_ID` are required. Failed YouTube requests throw instead of caching an empty page. Blog builds need no Dev.to key, revalidation secret or access to the private `estudio` repo.
+`YOUTUBE_API_KEY` and `YOUTUBE_CHANNEL_ID` are required. Failed YouTube requests throw instead of caching an empty page.
 
 ## Scripts
 
@@ -76,7 +76,7 @@ Article text…
 [embed](https://youtu.be/abcdefghijk)
 ```
 
-Required: `title`, `description`, `publishedAt` (ISO timestamp with timezone). Optional: `updatedAt` (an actual editorial change, not build time), `tags` (array), `videoId`, `cover` and `socialImage` (files under `public/blog/`, referenced as `/blog/file.png`). Imported articles keep `devtoUrl` for their existing comment threads and `devtoId` for provenance. `estudioSource` optionally names the originating video folder relative to that private repo. There is no `published`/`draft` flag or publication scheduling: work in a branch and merge into `main` to publish through Vercel.
+Required: `title`, `description`, `publishedAt` (ISO timestamp with timezone). Optional: `updatedAt` (an actual editorial change, not build time), `tags` (array), `videoId`, `cover` and `socialImage` (files under `public/blog/`, referenced as `/blog/file.png`). `estudioSource` optionally names the originating video folder relative to that private repo. There is no `published`/`draft` flag or publication scheduling: work in a branch and merge into `main` to publish through Vercel.
 
 Markdown supports GFM tables, fenced code highlighting, heading anchors, images/GIFs and explicit `[embed](https://...)` links on their own line for YouTube and X/Twitter. Other embed targets remain ordinary links. Raw HTML is sanitized; arbitrary scripts and iframes are removed. GIFs may use `media.giphy.com`; new image origins need the CSP allowlist updated. Prefer local images for long-lived content.
 
@@ -84,7 +84,7 @@ Markdown supports GFM tables, fenced code highlighting, heading anchors, images/
 
 For every article derived from a video, always consult `~/programacao/estudio` (`danielbergholz/estudio`), including its channel instructions and source materials. BR sources are under `canais/br/youtube/<folder>/` (final SRT first); EN sources are under `canais/en/videos/<folder>/` (reviewed transcript first). Scripts, transcripts, research and production notes remain there. Write and revise the final article here, without keeping a second editable `blog.md` in `estudio`.
 
-The 15 previously published Dev.to posts were imported once; `content/blog/migration.json` records their original slugs, locales, dates and external URLs. Their Dev.to copies remain untouched. Legacy drafts were not published. There is no ongoing Dev.to sync, cache webhook or draft upload.
+`content/blog/migration.json` records the 15 imported articles' original slugs, locales and publication dates for regression checks.
 
 Before publishing a content or code change, run `npm run verify`.
 

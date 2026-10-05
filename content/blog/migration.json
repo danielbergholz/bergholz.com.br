@@ -1,107 +1,77 @@
 [
   {
-    "id": 4779516,
     "slug": "o-dhh-disse-que-o-rails-morreu-fui-ver-o-que-ele-falou-de-verdade-oll",
     "locale": "pt",
-    "publishedAt": "2026-10-01T18:12:42.705Z",
-    "devtoUrl": "https://dev.to/danielbergholz/o-dhh-disse-que-o-rails-morreu-fui-ver-o-que-ele-falou-de-verdade-oll"
+    "publishedAt": "2026-10-01T18:12:42.705Z"
   },
   {
-    "id": 4670588,
     "slug": "o-perigo-de-depender-do-claude-code-39j8",
     "locale": "pt",
-    "publishedAt": "2026-09-24T16:52:51.595Z",
-    "devtoUrl": "https://dev.to/danielbergholz/o-perigo-de-depender-do-claude-code-39j8"
+    "publishedAt": "2026-09-24T16:52:51.595Z"
   },
   {
-    "id": 4670183,
     "slug": "o-que-colocar-no-agentsmd-e-o-que-voce-deveria-apagar-2pd9",
     "locale": "pt",
-    "publishedAt": "2026-09-17T16:42:13.862Z",
-    "devtoUrl": "https://dev.to/danielbergholz/o-que-colocar-no-agentsmd-e-o-que-voce-deveria-apagar-2pd9"
+    "publishedAt": "2026-09-17T16:42:13.862Z"
   },
   {
-    "id": 4577734,
     "slug": "claude-code-nao-e-claude-a-diferenca-entre-harness-e-llm-a33",
     "locale": "pt",
-    "publishedAt": "2026-09-08T19:47:48.005Z",
-    "devtoUrl": "https://dev.to/danielbergholz/claude-code-nao-e-claude-a-diferenca-entre-harness-e-llm-a33"
+    "publishedAt": "2026-09-08T19:47:48.005Z"
   },
   {
-    "id": 4550205,
     "slug": "chatgpt-claude-ou-cursor-qual-assinatura-de-ia-vale-mais-pelos-mesmos-20-dolares-1ao2",
     "locale": "pt",
-    "publishedAt": "2026-09-01T22:33:31.305Z",
-    "devtoUrl": "https://dev.to/danielbergholz/chatgpt-claude-ou-cursor-qual-assinatura-de-ia-vale-mais-pelos-mesmos-20-dolares-1ao2"
+    "publishedAt": "2026-09-01T22:33:31.305Z"
   },
   {
-    "id": 3977749,
     "slug": "escaping-claude-code-lock-in-my-open-source-ai-stack-opencode-openrouter-4jgc",
     "locale": "en",
-    "publishedAt": "2026-06-25T13:36:44.200Z",
-    "devtoUrl": "https://dev.to/danielbergholz/escaping-claude-code-lock-in-my-open-source-ai-stack-opencode-openrouter-4jgc"
+    "publishedAt": "2026-06-25T13:36:44.200Z"
   },
   {
-    "id": 3965463,
     "slug": "superconductor-review-the-cleanest-way-ive-found-to-run-ai-agents-in-parallel-1c87",
     "locale": "en",
-    "publishedAt": "2026-06-22T23:33:02.806Z",
-    "devtoUrl": "https://dev.to/danielbergholz/superconductor-review-the-cleanest-way-ive-found-to-run-ai-agents-in-parallel-1c87"
+    "publishedAt": "2026-06-22T23:33:02.806Z"
   },
   {
-    "id": 3931200,
     "slug": "testing-glm-52-on-opencode-im-impressed-1780",
     "locale": "en",
-    "publishedAt": "2026-06-18T09:51:13.988Z",
-    "devtoUrl": "https://dev.to/danielbergholz/testing-glm-52-on-opencode-im-impressed-1780"
+    "publishedAt": "2026-06-18T09:51:13.988Z"
   },
   {
-    "id": 3820295,
     "slug": "how-i-used-ai-to-rebuild-my-saas-from-scratch-5f3m",
     "locale": "en",
-    "publishedAt": "2026-06-16T19:40:11.990Z",
-    "devtoUrl": "https://dev.to/danielbergholz/how-i-used-ai-to-rebuild-my-saas-from-scratch-5f3m"
+    "publishedAt": "2026-06-16T19:40:11.990Z"
   },
   {
-    "id": 3868102,
     "slug": "claude-fable-5-review-i-let-anthropics-new-bazooka-loose-on-my-saas-41co",
     "locale": "en",
-    "publishedAt": "2026-06-10T19:50:21.090Z",
-    "devtoUrl": "https://dev.to/danielbergholz/claude-fable-5-review-i-let-anthropics-new-bazooka-loose-on-my-saas-41co"
+    "publishedAt": "2026-06-10T19:50:21.090Z"
   },
   {
-    "id": 3805111,
     "slug": "moving-my-saas-away-from-react-and-inertia-to-elixir-50el",
     "locale": "en",
-    "publishedAt": "2026-06-02T18:22:23.532Z",
-    "devtoUrl": "https://dev.to/danielbergholz/moving-my-saas-away-from-react-and-inertia-to-elixir-50el"
+    "publishedAt": "2026-06-02T18:22:23.532Z"
   },
   {
-    "id": 3189151,
     "slug": "announcing-courseshelf-rotten-tomatoes-for-online-learning-4h3k",
     "locale": "en",
-    "publishedAt": "2026-01-21T22:10:59.162Z",
-    "devtoUrl": "https://dev.to/danielbergholz/announcing-courseshelf-rotten-tomatoes-for-online-learning-4h3k"
+    "publishedAt": "2026-01-21T22:10:59.162Z"
   },
   {
-    "id": 2321033,
     "slug": "my-ai-powered-workflow-for-writing-elixir-and-phoenix-with-windsurf-4k8m",
     "locale": "en",
-    "publishedAt": "2025-03-10T14:41:03.226Z",
-    "devtoUrl": "https://dev.to/danielbergholz/my-ai-powered-workflow-for-writing-elixir-and-phoenix-with-windsurf-4k8m"
+    "publishedAt": "2025-03-10T14:41:03.226Z"
   },
   {
-    "id": 1781389,
     "slug": "announcing-techschool-a-free-and-open-source-platform-to-learn-programming-47fk",
     "locale": "en",
-    "publishedAt": "2024-03-05T22:52:54.521Z",
-    "devtoUrl": "https://dev.to/danielbergholz/announcing-techschool-a-free-and-open-source-platform-to-learn-programming-47fk"
+    "publishedAt": "2024-03-05T22:52:54.521Z"
   },
   {
-    "id": 1716343,
     "slug": "from-nextjs-to-rails-then-elixir-my-journey-through-reactjs-burnout-h8d",
     "locale": "en",
-    "publishedAt": "2024-01-10T23:29:41.190Z",
-    "devtoUrl": "https://dev.to/danielbergholz/from-nextjs-to-rails-then-elixir-my-journey-through-reactjs-burnout-h8d"
+    "publishedAt": "2024-01-10T23:29:41.190Z"
   }
 ]

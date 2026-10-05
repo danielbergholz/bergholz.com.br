@@ -95,8 +95,7 @@ export function withChannelLanguage(
   return result
 }
 
-// Where "Read" goes: the post's page on this site when we know which locale
-// it belongs to, else its dev.to URL (a post not yet in the public list).
+// Link to the locale route when available, otherwise the article's canonical URL.
 export function articleUrl(article: Article): string {
   return article.language
     ? blogArticlePath(article.language, article.slug)

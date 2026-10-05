@@ -23,7 +23,6 @@ export type PublishedArticle = Omit<Article, "body_markdown" | "language"> & {
   canonical_url: string
   social_image: string
   language: string
-  devtoUrl?: string
 }
 
 export type PublishedArticleWithBody = PublishedArticle & {

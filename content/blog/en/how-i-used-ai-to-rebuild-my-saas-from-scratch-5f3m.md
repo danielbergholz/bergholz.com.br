@@ -12,8 +12,6 @@ videoId: rjg_51HnTUI
 estudioSource: canais/en/videos/2026-05-30-how-i-used-ai-to-rebuild-my-saas-from-scratch
 cover: /blog/949f43b66cd1cff80a1d.webp
 socialImage: /blog/9145f656534fe467f894.png
-devtoUrl: https://dev.to/danielbergholz/how-i-used-ai-to-rebuild-my-saas-from-scratch-5f3m
-devtoId: 3820295
 ---
 
 On my [previous video](https://www.youtube.com/watch?v=DbBw1GAs-FQ), I explained **why** I migrated my SaaS, [CourseShelf](https://thecourseshelf.com), away from React and Inertia to Phoenix LiveView. Today I want to talk about the part everyone actually asks me about: **how** I did it. Did I just point an AI at a giant codebase and walk away? Did I automate the whole thing?

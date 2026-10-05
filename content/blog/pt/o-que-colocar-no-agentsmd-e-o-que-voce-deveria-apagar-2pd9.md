@@ -6,8 +6,6 @@ updatedAt: 2026-09-17T16:44:10Z
 tags: []
 videoId: 2LgLiHZ4dl8
 socialImage: /blog/c6ac5aeec3c22937b445.png
-devtoUrl: https://dev.to/danielbergholz/o-que-colocar-no-agentsmd-e-o-que-voce-deveria-apagar-2pd9
-devtoId: 4670183
 estudioSource: canais/br/youtube/2026-09-11-agents-md
 ---
 

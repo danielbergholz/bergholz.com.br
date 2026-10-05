@@ -14,7 +14,7 @@ type CardLabels = Dictionary["card"]
 
 const isExternal = (href: string) => /^https?:\/\//i.test(href)
 
-// External targets (YouTube, dev.to) open in a new tab; internal ones (a post
+// External targets (YouTube) open in a new tab; internal ones (a post
 // on this site) are client-side navigations.
 function CardLink({
   href,

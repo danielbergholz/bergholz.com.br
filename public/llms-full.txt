@@ -81,14 +81,14 @@ Free\\
 8videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYXXwbP2TNTbviUaFh6YqqVt "Curso de Terminal Linux")
 
 ## Useful Links
-[Premium](https://www.youtube.com/@DanielBergholz/join "Premium") [TechSchool](https://techschool.dev/ "TechSchool") [YouTube](https://www.youtube.com/@DanielBergholz "YouTube") [Twitter](https://twitter.com/danielbergholz "Twitter") [LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn") [Blog](https://dev.to/danielbergholz "Blog") [GitHub](https://github.com/danielbergholz "GitHub")
+[Premium](https://www.youtube.com/@DanielBergholz/join "Premium") [TechSchool](https://techschool.dev/ "TechSchool") [YouTube](https://www.youtube.com/@DanielBergholz "YouTube") [Twitter](https://twitter.com/danielbergholz "Twitter") [LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn") [Blog](https://bergholz.com.br/en/blog "Blog") [GitHub](https://github.com/danielbergholz "GitHub")
 
 ## TechSchool and Developer Journey
 [**Announcing TechSchool: A free and open-source platform to learn programming** \\
 Since 2019 I have published free courses on my YouTube channel. Many times, people have commented on...\\
 \\
-March 5, 20242 minutes read](https://dev.to/danielbergholz/announcing-techschool-a-free-and-open-source-platform-to-learn-programming-47fk "Announcing TechSchool: A free and open-source platform to learn programming") [**From Next.js to Rails then Elixir: My journey through React.js burnout** \\
+March 5, 20242 minutes read](https://bergholz.com.br/en/blog/announcing-techschool-a-free-and-open-source-platform-to-learn-programming-47fk "Announcing TechSchool: A free and open-source platform to learn programming") [**From Next.js to Rails then Elixir: My journey through React.js burnout** \\
 I've been a web developer since 2019. I used React.js and React-based frameworks like Gatsby, Next,...\\
 \\
-January 10, 202413 minutes read](https://dev.to/danielbergholz/from-nextjs-to-rails-then-elixir-my-journey-through-reactjs-burnout-h8d "From Next.js to Rails then Elixir: My journey through React.js burnout")
+January 10, 202413 minutes read](https://bergholz.com.br/en/blog/from-nextjs-to-rails-then-elixir-my-journey-through-reactjs-burnout-h8d "From Next.js to Rails then Elixir: My journey through React.js burnout")
 

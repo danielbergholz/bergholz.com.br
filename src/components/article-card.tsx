@@ -8,7 +8,7 @@ import type { Locale } from "@/lib/i18n"
 import type { PublishedArticle } from "@/lib/types"
 import { isYouTubeThumbnail, readableDate } from "@/lib/utils"
 
-// dev.to cover banners are 1000×420; YouTube thumbnails are 16:9. Decorative:
+// Imported cover banners are 1000×420; YouTube thumbnails are 16:9. Decorative:
 // the title sits next to it.
 export function ArticleCover({
   src,
@@ -43,8 +43,7 @@ export function ArticleCover({
 type Props = {
   article: PublishedArticle
   // Thumbnail of the video the post links, when it does (see
-  // getArticleVideoThumbnails). Preferred over the dev.to cover, which is the
-  // same image cropped to 1000×420.
+  // getArticleVideoThumbnails). Preferred over the cropped article cover.
   videoThumbnailUrl?: string
   locale: Locale
   currentYear: number

@@ -10,8 +10,6 @@ tags:
   - react
 cover: /blog/0de308bbbc7cc2cf9d28.webp
 socialImage: /blog/508592f5ec28a047d3e2.png
-devtoUrl: https://dev.to/danielbergholz/my-ai-powered-workflow-for-writing-elixir-and-phoenix-with-windsurf-4k8m
-devtoId: 2321033
 ---
 
 There's a ton of stuff out there about using AI to write JavaScript and Next.js code, but what about Elixir and Phoenix? Are they getting left behind in the LLM code generation game? Well, yes and no. Can we make it better? Definitely. Is it worth the effort? Hell yeah. And can we actually become those legendary 10x engineers by writing Elixir with AI-powered tools like [Cursor](https://www.cursor.com) or [Windsurf](https://codeium.com/windsurf)? You bet we can!

@@ -7,8 +7,6 @@ tags: []
 videoId: RHkFnFE6vgI
 cover: /blog/70015d6c2d2eedb70c1e.webp
 socialImage: /blog/5c223905a454fd1dc7d4.png
-devtoUrl: https://dev.to/danielbergholz/claude-fable-5-review-i-let-anthropics-new-bazooka-loose-on-my-saas-41co
-devtoId: 3868102
 estudioSource: canais/en/videos/2026-06-10-claude-fable-5-is-here
 ---
 

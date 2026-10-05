@@ -34,7 +34,6 @@ export const site: SiteConfig = {
     { name: "Instagram", href: socialUrls.instagram },
     { name: "X", href: socialUrls.x },
     { name: "LinkedIn", href: socialUrls.linkedin },
-    { name: "GitHub", href: socialUrls.github },
-    { name: "DEV", href: socialUrls.devto }
+    { name: "GitHub", href: socialUrls.github }
   ]
 }

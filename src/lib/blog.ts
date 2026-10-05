@@ -92,7 +92,7 @@ type RssFeedInput = {
 }
 
 // RSS 2.0 for one locale's posts. Items link to the site (the canonical
-// home of each post), not to dev.to.
+// home of each post).
 export function buildRssFeed({
   locale,
   title,

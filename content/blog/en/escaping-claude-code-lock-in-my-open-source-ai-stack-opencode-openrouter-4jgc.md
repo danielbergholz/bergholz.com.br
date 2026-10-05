@@ -7,8 +7,6 @@ tags: []
 videoId: VR7hvwwk_Qk
 cover: /blog/cba0312dd45809d7a412.webp
 socialImage: /blog/465cbb715bc8532ad1ed.png
-devtoUrl: https://dev.to/danielbergholz/escaping-claude-code-lock-in-my-open-source-ai-stack-opencode-openrouter-4jgc
-devtoId: 3977749
 estudioSource: canais/en/videos/2026-06-23-alternatives-to-claude-code
 ---
 

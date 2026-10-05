@@ -10,8 +10,6 @@ tags:
   - react
 cover: /blog/99db0a027ba7a414b285.webp
 socialImage: /blog/5ec8c15644f6e362658e.png
-devtoUrl: https://dev.to/danielbergholz/announcing-courseshelf-rotten-tomatoes-for-online-learning-4h3k
-devtoId: 3189151
 ---
 
 Back in 2019, I created [TechSchool](https://techschool.dev), an open-source platform to help people find free programming courses. The idea was simple: fight back against predatory coding bootcamps that charge thousands of dollars for content that's often worse than what's available for free on YouTube.

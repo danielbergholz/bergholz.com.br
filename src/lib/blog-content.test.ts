@@ -20,7 +20,6 @@ test("local posts derive identity, locale and canonical from the file path", asy
   assert.equal(article.language, "en")
   assert.equal(article.url, "https://bergholz.com.br/en/blog/example")
   assert.equal(article.canonical_url, article.url)
-  assert.equal(article.devtoUrl, undefined)
   assert.equal(article.videoId, "abcdefghijk")
   assert.deepEqual(article.tag_list, ["ai", "elixir"])
   assert.equal(article.reading_time_minutes, 1)
@@ -32,7 +31,7 @@ test("invalid metadata, reserved routes and obsolete draft states fail the build
     post("draft: true\n"),
     post("tags: ai\n"),
     post("videoId: invalid\n"),
-    post("cover: https://dev.to/cover.jpg\n"),
+    post("cover: https://example.com/cover.jpg\n"),
     post("updatedAt: 2020-01-01T00:00:00Z\n"),
     post().replace('"2026-10-05T12:00:00Z"', '"2026-10-05"'),
     post().replace("2026-10-05", "2026-02-30"),

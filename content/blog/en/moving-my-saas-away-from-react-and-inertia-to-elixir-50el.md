@@ -12,8 +12,6 @@ videoId: DbBw1GAs-FQ
 estudioSource: canais/en/videos/2026-05-30-moving-away-from-react
 cover: /blog/53154af6c95faf3f1838.webp
 socialImage: /blog/b719d1225aa0bc633ea5.png
-devtoUrl: https://dev.to/danielbergholz/moving-my-saas-away-from-react-and-inertia-to-elixir-50el
-devtoId: 3805111
 ---
 
 If you've been following my journey, you know I went all in on Elixir a while ago. I left the React treadmill behind, picked Phoenix, and to keep React on the front end I used [Inertia.js](https://inertiajs.com/). For a year, I was happy. I built my SaaS, [CourseShelf](https://thecourseshelf.com/), and I had a lot of fun doing it.

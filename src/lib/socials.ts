@@ -24,6 +24,5 @@ export const socialUrls = {
   instagram: "https://www.instagram.com/bergholz.dev/",
   x: "https://twitter.com/danielbergholz",
   linkedin: "https://www.linkedin.com/in/daniel-gobbi-bergholz/",
-  github: "https://github.com/danielbergholz",
-  devto: "https://dev.to/danielbergholz"
+  github: "https://github.com/danielbergholz"
 } as const

@@ -10,8 +10,6 @@ tags:
   - react
 cover: /blog/0995dc67e1d928dabf00.webp
 socialImage: /blog/adff9c040676cff0e6c1.png
-devtoUrl: https://dev.to/danielbergholz/from-nextjs-to-rails-then-elixir-my-journey-through-reactjs-burnout-h8d
-devtoId: 1716343
 ---
 
 I've been a web developer since 2019. I used React.js and React-based frameworks like Gatsby, Next, Remix, Astro, and Hydrogen. I've never been fully content with any of these tools, but, as a beginner who was deep into the JS ecosystem, all that I could hear from my peers was something along those lines: "This is the way, any other programming language is either slow or old".

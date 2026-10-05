@@ -11,8 +11,6 @@ tags:
 videoId: T5G_aUIEwEk
 cover: /blog/6f842966bc77014c3c1f.webp
 socialImage: /blog/92676fdcb7d1ec0b91a0.png
-devtoUrl: https://dev.to/danielbergholz/superconductor-review-the-cleanest-way-ive-found-to-run-ai-agents-in-parallel-1c87
-devtoId: 3965463
 estudioSource: canais/en/videos/2026-06-22-run-parallel-agents-with-superconductor
 ---
 

@@ -46,7 +46,7 @@ test("isYouTubeThumbnail only matches YouTube's image CDN", () => {
     isYouTubeThumbnail("https://i.ytimg.com/vi/abc/maxresdefault.jpg"),
     true
   )
-  assert.equal(isYouTubeThumbnail("https://dev.to/cover.png"), false)
+  assert.equal(isYouTubeThumbnail("https://example.com/cover.png"), false)
   assert.equal(isYouTubeThumbnail("/luisa-daniel.jpg"), false)
   assert.equal(isYouTubeThumbnail(""), false)
 })

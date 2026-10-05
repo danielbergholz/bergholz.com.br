@@ -6,8 +6,6 @@ updatedAt: 2026-09-08T23:08:03Z
 tags: []
 videoId: 1K9WuPsaXdc
 socialImage: /blog/0751eb1817f9e676025f.png
-devtoUrl: https://dev.to/danielbergholz/claude-code-nao-e-claude-a-diferenca-entre-harness-e-llm-a33
-devtoId: 4577734
 estudioSource: canais/br/youtube/2026-08-31-harness-vs-llm
 ---
 

@@ -53,7 +53,7 @@ function article(opts: {
     slug: opts.slug,
     description: opts.description ?? `desc ${opts.id}`,
     published_at: opts.date ?? "2025-01-01T00:00:00Z",
-    url: `https://dev.to/danielbergholz/${opts.slug}`,
+    url: `https://bergholz.com.br/en/blog/${opts.slug}`,
     cover_image: `cover-${opts.id}`,
     social_image: `social-${opts.id}`,
     reading_time_minutes: opts.minutes ?? 5,
@@ -197,7 +197,7 @@ test("pairs a video with its article via the declared video id", () => {
 
   assert.equal(feed.length, 1, "paired article is not duplicated")
   assert.equal(feed[0].videoUrl, "https://www.youtube.com/watch?v=vid1111aaaa")
-  assert.equal(feed[0].articleUrl, "https://dev.to/danielbergholz/post-one")
+  assert.equal(feed[0].articleUrl, "https://bergholz.com.br/en/blog/post-one")
   assert.equal(feed[0].readingMinutes, 5)
   assert.equal(feed[0].durationSeconds, 600)
   assert.equal(
@@ -210,7 +210,7 @@ test("pairs a video with its article via the declared video id", () => {
 test("pairs via the slug in the video description when the article has no videoId", () => {
   const v = video({
     id: "vid2222bbbb",
-    description: "Full write-up: https://dev.to/danielbergholz/post-two"
+    description: "Full write-up: https://bergholz.com.br/en/blog/post-two"
   })
   const a = article({ id: 2, slug: "post-two", body: "" })
   const feed = buildContentFeed(
@@ -221,7 +221,7 @@ test("pairs via the slug in the video description when the article has no videoI
   )
 
   assert.equal(feed.length, 1)
-  assert.equal(feed[0].articleUrl, "https://dev.to/danielbergholz/post-two")
+  assert.equal(feed[0].articleUrl, "https://bergholz.com.br/en/blog/post-two")
 })
 
 test("excludes Shorts (<= 180s) but keeps 181s and unknown durations", () => {
@@ -283,7 +283,7 @@ test("a text-only article becomes its own card", () => {
 
   assert.equal(feed.length, 1)
   assert.equal(feed[0].id, "article-9")
-  assert.equal(feed[0].articleUrl, "https://dev.to/danielbergholz/essay")
+  assert.equal(feed[0].articleUrl, "https://bergholz.com.br/en/blog/essay")
   assert.equal(feed[0].videoUrl, undefined)
 })
 
@@ -297,7 +297,7 @@ test("an article with an out-of-window originating video still offers Watch", ()
 
   assert.equal(feed.length, 1)
   assert.equal(feed[0].videoUrl, "https://www.youtube.com/watch?v=oldvideo111")
-  assert.equal(feed[0].articleUrl, "https://dev.to/danielbergholz/old")
+  assert.equal(feed[0].articleUrl, "https://bergholz.com.br/en/blog/old")
 })
 
 test("video language flows into the item; article-only cards have none", () => {
@@ -339,7 +339,7 @@ test("sorts newest first across videos and articles", () => {
   )
 })
 
-test("articleUrl points at the site when the locale is known, else dev.to", () => {
+test("articleUrl uses the locale route or the article canonical URL", () => {
   assert.equal(
     articleUrl(article({ id: 1, slug: "post-pt", language: "pt" })),
     "/blog/post-pt"
@@ -350,7 +350,7 @@ test("articleUrl points at the site when the locale is known, else dev.to", () =
   )
   assert.equal(
     articleUrl(article({ id: 3, slug: "new" })),
-    "https://dev.to/danielbergholz/new"
+    "https://bergholz.com.br/en/blog/new"
   )
 })
 

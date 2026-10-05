@@ -25,8 +25,8 @@ function published(opts: {
     description: `desc ${opts.id}`,
     published_at: opts.date ?? "2026-01-01T00:00:00Z",
     edited_at: null,
-    url: `https://dev.to/danielbergholz/${opts.slug}`,
-    canonical_url: `https://dev.to/danielbergholz/${opts.slug}`,
+    url: `https://bergholz.com.br/en/blog/${opts.slug}`,
+    canonical_url: `https://bergholz.com.br/en/blog/${opts.slug}`,
     cover_image: `cover-${opts.id}`,
     social_image: `social-${opts.id}`,
     reading_time_minutes: 4,
@@ -109,7 +109,6 @@ test("buildRssFeed lists only the locale's posts, escaped, linking the site", ()
   )
   assert.match(xml, /<\/rss>\n$/)
   assert.doesNotMatch(xml, /ola/, "Portuguese post is not in the English feed")
-  assert.doesNotMatch(xml, /dev\.to/, "items link to the site, not dev.to")
 })
 
 test("postLocales maps each post's slug to its site locale", () => {

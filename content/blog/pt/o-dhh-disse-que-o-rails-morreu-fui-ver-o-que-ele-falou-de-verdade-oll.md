@@ -9,8 +9,6 @@ tags:
   - ruby
 videoId: x8dt_Fr5gUc
 socialImage: /blog/3ba0fc306491df731722.png
-devtoUrl: https://dev.to/danielbergholz/o-dhh-disse-que-o-rails-morreu-fui-ver-o-que-ele-falou-de-verdade-oll
-devtoId: 4779516
 estudioSource: canais/br/youtube/2026-09-25-dhh-abandonou-rails
 ---
 

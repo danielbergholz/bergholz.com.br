@@ -168,7 +168,7 @@ type PlaylistVideoIdResponse = {
 // Durations and language live on the videos endpoint, not playlistItems.
 // Durations show video length and detect Shorts (which the API has no flag
 // for); language drives the card badge; the thumbnail lets /blog show a
-// post's video image instead of dev.to's cropped cover. Batched 50 ids per
+// post's video thumbnail instead of its cropped cover. Batched 50 ids per
 // call — extra `part`s cost no additional quota. None of it changes after
 // upload, so cache for a day.
 export const getVideoDetails = async (videoIds: string[]) => {
