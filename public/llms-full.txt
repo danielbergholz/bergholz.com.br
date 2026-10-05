@@ -5,7 +5,7 @@
 
 ## My name is Daniel Bergholz, I'm a Software Engineer and Content Creator from Brazil
 
- [Contact me](mailto:daniel@bergholz.com.br "Send email to Daniel Bergholz")[YouTube](https://www.youtube.com/@DanielBergholz "YouTube")[X (Formerly Twitter)](https://twitter.com/danielbergholz "X (Formerly Twitter)")[LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn")[GitHub](https://github.com/danielbergholz "GitHub") [Get early access to my upcoming courses](https://www.youtube.com/@DanielBergholz/join)
+ [Contact me](mailto:daniel@bergholz.com.br "Send email to Daniel Bergholz")[YouTube](https://www.youtube.com/@DanielBergholz "YouTube")[X (Formerly Twitter)](https://twitter.com/danielbergholz "X (Formerly Twitter)")[LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn")[GitHub](https://github.com/danielbergholz "GitHub")
 
 ## Free Programming Courses
 [**Phoenix crash course** \\
@@ -81,7 +81,7 @@ Free\\
 8videos](https://www.youtube.com/playlist?list=PLbV6TI03ZWYXXwbP2TNTbviUaFh6YqqVt "Curso de Terminal Linux")
 
 ## Useful Links
-[Premium](https://www.youtube.com/@DanielBergholz/join "Premium") [TechSchool](https://techschool.dev/ "TechSchool") [YouTube](https://www.youtube.com/@DanielBergholz "YouTube") [Twitter](https://twitter.com/danielbergholz "Twitter") [LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn") [Blog](https://bergholz.com.br/en/blog "Blog") [GitHub](https://github.com/danielbergholz "GitHub")
+[TechSchool](https://techschool.dev/ "TechSchool") [YouTube](https://www.youtube.com/@DanielBergholz "YouTube") [Twitter](https://twitter.com/danielbergholz "Twitter") [LinkedIn](https://www.linkedin.com/in/daniel-gobbi-bergholz/ "LinkedIn") [Blog](https://bergholz.com.br/en/blog "Blog") [GitHub](https://github.com/danielbergholz "GitHub")
 
 ## TechSchool and Developer Journey
 [**Announcing TechSchool: A free and open-source platform to learn programming** \\

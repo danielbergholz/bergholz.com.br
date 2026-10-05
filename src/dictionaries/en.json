@@ -125,11 +125,6 @@
     "videoSingular": "video",
     "videoPlural": "videos"
   },
-  "membership": {
-    "title": "Join for early access",
-    "badge": "Members",
-    "body": "Become a channel member to watch new videos before anyone else, get member-only perks, and support the channel directly."
-  },
   "links": {
     "title": "Links",
     "sectionAria": "Social Media Links"

@@ -125,11 +125,6 @@
     "videoSingular": "vídeo",
     "videoPlural": "vídeos"
   },
-  "membership": {
-    "title": "Entre para ter acesso antecipado",
-    "badge": "Membros",
-    "body": "Vire membro do canal para assistir aos vídeos novos antes de todo mundo, ter benefícios exclusivos e apoiar o canal diretamente."
-  },
   "links": {
     "title": "Links",
     "sectionAria": "Links das redes sociais"
