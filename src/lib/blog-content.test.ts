@@ -29,6 +29,8 @@ test("invalid metadata, reserved routes and obsolete draft states fail the build
   for (const text of [
     post("published: false\n"),
     post("draft: true\n"),
+    post("videoID: abcdefghijk\n"),
+    post("estudioSource: 42\n"),
     post("tags: ai\n"),
     post("videoId: invalid\n"),
     post("cover: https://example.com/cover.jpg\n"),
@@ -37,6 +39,7 @@ test("invalid metadata, reserved routes and obsolete draft states fail the build
     post().replace("2026-10-05", "2026-02-30"),
     post("", "# Repeated title"),
     post("", "{% embed https://youtu.be/abcdefghijk %}"),
+    post("", "```unknown-language\nsome code\n```"),
     post("", ""),
     "No frontmatter"
   ])
@@ -58,16 +61,41 @@ test("Markdown preserves GFM, anchors, GIFs and highlighted real code", async ()
 const answer = 42
 \`\`\`
 
-\`\`\`unknown-language
-some code
+\`\`\`elixir
+defmodule Shelf do
+  def ok, do: :ok
+end
+\`\`\`
+
+\`\`\`text
+plain output
 \`\`\``)
   assert.match(html, /id="a-heading"/)
   assert.match(html, /<table>/)
   assert.match(html, /src="https:\/\/media.giphy.com\/reaction.gif"/)
   assert.match(html, /class="hljs-keyword"/)
-  assert.match(html, /some code/)
+  assert.match(html, /<span class="hljs-symbol">:ok<\/span>/)
+  assert.match(html, /plain output/)
   await assert.doesNotReject(
     parsePost("pt", "example", post("", "```sh\n# Shell comment\n```"))
+  )
+})
+
+test("images load lazily and local ones carry their intrinsic size", async () => {
+  const html = await renderMarkdown(
+    "![Local](/blog/shot.webp)\n\n![Remote](https://media.giphy.com/a.gif)",
+    {
+      imageSize: (src) =>
+        src === "/blog/shot.webp" ? { width: 1600, height: 900 } : undefined
+    }
+  )
+  assert.match(
+    html,
+    /<img src="\/blog\/shot.webp" alt="Local" loading="lazy" decoding="async" width="1600" height="900">/
+  )
+  assert.match(
+    html,
+    /<img src="https:\/\/media.giphy.com\/a.gif" alt="Remote" loading="lazy" decoding="async">/
   )
 })
 
@@ -90,8 +118,11 @@ test("unsafe HTML is removed while constructed YouTube and X embeds survive", as
     html,
     /src="https:\/\/www.youtube-nocookie.com\/embed\/abcdefghijk"/
   )
-  assert.match(html, /allowfullscreen/)
-  assert.match(html, /platform.twitter.com\/embed\/Tweet.html/)
+  assert.match(html, /allow="[^"]*fullscreen"/)
+  assert.match(
+    html,
+    /<blockquote class="twitter-tweet" data-dnt="true"><a href="https:\/\/x.com\/example\/status\/123456789">/
+  )
   assert.match(
     html,
     /<a href="https:\/\/example.com\/article">https:\/\/example.com\/article<\/a>/

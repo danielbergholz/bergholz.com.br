@@ -18,7 +18,7 @@ There's a ton of stuff out there about using AI to write JavaScript and Next.js 
 
 This year I tried using both Cursor and Windsurf for a month to see which one I'd stick with. The code they generated was pretty much the same (not surprising since they both use [Claude](https://claude.ai/) 3.5 Sonnet). But Windsurf was better at understanding my codebase and grabbing ideas from my existing files, plus its UI just felt smoother and more intuitive. Honestly though, these AI tools are copying each other's features so quickly that it probably doesn't matter which one you pick - they're both solid options.
 
-![Image description](/blog/17779b14c152e07c5589.png)
+![Image description](/blog/17779b14c152e07c5589.webp)
 
 ## Does AI generate good Elixir and Phoenix code?
 

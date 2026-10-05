@@ -1,39 +1,49 @@
+import { readFileSync, statSync } from "node:fs"
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { parsePost } from "../src/lib/blog-content.ts"
 import { locales } from "../src/lib/i18n.ts"
+import { imageSize } from "../src/lib/image-size.ts"
+
+// Article images ship as-is (no optimizer), so keep each one small: resize
+// screenshots to at most 1600px wide and save them as WebP.
+const MAX_IMAGE_BYTES = 300 * 1024
 
 const contentDir = path.resolve("content/blog")
+// Asset validation is local: publishing never needs a third-party image request.
+const localImage = (src: string) => path.resolve(`public${src}`)
+const options = {
+  imageSize: (src: string) => imageSize(readFileSync(localImage(src)))
+}
 const posts = []
 for (const locale of locales) {
   const dir = path.join(contentDir, locale)
   for (const name of (await readdir(dir)).sort()) {
     if (!name.endsWith(".md")) continue
     try {
-      posts.push(
-        await parsePost(
-          locale,
-          name.slice(0, -3),
-          await readFile(path.join(dir, name), "utf8")
-        )
+      const post = await parsePost(
+        locale,
+        name.slice(0, -3),
+        await readFile(path.join(dir, name), "utf8"),
+        options
       )
+      for (const image of [post.cover_image, post.social_image]) {
+        if (image) statSync(localImage(image))
+      }
+      for (const [, image] of post.body_html.matchAll(
+        /src="(\/blog\/[^"#?]+)"/g
+      )) {
+        const { size } = statSync(localImage(image))
+        if (size > MAX_IMAGE_BYTES) {
+          throw new Error(
+            `${image} is ${Math.round(size / 1024)} KB; article images must stay under ${MAX_IMAGE_BYTES / 1024} KB`
+          )
+        }
+      }
+      posts.push(post)
     } catch (error) {
       throw new Error(`${locale}/${name}: ${String(error)}`, { cause: error })
     }
-  }
-}
-// Asset validation is local: publishing never needs a third-party image request.
-for (const post of posts) {
-  const images = [
-    post.cover_image,
-    post.social_image,
-    ...Array.from(
-      post.body_html.matchAll(/src="(\/blog\/[^"#?]+)"/g),
-      (match) => match[1]
-    )
-  ]
-  for (const image of images) {
-    if (image) await readFile(path.resolve(`public${image}`))
   }
 }
 posts.sort((a, b) => b.published_at.localeCompare(a.published_at))

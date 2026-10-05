@@ -60,13 +60,13 @@ I reached my tipping point with [Next.js app router](https://nextjs.org/docs/app
 
 - What was once simple: The `getStaticProps` and `getServerSideProps` functions, now became complex and cumbersome. Currently, there is no specific place to add your API calls or database queries, you can write them wherever you want! We started mixing the business logic with UI once again, after making the same mistake with PHP multiple years ago. Do frontend developers not learn from the past? What happens if I delete a button? Does this break my user authentication flow because the database call was inside it? Your front end should be 100% trashable and replaceable. The competitive advantage you have against your competitors is the business logic, which should be completely isolated from the UI layer.
 
-![Horrible Next.js code](/blog/643a161228ed1ef7cce3.png)
+![Horrible Next.js code](/blog/643a161228ed1ef7cce3.webp)
 
 - Next is now server first. Which doesn't sound that bad right? After all, this solves the SEO issue and shows fresh content to the user immediately. The problem is that most of the existing Next codebases relied on client-side libraries, like Styled Components and a couple of global state managers. What does this mean? With breaking changes like this happening constantly, your app becomes legacy software in a couple of weeks instead of years. More time is spent to keep all dependencies up to date rather than doing what matters: Shipping features.
 
 - Vercel hired multiple React core team members from Meta. This presents a serious conflict of interest because these engineers are now (allegedly) shipping features that are beneficial to Next instead of prioritizing the ones that could help all the React-based frameworks like Remix.
 
-![Vercel is corrupting React](/blog/6ada4363f65a4150960f.png)
+![Vercel is corrupting React](/blog/6ada4363f65a4150960f.webp)
 
 I couldn't take it anymore. I said to myself: You know what? I am tired of re-learning the same framework over and over again, and I completely disagree with this new paradigm.
 
@@ -105,7 +105,7 @@ On the frontend side, there is [Hotwire](https://hotwired.dev/), a very simple a
 
 Alright, so on paper Rails passed on all of the prerequisites I wanted on a framework. Let's try it! The first thing I tested locally was the `rails scaffold` command. And immediatly I was **SHOCKED**. One single command generates everything I need for a CRUD? No way!
 
-![Image description](/blog/16b8598f83e38184dfa3.png)
+![Image description](/blog/16b8598f83e38184dfa3.webp)
 
 On Node + React land, to achieve the same thing, I would need to manually write all the code (there are no generators here) and install a bunch of libraries like: Vite, prisma, express, react router, redux, redux-thunk, vitest, cypress, react testing library, zod, typescript, eslint, prettier, 1000 different plugins, and maybe even GraphQL or tRPC. Basically a package.json with 900 dependencies already.
 
@@ -256,7 +256,7 @@ José Valim announced he was experimenting with adding types to the language, bu
 
 My final concern on the frontend was addressed by Phoenix [Live View](https://hexdocs.pm/phoenix_live_view/welcome.html). On the code side, this was the exact piece of the documentation's home page that convinced me:
 
-![Image description](/blog/6d4655bfdade3b0aebfb.png)
+![Image description](/blog/6d4655bfdade3b0aebfb.webp)
 
 You can define "props" to every component, and if the types mismatch, you get an error in your IDE, just like react! Impressive!
 

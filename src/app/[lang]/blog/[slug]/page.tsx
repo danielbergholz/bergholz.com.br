@@ -5,6 +5,7 @@ import { cache } from "react"
 
 import { ArticleCover } from "@/components/article-card"
 import { JsonLd } from "@/components/json-ld"
+import { TweetEmbeds } from "@/components/tweet-embeds"
 import { getArticle, getPublishedArticles } from "@/data-access/blog"
 import { getArticleVideoDetails } from "@/data-access/content"
 import { getDictionary } from "@/dictionaries"
@@ -26,8 +27,9 @@ import { site } from "@/lib/site"
 import type { PublishedArticle, PublishedArticleWithBody } from "@/lib/types"
 import { readableDate } from "@/lib/utils"
 
-// Show the complete, locally prerendered article after resolving its slug.
-// This route deliberately blocks instead of introducing a streamed skeleton.
+// Every post is prerendered, but the page reads `params` outside a <Suspense>
+// (pages here render without skeletons — see AGENTS.md), which instant
+// navigation validation reports. Opting out only silences that check.
 export const instant = false
 
 // Prerender every post under the locale matching its language. Runs once per
@@ -193,6 +195,7 @@ export default async function BlogArticle({
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Markdown HTML is sanitized at build time before trusted embed/highlight transforms
           dangerouslySetInnerHTML={{ __html: bodyHtml }}
         />
+        {bodyHtml.includes('class="twitter-tweet"') && <TweetEmbeds />}
 
         <footer className="flex flex-col gap-5 border-t border-current/10 dark:border-current/20 pt-6">
           {listed.tag_list.length > 0 && (

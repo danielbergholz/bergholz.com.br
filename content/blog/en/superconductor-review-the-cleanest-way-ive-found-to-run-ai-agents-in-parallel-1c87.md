@@ -62,13 +62,13 @@ Let me walk through how I actually use it.
 
 On the left, you have your projects. Open a project folder and you see all of its worktrees. Right now I just have the main branch for two projects: my personal website and CourseShelf v2. That starred branch row is the **primary worktree**, which is just the original checkout Superconductor opened, the source of truth you branch off from.
 
-![Default view](/blog/e175c39b201bcb106921.png)
+![Default view](/blog/e175c39b201bcb106921.webp)
 
 On the right, you have a panel you can fully customize. By default it shows your files, changes, and checks on top, and a terminal on the bottom (where you can also wire up a run script and a setup script, more on that in a second).
 
 I don't love that default arrangement, so I switched it to show two tabs on the right instead: one for my terminal with setup and run, and another for my files. It takes ten seconds and the layout sticks.
 
-![My custom view](/blog/9a5a5169be39ad0a6dff.png)
+![My custom view](/blog/9a5a5169be39ad0a6dff.webp)
 
 Adding a new project is just `Cmd + Shift + A` (or the "Add Project" button on the bottom left), pick your folder, done.
 
@@ -90,7 +90,7 @@ Now I switch tabs to another project and start a second agent. I'd normally reac
 
 And that's it. Two agents, two different providers, two different projects, both working at the same time. I flip between tabs and watch OpenCode finish while Opus is still thinking. This already solves my original problem: multiple agents, multiple projects, zero provider lock-in.
 
-![Two providers](/blog/3d77161820e429696d4b.png)
+![Two providers](/blog/3d77161820e429696d4b.webp)
 
 But running across separate projects is the easy case. The real question is: what about parallel work **inside the same project**?
 
@@ -135,7 +135,7 @@ You can configure these in the app's project settings, or commit them to your re
 
 Now watch what happens. I press `Cmd + N` on my Next.js personal website. The setup script kicks off, and I can see its output right there in the panel: `added 49 packages`. That's the classic `npm install` output. The worktree is ready to go.
 
-![Creating new worktree](/blog/9c44edb75cb6701a13a7.png)
+![Creating new worktree](/blog/9c44edb75cb6701a13a7.webp)
 
 Jump to the files and check it out. First, `node_modules` is there, so dependencies are installed. Second, my `.env` is sitting right there too. I didn't run a single `cp` or `npm install` by hand. It's all automated. Create another worktree with `Cmd + N` and the same thing happens again: dependencies, env vars, ready.
 
@@ -147,7 +147,7 @@ Remember that run script? To run it, press `Cmd + R`. My dev server boots up. Yo
 
 It's got some nice touches: a button to copy the URL, a button to open the site in your external browser, and a button to inspect.
 
-![Built-in browser](/blog/e27bf9c2d6ad185f1f7c.png)
+![Built-in browser](/blog/e27bf9c2d6ad185f1f7c.webp)
 
 So now picture the full parallel setup. I start CourseShelf, press `Cmd + R`, open its preview. I do the same for my personal website. Two dev servers, two previews, both live at once. And on the left sidebar, any worktree with a running server gets a glowing blue dot, so at a glance I know exactly what's up without hunting through tabs.
 
@@ -165,7 +165,7 @@ At the bottom left I keep one workspace for work and another for side projects. 
 
 To jump between workspaces, press `Option + Cmd + Left`. And like everything else in this app, it's instant. The animations are flawless, with zero lag.
 
-![New workspace](/blog/80b7d89ace8c145fbbc1.png)
+![New workspace](/blog/80b7d89ace8c145fbbc1.webp)
 
 ## What I'm not using (yet)
 

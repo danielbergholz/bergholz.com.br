@@ -17,9 +17,9 @@ export const SHORTS_MAX_SECONDS = 180
 // The originating video is explicit: body links may cite other creators or
 // earlier videos. Shared by feed pairing and the /blog thumbnail lookup.
 export function articleVideoIds(
-  articles: { id: number | string; videoId?: string }[]
-): Map<number | string, string> {
-  const result = new Map<number | string, string>()
+  articles: { id: string; videoId?: string }[]
+): Map<string, string> {
+  const result = new Map<string, string>()
   for (const article of articles) {
     const videoId = article.videoId
     if (videoId) result.set(article.id, videoId)
@@ -49,8 +49,8 @@ export function discoverableArticles<T extends { videoId?: string }>(
 export function articleVideoThumbnails(
   articles: Article[],
   details: Map<string, VideoDetails>
-): Map<number | string, string> {
-  const result = new Map<number | string, string>()
+): Map<string, string> {
+  const result = new Map<string, string>()
   for (const [articleId, videoId] of articleVideoIds(articles)) {
     const url = details.get(videoId)?.thumbnailUrl
     if (url) result.set(articleId, url)
@@ -184,7 +184,7 @@ export function buildContentFeed(
     if (videoId) articleByVideoId.set(videoId, article)
   }
 
-  const usedArticleIds = new Set<number | string>()
+  const usedArticleIds = new Set<string>()
   const items: ContentItem[] = []
 
   for (const video of videos) {
@@ -194,6 +194,9 @@ export function buildContentFeed(
     // keep anything whose duration is unknown rather than guess).
     if (courseVideoIds.has(videoId)) continue
     const videoDetails = details.get(videoId)
+    // Scheduled premieres and live streams only get a card once they start,
+    // the same gate their articles wait for, so a card never opens on a
+    // waiting room.
     if (videoDetails?.isPublic === false || videoDetails?.isUpcoming) continue
     if (isShort(videoDetails)) continue
 

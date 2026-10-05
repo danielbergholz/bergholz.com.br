@@ -3,7 +3,7 @@ import type { Locale } from "./i18n.ts"
 // Local Markdown is normalized into these records at build time. Metadata
 // and bodies share one source; client feed items contain only the summary.
 export type Article = {
-  id: number | string
+  id: string
   title: string
   slug: string
   description: string

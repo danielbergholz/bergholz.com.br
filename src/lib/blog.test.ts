@@ -8,6 +8,7 @@ import {
   buildRssFeed,
   postLocales
 } from "./blog.ts"
+import type { Locale } from "./i18n.ts"
 import type { PublishedArticle } from "./types.ts"
 
 function published(opts: {
@@ -19,7 +20,7 @@ function published(opts: {
   tags?: string[]
 }): PublishedArticle {
   return {
-    id: opts.id,
+    id: String(opts.id),
     title: opts.title ?? `Post ${opts.id}`,
     slug: opts.slug,
     description: `desc ${opts.id}`,
@@ -121,7 +122,7 @@ test("postLocales maps each post's slug to its site locale", () => {
 })
 
 test("blogPostRouting 404s unknown posts and redirects wrong locales", () => {
-  const posts = { ola: "pt", hello: "en" } as const
+  const posts: Record<string, Locale[]> = { ola: ["pt"], hello: ["en"] }
 
   // Posts under their own locale render normally.
   assert.equal(blogPostRouting("/blog/ola", posts), undefined)

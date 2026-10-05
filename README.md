@@ -21,7 +21,7 @@ Copy `.env.example` to `.env` and fill in:
 - `YOUTUBE_CHANNEL_ID` — channel ID for fetching videos and playlists
 - `YOUTUBE_CHANNEL_ID_BR` — (optional) Brazilian Portuguese channel; its uploads join the content feed and its stats are added to the totals
 
-`YOUTUBE_API_KEY` and `YOUTUBE_CHANNEL_ID` are required. Failed YouTube requests throw instead of caching an empty page.
+`YOUTUBE_API_KEY` and `YOUTUBE_CHANNEL_ID` are required. Failed YouTube requests throw instead of caching an empty page. Blog listings, RSS, the sitemap and article pages read YouTube too (to hold back articles whose video isn't out yet), so a missing key or exhausted quota fails the build; in production the last healthy cached page keeps being served.
 
 ## Scripts
 
@@ -76,13 +76,17 @@ Article text…
 [embed](https://youtu.be/abcdefghijk)
 ```
 
-Required: `title`, `description`, `publishedAt` (ISO timestamp with timezone). Optional: `updatedAt` (an actual editorial change, not build time), `tags` (array), `videoId`, `cover` and `socialImage` (files under `public/blog/`, referenced as `/blog/file.png`). `estudioSource` optionally names the originating video folder relative to that private repo. Review unfinished text in a branch; merging into `main` creates the article page through Vercel. There is no `published`/`draft` flag to toggle.
+Required: `title`, `description`, `publishedAt` (ISO timestamp with timezone). Optional: `updatedAt` (an actual editorial change, not build time), `tags` (array), `videoId`, `cover` and `socialImage` (files under `public/blog/`, referenced as `/blog/file.png`). `estudioSource` optionally names the originating video folder relative to that private repo. Review unfinished text in a branch; merging into `main` creates the article page through Vercel. There is no `published`/`draft` flag to toggle. Any other frontmatter key fails the build, so a typo such as `videoID` can't silently publish an article before its video.
 
 You can merge a finished article before its scheduled video goes live. Set `videoId` to the actual originating video's ID, even while it is private. The article URL already works and can go into the YouTube description. Until the video is public and no longer upcoming, the article stays out of home, `/videos`, `/blog`, RSS and sitemap, and its page asks search engines not to index it. The primary embed shows “Video coming soon” in the article's language. Once the video is released, discovery and the player update automatically; no new commit, deploy or content sync is needed. Articles without `videoId` are listed immediately.
 
 YouTube uploads and video details refresh hourly using request-driven background revalidation, so release visibility can lag behind YouTube while caches refresh. The public API cannot distinguish an omitted private video from a deleted video or an incorrect ID: all remain pending, so verify the ID with `estudio`'s `scripts/ytdata`. Upcoming public premieres stay pending until they start; unlisted videos do not unlock discovery. API errors throw and preserve the last healthy cached page rather than being treated as an upcoming video.
 
 Markdown supports GFM tables, fenced code highlighting, heading anchors, images/GIFs and explicit `[embed](https://...)` links on their own line for YouTube and X/Twitter. Other embed targets remain ordinary links. Raw HTML is sanitized; arbitrary scripts and iframes are removed. GIFs may use `media.giphy.com`; new image origins need the CSP allowlist updated. Prefer local images for long-lived content.
+
+Code blocks are highlighted with highlight.js's common languages plus Elixir (`languages` in `src/lib/blog-content.ts`); a fence in any other language fails the build until it's registered there. Use `text` for plain output. X posts render as a quoted link that X's `widgets.js` (loaded only on articles that embed one) turns into a full-height post.
+
+Article images are served as-is, without the image optimizer. The build gives local ones their `width`/`height` and lazy loading, and fails on any image over 300 KB: save screenshots as WebP at most 1600px wide (twice the article column).
 
 `npm run dev` compiles the articles and watches Markdown changes. Production builds, typechecks and tests compile automatically into ignored `content/blog/.generated/` JSON. The proxy gets a small routing index; article bodies stay on the server. Home, `/videos`, `/blog`, individual articles, sitemap and both RSS feeds read the same corpus. `videoId` identifies the originating video for feed pairing and thumbnails; citing a video in the body does not associate the article with it. Articles without an originating video work independently.
 

@@ -21,7 +21,7 @@ test("a private originating video shows a notice while cited embeds and text sur
   assert.match(result, /id="fontes"/)
   assert.doesNotMatch(result, /youtube-nocookie\.com\/embed\/abcdefghijk/)
   assert.match(result, /youtube-nocookie\.com\/embed\/zyxwvutsrqp/)
-  assert.match(result, /platform\.twitter\.com\/embed\/Tweet/)
+  assert.match(result, /class="twitter-tweet"/)
 })
 
 test("the primary embed returns automatically after publication", async () => {

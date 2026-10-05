@@ -41,7 +41,7 @@ So, what are the realistic alternatives to Claude Code and Codex today? I looked
 Credit where it is due: the Cursor desktop app is probably the best app I have ever used for managing parallel agents. If raw experience were the only axis, it would be an easy recommendation.
 
 
-![Cursor](/blog/0aebae796c6d3a3cd2ec.png)
+![Cursor](/blog/0aebae796c6d3a3cd2ec.webp)
 
 
 
@@ -54,7 +54,7 @@ So do I recommend Cursor? Not right now, if your goal is to use open-source stuf
 [AMP](https://ampcode.com/?utm_source=danielbergholz&utm_medium=blog&utm_campaign=alternatives-to-claude-code) is also closed source. It is an agent harness: you download their CLI, and they have a nice web interface for managing the CLI agents.
 
 
-![AMP](/blog/3b6bc5eaf1ee0e1ece3f.png)
+![AMP](/blog/3b6bc5eaf1ee0e1ece3f.webp)
 
 
 
@@ -75,7 +75,7 @@ Now for the good stuff.
 [Pi](https://pi.dev/?utm_source=danielbergholz&utm_medium=blog&utm_campaign=alternatives-to-claude-code) is an open-source coding harness. It does not include the LLMs, so you choose a provider inside Pi to pick a model. The philosophy is to be minimal and customizable: your agent has access to a handful of tools (read files, write files, run Bash) and nothing else. Need web search? You install a plugin. You can edit the system prompt, you can edit some markdown files that get appended after it. If you ever wanted to build your own agent on an open-source base, Pi is my recommendation.
 
 
-![Pi](/blog/c402016d0d37642e4755.png)
+![Pi](/blog/c402016d0d37642e4755.webp)
 
 
 So why am I not using it? I love that it is open source. But I do not love that it is customizable by default.
@@ -89,7 +89,7 @@ I want somebody else to build the harness for me. I have zero interest in custom
 Which brings me to my current default recommendation: [OpenCode](https://opencode.ai/?utm_source=danielbergholz&utm_medium=blog&utm_campaign=alternatives-to-claude-code). As the name implies, it is open source, with almost 200,000 stars on GitHub.
 
 
-![OpenCode](/blog/f9ca2c2205af35421e1f.png)
+![OpenCode](/blog/f9ca2c2205af35421e1f.webp)
 
 
 
@@ -110,7 +110,7 @@ Why not Zen? Availability. Look up Kimi K2.7 on Zen and you will find it is only
 
 OpenRouter solves this. The idea: one API key, access to 400+ models. And it is high availability, because every model has multiple providers behind it. Take DeepSeek V4 Flash: OpenRouter lists eleven providers for it. If the first provider fails for any reason, it tries the second, then the third, and so on. That makes it extremely reliable.
 
-![OpenRouter](/blog/9d5e5b392ba48c8b6def.png)
+![OpenRouter](/blog/9d5e5b392ba48c8b6def.webp)
 
 The other thing I care about is data policy. In my OpenRouter account, under privacy preferences, I set non-frontier models to only use zero-data-retention endpoints, which means my interactions are not used to train the model. You even get a live preview of which models stay available once you tick those boxes. If I also block Anthropic and OpenAI (because they do not offer zero data retention), the list shrinks and some Claude and GPT models simply disappear from it. That is fine by me.
 
@@ -222,7 +222,7 @@ config :course_shelf, CourseShelf.AI,
 In the OpenRouter logs I can watch DeepSeek V4 Flash tagging courses and the OpenAI model creating embeddings, and I can see the provider rotating under the hood (Wafer on one call, then DeepInfra, then DigitalOcean). One key for my editor and my product. That is the part that sold me.
 
 
-![OpenRouter logs](/blog/f6cd9c79d95554c60686.png)
+![OpenRouter logs](/blog/f6cd9c79d95554c60686.webp)
 
 
 

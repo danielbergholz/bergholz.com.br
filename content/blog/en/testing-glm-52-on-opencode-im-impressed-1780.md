@@ -218,9 +218,9 @@ I trimmed the `SearchInput` sub-component and a couple of effects out of the sni
 
 Design-wise, it matched the rest of my site without being told what the site looks like. Same border treatment, same spacing, same muted opacity. When I tested it, typing "Elixir", "React", "Fable", it filtered instantly, and pasting `/blog?q=fable` straight into the address bar worked too. URL state as the single source of truth, exactly as planned.
 
-![Finished design](/blog/e92a20a3b47fe6965f83.png)
+![Finished design](/blog/e92a20a3b47fe6965f83.webp)
 
-![Finished design part 2](/blog/ddca4e92580afd6e4cd7.png)
+![Finished design part 2](/blog/ddca4e92580afd6e4cd7.webp)
 
 ## The part I didn't expect to like: restraint
 
@@ -243,7 +243,7 @@ GLM followed it to the letter. It formatted, it checked, it built, and it stoppe
 
 Now for the honest part, because I'm not going to pretend the run was flawless. Right after I asked it to clean up the commits, OpenCode froze and threw a JavaScript error in the main process. The whole app went down on camera.
 
-![OpenCode crashed](/blog/ac6defcd0fa389c7e59b.png)
+![OpenCode crashed](/blog/ac6defcd0fa389c7e59b.webp)
 
 To be clear, that's an OpenCode problem, not a GLM 5.2 problem. The model's work was fine. The harness around it fell over. I relaunched, my changes were still there (just not pushed yet), and I pushed them up to deploy. Annoying, but the kind of thing that happens with fast-moving tools, and worth showing instead of editing out.
 

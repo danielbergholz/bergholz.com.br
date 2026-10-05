@@ -2,7 +2,7 @@ import type { NextConfig } from "next"
 
 // Third-party origins this site loads, merged into the shared CSP below.
 const allow = {
-  script: ["https://plausible.io"],
+  script: ["https://plausible.io", "https://platform.twitter.com"],
   connect: ["https://plausible.io"],
   img: ["https://i.ytimg.com", "https://*.giphy.com"],
   frame: [

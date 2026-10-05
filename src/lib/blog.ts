@@ -14,10 +14,10 @@ export function blogArticlePath(locale: Locale, slug: string): Route {
 
 export const blogFeedPath = "/blog/feed"
 
-// slug → locale for every post with a site language. Served at
-// the generated routing index (see blogPostRouting).
+// slug → locales for every post with a site language (a slug may exist in
+// both). The proxy builds it from the generated index (see blogPostRouting).
 export function postLocales(
-  articles: PublishedArticle[]
+  articles: { slug: string; language?: string }[]
 ): Record<string, Locale[]> {
   const posts: Record<string, Locale[]> = {}
   for (const article of articles) {
@@ -38,7 +38,7 @@ export function postLocales(
 // the status code on the first visit to a URL.
 export function blogPostRouting(
   pathname: string,
-  posts: Record<string, Locale | Locale[]>
+  posts: Record<string, Locale[]>
 ): { notFound: Locale } | { redirect: Route } | undefined {
   const match = pathname.match(/^(?:\/(en))?\/blog\/([^/]+)$/)
   if (!match) return undefined
@@ -46,15 +46,10 @@ export function blogPostRouting(
   if (`/blog/${slug}` === blogFeedPath) return undefined
 
   const locale: Locale = prefix === "en" ? "en" : "pt"
-  const entry = Object.hasOwn(posts, slug) ? posts[slug] : undefined
-  const postLocales = entry ? (Array.isArray(entry) ? entry : [entry]) : []
-  if (postLocales.includes(locale)) return undefined
-  const postLocale = postLocales[0]
-  if (!postLocale) return { notFound: locale }
-  if (postLocale !== locale) {
-    return { redirect: blogArticlePath(postLocale, slug) }
-  }
-  return undefined
+  const locales = Object.hasOwn(posts, slug) ? posts[slug] : []
+  if (locales.includes(locale)) return undefined
+  if (locales.length === 0) return { notFound: locale }
+  return { redirect: blogArticlePath(locales[0], slug) }
 }
 
 // Posts for one locale, newest first (published_at is ISO-8601 UTC, so the

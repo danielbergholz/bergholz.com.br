@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { blogPostRouting } from "@/lib/blog"
-import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n"
+import { blogPostRouting, postLocales } from "@/lib/blog"
+import { defaultLocale, type Locale } from "@/lib/i18n"
 import postIndex from "../content/blog/.generated/index.json"
 
 // Locale routing: Portuguese (the default) lives unprefixed at the root and is
@@ -28,7 +28,7 @@ export function proxy(request: NextRequest) {
   }
 
   if (pathname.includes("/blog/")) {
-    const routing = blogPostRouting(pathname, postLocales)
+    const routing = blogPostRouting(pathname, posts)
 
     if (routing && "redirect" in routing) {
       return NextResponse.redirect(new URL(routing.redirect, request.url), 308)
@@ -68,13 +68,7 @@ function notFoundResponse(request: NextRequest, locale: Locale) {
 }
 
 // Generated from local Markdown before dev/build; no HTTP lookup or stale map.
-const postLocales: Record<string, Locale[]> = {}
-for (const { slug, language } of postIndex) {
-  if (hasLocale(language)) {
-    postLocales[slug] ??= []
-    postLocales[slug].push(language)
-  }
-}
+const posts = postLocales(postIndex)
 
 export const config = {
   // Skip Next internals, /api/* route handlers (they live outside [lang]) and

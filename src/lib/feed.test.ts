@@ -50,7 +50,7 @@ function article(opts: {
   language?: "en" | "pt"
 }): Article {
   return {
-    id: opts.id,
+    id: String(opts.id),
     title: opts.title ?? `Article ${opts.id}`,
     slug: opts.slug,
     description: opts.description ?? `desc ${opts.id}`,
@@ -85,8 +85,8 @@ test("articleVideoIds maps each post to its declared originating video", () => {
   assert.deepEqual(
     [...articleVideoIds([paired, second, solo])],
     [
-      [1, "vid1111aaaa"],
-      [2, "vid2222bbbb"]
+      ["1", "vid1111aaaa"],
+      ["2", "vid2222bbbb"]
     ]
   )
 })
@@ -116,7 +116,7 @@ test("articleVideoThumbnails resolves a post's video thumbnail when known", () =
     ])
   )
 
-  assert.deepEqual([...result], [[1, "thumb-1"]])
+  assert.deepEqual([...result], [["1", "thumb-1"]])
 })
 
 test("articleSlugFromDescription extracts the dev.to slug", () => {

@@ -38,7 +38,7 @@ export const getDiscoverableArticles = async (): Promise<
 // listing: prefer the video thumbnail to the article cover. Local posts are
 // compiled once per build; YouTube publication state refreshes independently.
 export const getArticleVideoThumbnails = async (): Promise<
-  Map<number | string, string>
+  Map<string, string>
 > => {
   const articles = await getArticles()
   const details = await getArticleVideoDetails()

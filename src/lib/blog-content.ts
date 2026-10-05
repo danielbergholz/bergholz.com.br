@@ -1,4 +1,6 @@
 import type { Element, Root } from "hast"
+import elixir from "highlight.js/lib/languages/elixir"
+import { common } from "lowlight"
 import rehypeHighlight from "rehype-highlight"
 import rehypeRaw from "rehype-raw"
 import rehypeSanitize from "rehype-sanitize"
@@ -12,6 +14,7 @@ import { parse } from "yaml"
 
 import { blogArticlePath } from "./blog.ts"
 import { hasLocale, type Locale } from "./i18n.ts"
+import type { ImageSize } from "./image-size.ts"
 import { site } from "./site.ts"
 import type { Article, PublishedArticleWithBody } from "./types.ts"
 
@@ -89,7 +92,6 @@ function embeds() {
                 loading: "lazy",
                 allow:
                   "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen",
-                allowFullScreen: true,
                 referrerPolicy: "strict-origin-when-cross-origin"
               },
               href
@@ -98,16 +100,23 @@ function embeds() {
           const tweet = href.match(
             /^https:\/\/(?:www\.)?(?:x\.com|twitter\.com)\/[\w]+\/status\/(\d+)(?:[/?#]|$)/
           )
+          // X's own widgets.js turns this into a sized iframe on the article
+          // page (a bare Tweet.html iframe never reports its height); without
+          // the script it stays a quoted link to the post.
           if (tweet) {
-            return embedFrame(
-              {
-                src: `https://platform.twitter.com/embed/Tweet.html?id=${tweet[1]}&dnt=true`,
-                title: "X / Twitter post",
-                className: ["tweet-embed"],
-                loading: "lazy"
-              },
-              href
-            )
+            return {
+              type: "element",
+              tagName: "blockquote",
+              properties: { className: ["twitter-tweet"], dataDnt: "true" },
+              children: [
+                {
+                  type: "element",
+                  tagName: "a",
+                  properties: { href },
+                  children: [{ type: "text", value: href }]
+                }
+              ]
+            }
           }
           // Other references remain ordinary links, including imported article embeds.
           link.children = [{ type: "text", value: href }]
@@ -120,6 +129,34 @@ function embeds() {
   }
 }
 
+// Local images get their intrinsic size (no layout shift) when the caller can
+// read it; every image loads lazily, since none sits above the article fold.
+type RenderOptions = { imageSize?: (src: string) => ImageSize | undefined }
+
+function images() {
+  return (tree: Root, file: { data: object }) => {
+    const { imageSize } = file.data as RenderOptions
+    function walk(parent: Root | Element) {
+      for (const child of parent.children) {
+        if (child.type !== "element") continue
+        if (child.tagName === "img") {
+          child.properties.loading = "lazy"
+          child.properties.decoding = "async"
+          const src = String(child.properties.src ?? "")
+          const size = src.startsWith("/blog/") ? imageSize?.(src) : undefined
+          if (size) Object.assign(child.properties, size)
+        }
+        walk(child)
+      }
+    }
+    walk(tree)
+  }
+}
+
+// lowlight's `common` bundle has no Elixir, the blog's most-used language.
+// Register any other language a post needs here; unknown ones fail the build.
+const languages = { ...common, elixir }
+
 const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
@@ -127,12 +164,24 @@ const processor = unified()
   .use(rehypeRaw)
   .use(rehypeSanitize)
   .use(rehypeSlug)
-  .use(rehypeHighlight, { detect: false, ignoreMissing: true })
+  .use(rehypeHighlight, {
+    detect: false,
+    languages,
+    plainText: ["text", "txt", "plaintext"]
+  })
+  .use(images)
   .use(embeds)
   .use(rehypeStringify)
 
-export async function renderMarkdown(markdown: string): Promise<string> {
-  return String(await processor.process(markdown))
+export async function renderMarkdown(
+  markdown: string,
+  options: RenderOptions = {}
+): Promise<string> {
+  const file = await processor.process({ value: markdown, data: options })
+  // rehype-highlight only warns about an unregistered language and leaves the
+  // block uncolored, so turn its messages into build errors.
+  if (file.messages.length > 0) throw new Error(file.messages.join("; "))
+  return String(file)
 }
 
 function requiredString(data: Record<string, unknown>, key: string): string {
@@ -160,10 +209,25 @@ function timestamp(data: Record<string, unknown>, key: string): string {
   return new Date(value).toISOString()
 }
 
+// Every frontmatter key the blog understands. Anything else is a typo — a
+// misspelled `videoId` would otherwise publish the article before its video.
+const frontmatterKeys = new Set([
+  "title",
+  "description",
+  "publishedAt",
+  "updatedAt",
+  "tags",
+  "videoId",
+  "cover",
+  "socialImage",
+  "estudioSource"
+])
+
 export async function parsePost(
   locale: Locale,
   slug: string,
-  text: string
+  text: string,
+  options: RenderOptions = {}
 ): Promise<LocalArticle> {
   if (
     !hasLocale(locale) ||
@@ -180,6 +244,11 @@ export async function parsePost(
   if ("published" in data || "draft" in data) {
     throw new Error("Use a Git branch for drafts; posts in main are published")
   }
+  const unknownKeys = Object.keys(data).filter(
+    (key) => !frontmatterKeys.has(key)
+  )
+  if (unknownKeys.length > 0)
+    throw new Error(`Unknown frontmatter keys: ${unknownKeys.join(", ")}`)
   const title = requiredString(data, "title")
   const description = requiredString(data, "description")
   const publishedAt = timestamp(data, "publishedAt")
@@ -199,6 +268,8 @@ export async function parsePost(
     throw new Error("Invalid videoId")
   const optional = (key: string) =>
     data[key] === undefined ? undefined : requiredString(data, key)
+  // A pointer for authors into the private estudio repo; never read here.
+  optional("estudioSource")
   const cover = optional("cover")
   const socialImage = optional("socialImage")
   for (const image of [cover, socialImage]) {
@@ -237,6 +308,6 @@ export async function parsePost(
       Math.ceil(markdown.split(/\s+/).length / 220)
     ),
     body_markdown: markdown,
-    body_html: await renderMarkdown(markdown)
+    body_html: await renderMarkdown(markdown, options)
   }
 }

@@ -317,19 +317,28 @@
     opacity: 0.65;
   }
 
-  .article-body iframe.tweet-embed {
-    max-width: 550px;
-    height: 450px;
-    aspect-ratio: auto;
+  /* X posts: widgets.js swaps the blockquote for an iframe it sizes inline. */
+  .article-body .twitter-tweet {
     margin-inline: auto;
   }
 
+  .article-body .twitter-tweet iframe {
+    aspect-ratio: auto;
+  }
+
+  /* highlight.js token classes, mapped onto GitHub's palette (plain names
+     and punctuation inherit the <pre> colour). */
   .article-body .hljs-comment,
-  .article-body .hljs-quote {
+  .article-body .hljs-quote,
+  .article-body .hljs-code {
     color: var(--hl-comment);
+    font-style: italic;
   }
   .article-body .hljs-keyword,
-  .article-body .hljs-selector-tag {
+  .article-body .hljs-selector-tag,
+  .article-body .hljs-doctag,
+  .article-body .hljs-type,
+  .article-body .hljs-variable.language_ {
     color: var(--hl-keyword);
   }
   .article-body .hljs-string,
@@ -338,18 +347,38 @@
   }
   .article-body .hljs-number,
   .article-body .hljs-literal,
-  .article-body .hljs-attr {
+  .article-body .hljs-attr,
+  .article-body .hljs-attribute,
+  .article-body .hljs-meta,
+  .article-body .hljs-property,
+  .article-body .hljs-selector-class,
+  .article-body .hljs-selector-id,
+  .article-body .hljs-section {
     color: var(--hl-literal);
   }
-  .article-body .hljs-title,
-  .article-body .hljs-built_in {
+  .article-body .hljs-title {
     color: var(--hl-function);
   }
-  .article-body .hljs-tag {
+  .article-body .hljs-tag,
+  .article-body .hljs-name {
     color: var(--hl-tag);
   }
-  .article-body .hljs-variable {
+  /* Elixir atoms and module attributes, Ruby ivars, builtins. */
+  .article-body .hljs-symbol,
+  .article-body .hljs-variable,
+  .article-body .hljs-built_in,
+  .article-body .hljs-bullet {
     color: var(--hl-variable);
+  }
+  .article-body .hljs-subst {
+    color: var(--hl-name);
+  }
+  .article-body .hljs-section,
+  .article-body .hljs-strong {
+    font-weight: 700;
+  }
+  .article-body .hljs-emphasis {
+    font-style: italic;
   }
   .article-body .hljs-deletion {
     background: var(--hl-deleted-bg);
