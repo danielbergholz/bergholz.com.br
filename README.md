@@ -1,6 +1,6 @@
 # bergholz.com.br
 
-Daniel Bergholz's personal website — built with Next.js 16 (App Router), TypeScript, and Tailwind CSS v4. It pulls in dynamic content from external APIs: videos and course playlists from the YouTube Data API, and blog posts from Dev.to (which acts as a headless CMS — see [Blog](#blog)).
+Daniel Bergholz's personal website — built with Next.js 16 (App Router), TypeScript, and Tailwind CSS v4. Videos and course playlists come from the YouTube Data API; blog articles are Markdown files in this repository.
 
 ## Getting Started
 
@@ -20,10 +20,8 @@ Copy `.env.example` to `.env` and fill in:
 - `YOUTUBE_API_KEY` — YouTube Data API key
 - `YOUTUBE_CHANNEL_ID` — channel ID for fetching videos and playlists
 - `YOUTUBE_CHANNEL_ID_BR` — (optional) Brazilian Portuguese channel; its uploads join the content feed and its stats are added to the totals
-- `DEV_TO_API_KEY` — Dev.to API key (only the authenticated list, which carries each post's markdown for video pairing and for the video thumbnails on `/blog`, needs it; post pages use the public API)
-- `REVALIDATE_SECRET` — (optional) enables `POST /api/revalidate` for on-demand revalidation; see [Blog](#blog)
 
-`YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, and `DEV_TO_API_KEY` are required. The data-access layer throws on a failed API response (so a broken or empty page is never cached), so the build will error if a required key is missing or invalid.
+`YOUTUBE_API_KEY` and `YOUTUBE_CHANNEL_ID` are required. Failed YouTube requests throw instead of caching an empty page. Blog builds need no Dev.to key, revalidation secret or access to the private `estudio` repo.
 
 ## Scripts
 
@@ -34,7 +32,7 @@ Copy `.env.example` to `.env` and fill in:
 - `npm run check` — Biome (lint + format check) and typecheck
 - `npm test` — run unit tests (Node's built-in test runner)
 - `npm run verify` — check + test + production build
-- `npm run revalidate` — expire the site's cached Dev.to data now (see [Blog](#blog))
+- `npm run content:build` — validate and compile local Markdown (also runs automatically before build, typecheck and tests)
 
 ## Tech Stack
 
@@ -50,7 +48,9 @@ Copy `.env.example` to `.env` and fill in:
 - `src/proxy.ts` — locale routing: rewrites unprefixed paths to the Portuguese default, redirects public `/pt/...` URLs
 - `src/dictionaries/` — pt/en UI strings, loaded in Server Components only
 - `src/components/` — reusable UI components
-- `src/data-access/` — API integration layer (YouTube, Dev.to)
+- `content/blog/{pt,en}/` — published Markdown articles
+- `public/blog/` — local article images
+- `src/data-access/` — YouTube integration and compiled blog readers
 - `src/lib/` — types, utilities, locale helpers (`i18n.ts`), the route registry that generates the sitemap (`routes.ts`), and the pure feed logic (`feed.ts`), with co-located `*.test.ts` unit tests
 
 ## Internationalization
@@ -59,17 +59,34 @@ The site is bilingual: Brazilian Portuguese is the default and lives at the root
 
 ## Blog
 
-Posts are written and published on [Dev.to](https://dev.to/danielbergholz); the site is their canonical home. The public Forem API is cached for an hour (`"use cache"` plus the fetch Data Cache) and rendered at `/blog/<slug>` (Portuguese posts) and `/en/blog/<slug>` (English posts), split by the `language` field Dev.to reports. Each post's `canonical_url` on Dev.to points back to its page here (set per post in the Dev.to editor). Post bodies arrive as sanitized HTML with Rouge-highlighted code, so there is no Markdown or highlighting dependency — just CSS (`.article-body` in `globals.css`).
+Write an article in `content/blog/pt/<slug>.md` (public `/blog/<slug>`) or `content/blog/en/<slug>.md` (public `/en/blog/<slug>`). The filename defines the URL, so keep published filenames stable. The title belongs in frontmatter; body headings start at `##`.
 
-The `/blog` listing shows each post's YouTube thumbnail (16:9, from the video the post links in its body — the same pairing the content feed uses) instead of Dev.to's cover, which is that image cropped to 1000×420; posts with no video keep the Dev.to cover.
+```md
+---
+title: "A concrete title"
+description: "A short summary for cards, SEO and RSS."
+publishedAt: "2026-10-05T12:00:00Z"
+tags:
+  - programming
+videoId: "abcdefghijk"
+---
 
-Requests to Dev.to are kept to a minimum: the listing is fetched once per hour and shared (via the Data Cache) by the home page, `/videos`, `/blog`, every post page, the sitemap and the RSS feeds (`/blog/feed`, `/en/blog/feed`); each post body is fetched once per hour on top of that. Unknown slugs are answered from the cached listing without calling Dev.to. A new post appears on its first visit (or the next hourly revalidation of `/blog`).
+Article text…
 
-Publishing lives in the private `estudio` repo: its `tools/scripts/sync-devto.sh`, run after a draft goes live on Dev.to, calls `POST /api/revalidate` here (with `REVALIDATE_SECRET`, set on Vercel for Production and Preview) and points the Dev.to `canonical_url` at the post's page on this site. Dev.to cannot call this itself: Forem removed its webhooks API. To refresh by hand, add the secret to `.env` (or `vercel env pull`) and run:
-
-```bash
-npm run revalidate
+[embed](https://youtu.be/abcdefghijk)
 ```
+
+Required: `title`, `description`, `publishedAt` (ISO timestamp with timezone). Optional: `updatedAt` (an actual editorial change, not build time), `tags` (array), `videoId`, `cover` and `socialImage` (files under `public/blog/`, referenced as `/blog/file.png`). Imported articles keep `devtoUrl` for their existing comment threads and `devtoId` for provenance. `estudioSource` optionally names the originating video folder relative to that private repo. There is no `published`/`draft` flag or publication scheduling: work in a branch and merge into `main` to publish through Vercel.
+
+Markdown supports GFM tables, fenced code highlighting, heading anchors, images/GIFs and explicit `[embed](https://...)` links on their own line for YouTube and X/Twitter. Other embed targets remain ordinary links. Raw HTML is sanitized; arbitrary scripts and iframes are removed. GIFs may use `media.giphy.com`; new image origins need the CSP allowlist updated. Prefer local images for long-lived content.
+
+`npm run dev` compiles the articles and watches Markdown changes. Production builds, typechecks and tests compile automatically into ignored `content/blog/.generated/` JSON. The proxy gets a small routing index; article bodies stay on the server. Home, `/videos`, `/blog`, individual articles, sitemap and both RSS feeds read the same corpus. `videoId` identifies the originating video for feed pairing and thumbnails; citing a video in the body does not associate the article with it. Articles without an originating video work independently.
+
+For every article derived from a video, always consult `~/programacao/estudio` (`danielbergholz/estudio`), including its channel instructions and source materials. BR sources are under `canais/br/youtube/<folder>/` (final SRT first); EN sources are under `canais/en/videos/<folder>/` (reviewed transcript first). Scripts, transcripts, research and production notes remain there. Write and revise the final article here, without keeping a second editable `blog.md` in `estudio`.
+
+The 15 previously published Dev.to posts were imported once; `content/blog/migration.json` records their original slugs, locales, dates and external URLs. Their Dev.to copies remain untouched. Legacy drafts were not published. There is no ongoing Dev.to sync, cache webhook or draft upload.
+
+Before publishing a content or code change, run `npm run verify`.
 
 > Working in this repo with an AI coding agent? See [`AGENTS.md`](./AGENTS.md).
 

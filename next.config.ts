@@ -1,12 +1,10 @@
 import type { NextConfig } from "next"
 
 // Third-party origins this site loads, merged into the shared CSP below.
-// dev.to post bodies are rendered as-is, so they bring their CDN images and
-// YouTube/Twitter embeds with them.
 const allow = {
   script: ["https://plausible.io"],
   connect: ["https://plausible.io"],
-  img: ["https://i.ytimg.com", "https://*.dev.to"],
+  img: ["https://i.ytimg.com", "https://*.giphy.com"],
   frame: [
     "https://www.youtube.com",
     "https://www.youtube-nocookie.com",
@@ -62,28 +60,17 @@ const nextConfig: NextConfig = {
     // The root layout lives under [lang], so a notFound() can't be caught by
     // [lang]/not-found.tsx while server rendering; app/global-not-found.tsx
     // renders the 404 instead of Next's client-rendered error page.
-    globalNotFound: true,
-    // Prerender pages one at a time in a single worker. Every blog post page
-    // hits the dev.to API at build time, and the default 9 parallel workers
-    // burst enough requests to get throttled (429) — and each worker fetches
-    // the listing itself before the shared fetch cache is warm. The site is
-    // ~35 pages, so serial generation costs a few seconds at most. (429s
-    // are retried inside the dev.to fetch wrapper itself.)
-    staticGenerationMinPagesPerWorker: 1000,
-    staticGenerationMaxConcurrency: 1
+    globalNotFound: true
   },
   images: {
-    // What's still optimized is local and dev.to art that rarely changes, so
+    // What's still optimized is local blog art that rarely changes, so
     // keep it for a day instead of the 4h default. YouTube thumbnails skip the
     // optimizer (unoptimized), so a changed one is never held back by this.
     minimumCacheTTL: 60 * 60 * 24,
     // Layouts are at most ~1152px wide, so drop the 3840px/2048px widths (and
     // 750px, which 640/828 already cover): fewer variants per image.
     deviceSizes: [640, 828, 1080, 1200, 1920],
-    remotePatterns: [
-      { protocol: "https", hostname: "i.ytimg.com" },
-      { protocol: "https", hostname: "**.dev.to" }
-    ]
+    remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com" }]
   },
   async redirects() {
     return [

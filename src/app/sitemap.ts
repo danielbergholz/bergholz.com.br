@@ -10,7 +10,7 @@ import { site } from "@/lib/site"
 // locale per route, each carrying the full hreflang alternate set — plus one
 // entry per blog post under the locale matching its language (posts exist in
 // a single language, so they carry no alternates). Pages have no lastModified
-// (it would just be the build date); posts use their dev.to edit date.
+// (it would just be the build date); posts use their explicit editorial date.
 // routes.test.ts guarantees the registry matches the pages on disk.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = siteRoutes.flatMap((route) => {

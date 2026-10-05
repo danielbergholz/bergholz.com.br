@@ -24,6 +24,10 @@ import { site } from "@/lib/site"
 import type { PublishedArticle, PublishedArticleWithBody } from "@/lib/types"
 import { readableDate } from "@/lib/utils"
 
+// Show the complete, locally prerendered article after resolving its slug.
+// This route deliberately blocks instead of introducing a streamed skeleton.
+export const instant = false
+
 // Prerender every post under the locale matching its language. Runs once per
 // `lang` from the layout's generateStaticParams; the listing fetch is cached
 // and shared with every page render below.
@@ -39,26 +43,24 @@ export async function generateStaticParams({
   }))
 }
 
-// The listing (one cached request, shared by every route) gates the
-// per-article request: a slug that isn't published never hits the article
-// endpoint, so random URLs cost zero dev.to calls and 404 right here. A post
-// requested under the wrong locale prefix redirects to its real URL instead
-// of duplicating the page. React `cache` so generateMetadata and the page
-// share one parse of the responses.
+// Resolve metadata and body from the same generated local corpus. React cache
+// shares the result between generateMetadata and the page.
 type ResolvedArticle =
   | { redirectTo: Route }
   | { listed: PublishedArticle; article: PublishedArticleWithBody }
 
 const resolveArticle = cache(
   async (lang: Locale, slug: string): Promise<ResolvedArticle> => {
-    const listed = (await getPublishedArticles()).find(
-      (article) => article.slug === slug
-    )
+    const posts = await getPublishedArticles()
+    const listed =
+      posts.find(
+        (article) => article.slug === slug && article.language === lang
+      ) ?? posts.find((article) => article.slug === slug)
     const locale = listed && siteLanguage(listed.language)
     if (!listed || !locale) notFound()
     if (locale !== lang) return { redirectTo: blogArticlePath(locale, slug) }
 
-    const article = await getArticle(slug)
+    const article = await getArticle(slug, lang)
     if (!article) notFound()
     return { listed, article }
   }
@@ -77,13 +79,13 @@ export async function generateMetadata({
   const { listed, article } = resolved
   const path = blogArticlePath(lang, slug)
   const image = articleImage(article)
-  // dev.to renders social cards at 1200×627 and cover banners at 1000×420.
+  // Imported social cards preserve their original 1200×627 dimensions.
   const imageSize = article.social_image
     ? { width: 1200, height: 627 }
     : { width: 1000, height: 420 }
 
   // A post exists in one language only, so there are no hreflang pairs: just
-  // the canonical, which is this page (dev.to's canonical_url points here too).
+  // the canonical, which is this page.
   return pageMetadata({
     title: `${article.title} | ${site.name}`,
     description: article.description,
@@ -170,13 +172,10 @@ export default async function BlogArticle({
           )}
         </header>
 
-        {/* dev.to renders and sanitizes the markdown (Rouge-highlighted code,
-            YouTube iframes, GIFs from its CDN); we only style it — see
-            .article-body in globals.css. */}
         <div
           className="article-body"
           lang={languageTags[lang]}
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: body_html is sanitized by dev.to (Forem) before it reaches us
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Markdown HTML is sanitized at build time before trusted embed/highlight transforms
           dangerouslySetInnerHTML={{ __html: article.body_html }}
         />
 
@@ -193,15 +192,17 @@ export default async function BlogArticle({
               ))}
             </ul>
           )}
-          <a
-            href={article.url}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="inline-flex w-max items-center gap-1.5 rounded-sm border border-current/15 dark:border-current/25 px-2.5 py-1.5 text-xs uppercase tracking-[0.15em] text-foreground/60 hover:text-foreground transition-colors"
-          >
-            {t.discussOnDevto}
-            <ExternalLink />
-          </a>
+          {article.devtoUrl && (
+            <a
+              href={article.devtoUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex w-max items-center gap-1.5 rounded-sm border border-current/15 dark:border-current/25 px-2.5 py-1.5 text-xs uppercase tracking-[0.15em] text-foreground/60 hover:text-foreground transition-colors"
+            >
+              {t.discussOnDevto}
+              <ExternalLink />
+            </a>
+          )}
         </footer>
       </article>
     </main>

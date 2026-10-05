@@ -1,4 +1,4 @@
-import { getArticles, getPublishedArticles } from "@/data-access/blog"
+import { getArticles } from "@/data-access/blog"
 import {
   getCourseVideoIds,
   getLatestVideos,
@@ -9,21 +9,18 @@ import {
   articleVideoIds,
   articleVideoThumbnails,
   buildContentFeed,
-  withChannelLanguage,
-  withPublishedMetadata
+  withChannelLanguage
 } from "@/lib/feed"
 import type { ContentItem } from "@/lib/types"
 
 // Fetches everything the merged feed needs, then hands off to the pure
 // buildContentFeed (which does the pairing/filtering/sorting and is unit-tested).
-// `body_markdown` is consumed in there and never returned, so the large article
-// bodies don't reach the client.
+// Only feed summaries are returned, so article bodies don't reach the client.
 // Thumbnail of the video each post links, keyed by post id, for the /blog
-// listing: a 16:9 YouTube thumbnail instead of dev.to's 1000×420 crop of the
-// same image. Both requests are cached (the post list hourly, shared with the
-// feed; video details daily), so this adds no dev.to traffic.
+// listing: prefer the video thumbnail to the article cover. Local posts are
+// compiled once per build; YouTube details retain their existing daily cache.
 export const getArticleVideoThumbnails = async (): Promise<
-  Map<number, string>
+  Map<number | string, string>
 > => {
   const articles = await getArticles()
   const videoIds = [...new Set(articleVideoIds(articles).values())]
@@ -32,14 +29,12 @@ export const getArticleVideoThumbnails = async (): Promise<
 }
 
 export const getContentFeed = async (): Promise<ContentItem[]> => {
-  const [videos, videosBr, articles, publishedArticles, courseVideoIds] =
-    await Promise.all([
-      getLatestVideos(50),
-      getLatestVideosBr(50),
-      getArticles(),
-      getPublishedArticles(),
-      getCourseVideoIds()
-    ])
+  const [videos, videosBr, articles, courseVideoIds] = await Promise.all([
+    getLatestVideos(50),
+    getLatestVideosBr(50),
+    getArticles(),
+    getCourseVideoIds()
+  ])
 
   const details = await getVideoDetails([
     ...new Set(
@@ -58,9 +53,7 @@ export const getContentFeed = async (): Promise<ContentItem[]> => {
 
   return buildContentFeed(
     [...videos, ...videosBr],
-    // The public list adds each post's language, which decides whether "Read"
-    // links to /blog/<slug> or /en/blog/<slug>.
-    withPublishedMetadata(articles, publishedArticles),
+    articles,
     courseVideoIds,
     detailsWithLanguage
   )

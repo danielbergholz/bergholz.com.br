@@ -3,13 +3,12 @@ import { test } from "node:test"
 import {
   articleImage,
   articlesForLocale,
-  articlesMissingFromPublicList,
   blogArticlePath,
   blogPostRouting,
   buildRssFeed,
   postLocales
 } from "./blog.ts"
-import type { Article, PublishedArticle } from "./types.ts"
+import type { PublishedArticle } from "./types.ts"
 
 function published(opts: {
   id: number
@@ -67,21 +66,6 @@ test("articlesForLocale filters by language and sorts newest first", () => {
   )
 })
 
-test("articlesMissingFromPublicList finds posts still missing from Forem's public CDN", () => {
-  const known = published({ id: 1, slug: "known", language: "pt" })
-  const authenticated = [
-    { id: 1, slug: "known" },
-    { id: 2, slug: "new-post" }
-  ] as Article[]
-
-  assert.deepEqual(
-    articlesMissingFromPublicList(authenticated, [known]).map(
-      (article) => article.slug
-    ),
-    ["new-post"]
-  )
-})
-
 test("articleImage prefers the social card, then the cover", () => {
   assert.equal(
     articleImage({ cover_image: "cover", social_image: "social" }),
@@ -134,7 +118,7 @@ test("postLocales maps each post's slug to its site locale", () => {
     published({ id: 2, slug: "hello", language: "en" }),
     published({ id: 3, slug: "hola", language: "es" })
   ])
-  assert.deepEqual(posts, { ola: "pt", hello: "en" })
+  assert.deepEqual(posts, { ola: ["pt"], hello: ["en"] })
 })
 
 test("blogPostRouting 404s unknown posts and redirects wrong locales", () => {
@@ -166,4 +150,13 @@ test("blogPostRouting 404s unknown posts and redirects wrong locales", () => {
     assert.equal(blogPostRouting(path, posts), undefined)
   }
   assert.equal(blogPostRouting("/blog/ola/extra", posts), undefined)
+})
+
+test("the same slug can exist in both locales without redirecting either page", () => {
+  const routing = postLocales([
+    published({ id: 1, slug: "shared", language: "pt" }),
+    published({ id: 2, slug: "shared", language: "en" })
+  ])
+  assert.equal(blogPostRouting("/blog/shared", routing), undefined)
+  assert.equal(blogPostRouting("/en/blog/shared", routing), undefined)
 })

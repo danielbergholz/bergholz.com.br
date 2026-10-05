@@ -2,7 +2,7 @@ import type { Route } from "next"
 import { type Locale, languageTags, localePath, siteLanguage } from "./i18n.ts"
 import { site } from "./site.ts"
 
-import type { Article, PublishedArticle } from "./types.ts"
+import type { PublishedArticle } from "./types.ts"
 
 // Pure helpers for the /blog routes (no I/O, unit-tested in blog.test.ts).
 
@@ -15,14 +15,17 @@ export function blogArticlePath(locale: Locale, slug: string): Route {
 export const blogFeedPath = "/blog/feed"
 
 // slug → locale for every post with a site language. Served at
-// /api/blog/posts for the proxy (see blogPostRouting).
+// the generated routing index (see blogPostRouting).
 export function postLocales(
   articles: PublishedArticle[]
-): Record<string, Locale> {
-  const posts: Record<string, Locale> = {}
+): Record<string, Locale[]> {
+  const posts: Record<string, Locale[]> = {}
   for (const article of articles) {
     const locale = siteLanguage(article.language)
-    if (locale) posts[article.slug] = locale
+    if (locale) {
+      posts[article.slug] ??= []
+      posts[article.slug].push(locale)
+    }
   }
   return posts
 }
@@ -35,7 +38,7 @@ export function postLocales(
 // the status code on the first visit to a URL.
 export function blogPostRouting(
   pathname: string,
-  posts: Record<string, Locale>
+  posts: Record<string, Locale | Locale[]>
 ): { notFound: Locale } | { redirect: Route } | undefined {
   const match = pathname.match(/^(?:\/(en))?\/blog\/([^/]+)$/)
   if (!match) return undefined
@@ -43,25 +46,15 @@ export function blogPostRouting(
   if (`/blog/${slug}` === blogFeedPath) return undefined
 
   const locale: Locale = prefix === "en" ? "en" : "pt"
-  const postLocale = Object.hasOwn(posts, slug) ? posts[slug] : undefined
+  const entry = Object.hasOwn(posts, slug) ? posts[slug] : undefined
+  const postLocales = entry ? (Array.isArray(entry) ? entry : [entry]) : []
+  if (postLocales.includes(locale)) return undefined
+  const postLocale = postLocales[0]
   if (!postLocale) return { notFound: locale }
   if (postLocale !== locale) {
     return { redirect: blogArticlePath(postLocale, slug) }
   }
   return undefined
-}
-
-// Forem caches the public author listing at its CDN for much longer than its
-// Cache-Control header suggests. The authenticated published list is private
-// and fresh, so use it to spot newly published posts that the public listing
-// has not propagated yet. The caller can then recover only those posts from
-// their final public slug instead of issuing one request per existing post.
-export function articlesMissingFromPublicList(
-  articles: Article[],
-  publishedArticles: PublishedArticle[]
-): Article[] {
-  const publishedIds = new Set(publishedArticles.map((article) => article.id))
-  return articles.filter((article) => !publishedIds.has(article.id))
 }
 
 // Posts for one locale, newest first (published_at is ISO-8601 UTC, so the
@@ -75,8 +68,7 @@ export function articlesForLocale(
     .sort((a, b) => b.published_at.localeCompare(a.published_at))
 }
 
-// The image for Open Graph / cards: social_image is the 1200×627 card dev.to
-// renders; cover_image is the 1000×420 banner.
+// Prefer a dedicated social card over the article cover for Open Graph.
 export function articleImage(article: {
   cover_image: string | null
   social_image?: string | null

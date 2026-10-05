@@ -1,10 +1,10 @@
 import { blogArticlePath } from "./blog.ts"
 import { siteLanguage } from "./i18n.ts"
+import { site } from "./site.ts"
 import type {
   Article,
   ContentItem,
   LatestVideo,
-  PublishedArticle,
   VideoDetails
 } from "./types.ts"
 
@@ -14,28 +14,14 @@ import type {
 // here if a genuinely short long-form video ever gets hidden.
 export const SHORTS_MAX_SECONDS = 180
 
-// Pull a YouTube video id out of a dev.to post body: raw watch/short URLs plus
-// dev.to's liquid embeds ({% youtube ID %} and {% embed <url> %}).
-const VIDEO_ID_PATTERNS = [
-  /youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]{11})/i,
-  /\{%\s*youtube\s+([\w-]{11})/i,
-  /\{%\s*embed\s+https?:\/\/youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]{11})/i
-]
-
-export function videoIdFromBody(body: string): string | null {
-  for (const pattern of VIDEO_ID_PATTERNS) {
-    const match = body.match(pattern)
-    if (match) return match[1]
-  }
-  return null
-}
-
-// The video each post links from its body, keyed by post id. Shared by the
-// feed pairing and by /blog (which shows that video's thumbnail).
-export function articleVideoIds(articles: Article[]): Map<number, string> {
-  const result = new Map<number, string>()
+// The originating video is explicit: body links may cite other creators or
+// earlier videos. Shared by feed pairing and the /blog thumbnail lookup.
+export function articleVideoIds(
+  articles: Article[]
+): Map<number | string, string> {
+  const result = new Map<number | string, string>()
   for (const article of articles) {
-    const videoId = videoIdFromBody(article.body_markdown ?? "")
+    const videoId = article.videoId
     if (videoId) result.set(article.id, videoId)
   }
   return result
@@ -47,8 +33,8 @@ export function articleVideoIds(articles: Article[]): Map<number, string> {
 export function articleVideoThumbnails(
   articles: Article[],
   details: Map<string, VideoDetails>
-): Map<number, string> {
-  const result = new Map<number, string>()
+): Map<number | string, string> {
+  const result = new Map<number | string, string>()
   for (const [articleId, videoId] of articleVideoIds(articles)) {
     const url = details.get(videoId)?.thumbnailUrl
     if (url) result.set(articleId, url)
@@ -56,10 +42,22 @@ export function articleVideoThumbnails(
   return result
 }
 
-// Pull the dev.to article slug out of a video description (last path segment of
-// a dev.to/<user>/<slug> link).
+// New video descriptions link to the site; legacy descriptions may link to Dev.to.
 export function articleSlugFromDescription(description: string): string | null {
-  return description.match(/dev\.to\/[\w-]+\/([\w-]+)/i)?.[1] ?? null
+  for (const match of description.matchAll(/https?:\/\/[^\s)<>]+/g)) {
+    try {
+      const url = new URL(match[0])
+      if (url.origin === site.url) {
+        const slug = url.pathname.match(
+          /^\/(?:en\/)?blog\/([a-z0-9-]+)\/?$/
+        )?.[1]
+        if (slug && slug !== "feed") return slug
+      }
+      if (url.hostname === "dev.to")
+        return url.pathname.match(/^\/[\w-]+\/([\w-]+)/)?.[1] ?? null
+    } catch {}
+  }
+  return null
 }
 
 // Many video descriptions open with a promo line ("Check my website: …"); skip
@@ -95,26 +93,6 @@ export function withChannelLanguage(
     }
   }
   return result
-}
-
-// The authenticated list has the post bodies but no `language`/`social_image`;
-// the public list has those but no bodies. Merge the public metadata in by id
-// so the feed can link posts to their page on this site. Pure — returns new
-// objects, never mutates the input.
-export function withPublishedMetadata(
-  articles: Article[],
-  published: PublishedArticle[]
-): Article[] {
-  const byId = new Map(published.map((article) => [article.id, article]))
-  return articles.map((article) => {
-    const meta = byId.get(article.id)
-    if (!meta) return article
-    return {
-      ...article,
-      language: siteLanguage(meta.language),
-      social_image: meta.social_image || article.social_image
-    }
-  })
 }
 
 // Where "Read" goes: the post's page on this site when we know which locale
@@ -172,9 +150,8 @@ function isShort(details: VideoDetails | undefined): boolean {
   return duration !== undefined && duration <= SHORTS_MAX_SECONDS
 }
 
-// Merge YouTube uploads and dev.to posts into one deduped, newest-first feed.
-// Pairing is automatic: a post's body links its video, and a video's
-// description links its post — no manual mapping. Shorts and course-playlist
+// Merge YouTube uploads and local posts into one deduped, newest-first feed.
+// Pair posts through videoId or a video's description link. Shorts and course-playlist
 // videos are excluded. Pure (no I/O) so it can be unit-tested with fixtures.
 export function buildContentFeed(
   videos: LatestVideo[],
@@ -191,7 +168,7 @@ export function buildContentFeed(
     if (videoId) articleByVideoId.set(videoId, article)
   }
 
-  const usedArticleIds = new Set<number>()
+  const usedArticleIds = new Set<number | string>()
   const items: ContentItem[] = []
 
   for (const video of videos) {

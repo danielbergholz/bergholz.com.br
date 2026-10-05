@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-
 import { blogPostRouting } from "@/lib/blog"
-import { defaultLocale, type Locale } from "@/lib/i18n"
+import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n"
+import postIndex from "../content/blog/.generated/index.json"
 
 // Locale routing: Portuguese (the default) lives unprefixed at the root and is
 // rewritten internally to /pt; English is served as-is under /en. Visiting
@@ -15,7 +15,7 @@ import { defaultLocale, type Locale } from "@/lib/i18n"
 // blogPostRouting). The page can't do either on a first visit once its static
 // shell has started streaming. Other unknown paths match no route and get the
 // 404 from app/global-not-found.tsx.
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (
@@ -28,13 +28,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (pathname.includes("/blog/")) {
-    const origin = request.nextUrl.origin
-    let routing = await routePost(pathname, origin, POSTS_TTL_MS)
-    // A slug missing from a cached map may be a post published since it was
-    // fetched; confirm against a fresh copy before answering 404.
-    if (routing && "notFound" in routing) {
-      routing = await routePost(pathname, origin, POSTS_RECHECK_MS)
-    }
+    const routing = blogPostRouting(pathname, postLocales)
 
     if (routing && "redirect" in routing) {
       return NextResponse.redirect(new URL(routing.redirect, request.url), 308)
@@ -73,25 +67,13 @@ function notFoundResponse(request: NextRequest, locale: Locale) {
   return NextResponse.rewrite(url, withLocale(request, locale))
 }
 
-// The slug → locale map from /api/blog/posts (a prerendered route, so the
-// fetch is a CDN hit), kept in memory so most requests skip it. If it can't be
-// fetched, the proxy lets the page decide.
-const POSTS_TTL_MS = 60_000
-const POSTS_RECHECK_MS = 5_000
-let postsCache: { fetchedAt: number; posts: Record<string, Locale> } | undefined
-
-async function routePost(pathname: string, origin: string, maxAgeMs: number) {
-  if (!postsCache || Date.now() - postsCache.fetchedAt > maxAgeMs) {
-    try {
-      const response = await fetch(new URL("/api/blog/posts", origin))
-      if (response.ok) {
-        postsCache = { fetchedAt: Date.now(), posts: await response.json() }
-      }
-    } catch {
-      // Keep the previous copy, if any.
-    }
+// Generated from local Markdown before dev/build; no HTTP lookup or stale map.
+const postLocales: Record<string, Locale[]> = {}
+for (const { slug, language } of postIndex) {
+  if (hasLocale(language)) {
+    postLocales[slug] ??= []
+    postLocales[slug].push(language)
   }
-  return postsCache && blogPostRouting(pathname, postsCache.posts)
 }
 
 export const config = {

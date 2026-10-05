@@ -1,13 +1,9 @@
 import type { Locale } from "./i18n.ts"
 
-// A post from the authenticated dev.to list (/articles/me/published). It's the
-// only endpoint that returns `body_markdown` for every post in one call —
-// that's where the YouTube link Daniel pastes in each post comes from, parsed
-// server-side and never shipped to the client. It does NOT return `language`
-// or `social_image`; those are merged in from the public list (see
-// withPublishedMetadata in feed.ts).
+// Local Markdown is normalized into these records at build time. Metadata
+// and bodies share one source; client feed items contain only the summary.
 export type Article = {
-  id: number
+  id: number | string
   title: string
   slug: string
   description: string
@@ -18,34 +14,19 @@ export type Article = {
   reading_time_minutes: number
   tag_list: string[]
   body_markdown: string
-  // Collapsed from the public list's `language` ("en" | "pt" for this
-  // account); unset when the post isn't in the public list yet.
+  videoId?: string
   language?: Locale
 }
 
-// A post from the public dev.to list (/articles?username=…). Same post, but
-// with `language` and `social_image`, and no body. Powers /blog.
-export type PublishedArticle = {
-  id: number
-  title: string
-  slug: string
-  description: string
-  published_at: string
+export type PublishedArticle = Omit<Article, "body_markdown" | "language"> & {
   edited_at: string | null
-  url: string
   canonical_url: string
-  cover_image: string | null
   social_image: string
-  reading_time_minutes: number
-  tag_list: string[]
-  // BCP-47-ish primary tag as dev.to reports it ("en", "pt").
   language: string
+  devtoUrl?: string
 }
 
-// A single post from /articles/{username}/{slug}: the public shape plus the
-// rendered body. Note that on this endpoint dev.to swaps `tag_list` to a
-// comma-separated string, so tags are always read from the list instead.
-export type PublishedArticleWithBody = Omit<PublishedArticle, "tag_list"> & {
+export type PublishedArticleWithBody = PublishedArticle & {
   body_html: string
 }
 

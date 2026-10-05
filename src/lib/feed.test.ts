@@ -7,17 +7,10 @@ import {
   articleVideoThumbnails,
   buildContentFeed,
   firstMeaningfulLine,
-  videoIdFromBody,
-  withChannelLanguage,
-  withPublishedMetadata
+  withChannelLanguage
 } from "./feed.ts"
 import { siteLanguage } from "./i18n.ts"
-import type {
-  Article,
-  LatestVideo,
-  PublishedArticle,
-  VideoDetails
-} from "./types.ts"
+import type { Article, LatestVideo, VideoDetails } from "./types.ts"
 
 // --- fixtures ---
 const thumb = (url: string) => ({ url, width: 1280, height: 720 })
@@ -50,6 +43,7 @@ function article(opts: {
   date?: string
   description?: string
   body?: string
+  videoId?: string
   minutes?: number
   language?: "en" | "pt"
 }): Article {
@@ -65,28 +59,7 @@ function article(opts: {
     reading_time_minutes: opts.minutes ?? 5,
     tag_list: [],
     body_markdown: opts.body ?? "",
-    language: opts.language
-  }
-}
-
-function published(opts: {
-  id: number
-  slug: string
-  language: string
-}): PublishedArticle {
-  return {
-    id: opts.id,
-    title: `Post ${opts.id}`,
-    slug: opts.slug,
-    description: `desc ${opts.id}`,
-    published_at: "2025-01-01T00:00:00Z",
-    edited_at: null,
-    url: `https://dev.to/danielbergholz/${opts.slug}`,
-    canonical_url: `https://dev.to/danielbergholz/${opts.slug}`,
-    cover_image: `cover-${opts.id}`,
-    social_image: `public-social-${opts.id}`,
-    reading_time_minutes: 5,
-    tag_list: [],
+    videoId: opts.videoId,
     language: opts.language
   }
 }
@@ -97,31 +70,17 @@ const durations = (entries: [string, number][]) =>
   details(entries.map(([id, s]) => [id, { durationSeconds: s }]))
 
 // --- helpers ---
-test("videoIdFromBody handles every link format", () => {
-  assert.equal(
-    videoIdFromBody("watch https://www.youtube.com/watch?v=abcdefghijk now"),
-    "abcdefghijk"
-  )
-  assert.equal(videoIdFromBody("https://youtu.be/abcdefghijk"), "abcdefghijk")
-  assert.equal(videoIdFromBody("{% youtube abcdefghijk %}"), "abcdefghijk")
-  assert.equal(
-    videoIdFromBody("{% embed https://youtu.be/abcdefghijk %}"),
-    "abcdefghijk"
-  )
-  assert.equal(videoIdFromBody("no video here"), null)
-})
-
-test("articleVideoIds maps each post to the video its body links", () => {
+test("articleVideoIds maps each post to its declared originating video", () => {
   const paired = article({
     id: 1,
     slug: "a",
-    body: "https://youtu.be/vid1111aaaa"
+    videoId: "vid1111aaaa"
   })
-  const embed = article({ id: 2, slug: "b", body: "{% youtube vid2222bbbb %}" })
+  const second = article({ id: 2, slug: "b", videoId: "vid2222bbbb" })
   const solo = article({ id: 3, slug: "c", body: "no video" })
 
   assert.deepEqual(
-    [...articleVideoIds([paired, embed, solo])],
+    [...articleVideoIds([paired, second, solo])],
     [
       [1, "vid1111aaaa"],
       [2, "vid2222bbbb"]
@@ -133,17 +92,17 @@ test("articleVideoThumbnails resolves a post's video thumbnail when known", () =
   const paired = article({
     id: 1,
     slug: "a",
-    body: "https://youtu.be/vid1111aaaa"
+    videoId: "vid1111aaaa"
   })
   const unknownVideo = article({
     id: 2,
     slug: "b",
-    body: "https://youtu.be/vid2222bbbb"
+    videoId: "vid2222bbbb"
   })
   const noThumb = article({
     id: 3,
     slug: "c",
-    body: "https://youtu.be/vid3333cccc"
+    videoId: "vid3333cccc"
   })
   const solo = article({ id: 4, slug: "d" })
   const result = articleVideoThumbnails(
@@ -221,12 +180,12 @@ test("withChannelLanguage fills missing languages but keeps declared ones", () =
 })
 
 // --- buildContentFeed ---
-test("pairs a video with its article via the body video id", () => {
+test("pairs a video with its article via the declared video id", () => {
   const v = video({ id: "vid1111aaaa", description: "Check my website: x" })
   const a = article({
     id: 1,
     slug: "post-one",
-    body: "intro https://youtu.be/vid1111aaaa outro",
+    videoId: "vid1111aaaa",
     description: "clean excerpt"
   })
   const feed = buildContentFeed(
@@ -248,7 +207,7 @@ test("pairs a video with its article via the body video id", () => {
   )
 })
 
-test("pairs via the slug in the video description when the body has no id", () => {
+test("pairs via the slug in the video description when the article has no videoId", () => {
   const v = video({
     id: "vid2222bbbb",
     description: "Full write-up: https://dev.to/danielbergholz/post-two"
@@ -328,11 +287,11 @@ test("a text-only article becomes its own card", () => {
   assert.equal(feed[0].videoUrl, undefined)
 })
 
-test("an article linking an out-of-window video still offers Watch", () => {
+test("an article with an out-of-window originating video still offers Watch", () => {
   const a = article({
     id: 10,
     slug: "old",
-    body: "https://youtu.be/oldvideo111"
+    videoId: "oldvideo111"
   })
   const feed = buildContentFeed([], [a], noCourses, new Map())
 
@@ -380,23 +339,6 @@ test("sorts newest first across videos and articles", () => {
   )
 })
 
-test("withPublishedMetadata merges language and social image by id", () => {
-  const known = article({ id: 1, slug: "known" })
-  const unknown = article({ id: 2, slug: "unknown" })
-  const result = withPublishedMetadata(
-    [known, unknown],
-    [
-      published({ id: 1, slug: "known", language: "pt" }),
-      published({ id: 3, slug: "other", language: "en" })
-    ]
-  )
-
-  assert.equal(result[0].language, "pt")
-  assert.equal(result[0].social_image, "public-social-1")
-  assert.equal(result[1].language, undefined, "not in the public list")
-  assert.equal(known.language, undefined, "input is not mutated")
-})
-
 test("articleUrl points at the site when the locale is known, else dev.to", () => {
   assert.equal(
     articleUrl(article({ id: 1, slug: "post-pt", language: "pt" })),
@@ -417,7 +359,7 @@ test("feed cards link Read to the site page and carry the post language", () => 
   const paired = article({
     id: 1,
     slug: "paired",
-    body: "https://youtu.be/vid1111aaaa",
+    videoId: "vid1111aaaa",
     language: "en"
   })
   const solo = article({ id: 2, slug: "solo", language: "pt" })
@@ -432,4 +374,56 @@ test("feed cards link Read to the site page and carry the post language", () => 
   assert.equal(byId.get("vid1111aaaa")?.articleUrl, "/en/blog/paired")
   assert.equal(byId.get("article-2")?.articleUrl, "/blog/solo")
   assert.equal(byId.get("article-2")?.language, "pt")
+})
+
+test("explicit videoId pairs a local post even when its Markdown contains no video link", () => {
+  const local = {
+    ...article({ id: 1, slug: "local", language: "pt" }),
+    videoId: "abcdefghijk"
+  }
+  const feed = buildContentFeed(
+    [video({ id: "abcdefghijk" })],
+    [local],
+    noCourses,
+    durations([["abcdefghijk", 600]])
+  )
+  assert.equal(feed.length, 1)
+  assert.equal(feed[0].articleUrl, "/blog/local")
+})
+
+test("video descriptions can pair using a local site article URL", () => {
+  assert.equal(
+    articleSlugFromDescription(
+      "Read: https://bergholz.com.br/en/blog/local-post#section"
+    ),
+    "local-post"
+  )
+  assert.equal(
+    articleSlugFromDescription("RSS: https://bergholz.com.br/blog/feed"),
+    null
+  )
+  assert.equal(
+    articleSlugFromDescription("Read: https://evil.example/en/blog/local-post"),
+    null
+  )
+})
+
+test("cited videos do not become the article's originating video", () => {
+  const essay = article({
+    id: 1,
+    slug: "essay",
+    language: "en",
+    body: "Other creators: [embed](https://youtu.be/abcdefghijk)"
+  })
+  assert.equal(articleVideoIds([essay]).size, 0)
+  assert.equal(
+    articleVideoThumbnails(
+      [essay],
+      details([["abcdefghijk", { thumbnailUrl: "unrelated-thumbnail" }]])
+    ).size,
+    0
+  )
+  const feed = buildContentFeed([], [essay], noCourses, new Map())
+  assert.equal(feed[0].videoUrl, undefined)
+  assert.equal(feed[0].articleUrl, "/en/blog/essay")
 })
