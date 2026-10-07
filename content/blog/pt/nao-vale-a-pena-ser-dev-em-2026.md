@@ -1,9 +1,9 @@
 ---
 title: "NÃO vale a pena ser dev em 2026"
 description: "Eu vi o trabalho de dev acabar numa startup em quatro passos e em poucos meses. O que eu faria no seu lugar, se você quer entrar na área ou se já é dev."
-publishedAt: "[CONFIRMAR: horário de lançamento do vídeo, ex.: 2026-10-12T16:00:00Z]"
+publishedAt: "2026-10-26T16:00:00Z"
 tags: [ai, career, programming]
-videoId: "[CONFIRMAR: ID do vídeo no YouTube]"
+videoId: ufJv-YfbYzU
 estudioSource: canais/br/youtube/2026-10-05-nao-vale-a-pena-ser-dev
 ---
 
@@ -17,7 +17,7 @@ Eu discordo. E não é porque eu li uma manchete ou porque o CEO de uma empresa 
 
 Eu gravei um vídeo sobre isso. Aqui vai a versão escrita.
 
-[embed](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+[embed](https://www.youtube.com/watch?v=ufJv-YfbYzU)
 
 ## O que eu chamo de dev
 
@@ -107,7 +107,7 @@ Quando até quem ensina programação para de ensinar a escrever código, isso d
 
 Então, não. Não vale a pena ser dev em 2026. Vale a pena entender de tecnologia, usar IA melhor que todo mundo e se virar em tudo que existe em volta do código. Mas dev, a profissão de pegar o ticket e transformar em código, acabou.
 
-Vídeo no YouTube: [NÃO vale a pena ser dev em 2026](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+Vídeo no YouTube: [NÃO vale a pena ser dev em 2026](https://www.youtube.com/watch?v=ufJv-YfbYzU)
 
 Conheça meu trabalho: https://bergholz.com.br/
 
