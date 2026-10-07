@@ -1,7 +1,7 @@
 ---
 title: "Rust + IA é uma combinação absurda. Até o bug compilar."
 description: "Forcei erros no meu projeto web em Rust: o compilador pegou três, mas deixou passar o que os testes também não cobriam."
-publishedAt: "2026-10-08T16:00:00Z"
+publishedAt: "2026-10-12T16:00:00Z"
 tags: [rust, ai, programming, elixir]
 videoId: ydQ7HhnXUZk
 estudioSource: canais/br/youtube/2026-09-28-rust-melhor-linguagem-ai-agents

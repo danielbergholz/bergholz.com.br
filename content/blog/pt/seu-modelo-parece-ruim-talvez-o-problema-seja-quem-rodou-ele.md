@@ -1,7 +1,7 @@
 ---
 title: "Seu modelo parece ruim? Talvez o problema seja quem rodou ele"
 description: "Modelo, provider e AI gateway são três camadas diferentes. Mostro o que isso muda em preço, quantização e tool calls, com meu uso real de OpenCode e OpenRouter."
-publishedAt: "2026-10-12T16:00:00Z"
+publishedAt: "2026-10-19T16:00:00Z"
 tags: [ai, llm, opencode, programming]
 videoId: P9KYwXNQmIw
 estudioSource: canais/br/youtube/2026-09-24-o-que-e-ai-gateway
