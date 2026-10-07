@@ -97,7 +97,7 @@ Primeiro, estuda IA a fundo, em qualquer aspecto: programar com agente, integrar
 
 Segundo, estuda o que não é só de TI: vendas, marketing, gestão de projetos. Lê o [Shape Up](https://basecamp.com/shapeup), da Basecamp. É um livro sobre como decidir o que construir e em quanto tempo, e dá pra ler de graça no site deles.
 
-E o que você pode jogar no lixo: todo esse estudo de baixo nível, de como organizar cada classe e cada função. Isso importava quando quem escrevia e mantinha o código era um ser humano. Agora quem escreve é o agente.
+E o que você pode jogar no lixo: Clean Code, Domain-Driven Design e todo esse estudo de baixo nível, de como organizar cada classe e cada função. Isso importava quando quem escrevia e mantinha o código era um ser humano. Agora quem escreve é o agente.
 
 ## Até eu mudei
 
