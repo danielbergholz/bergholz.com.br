@@ -1,9 +1,9 @@
 ---
 title: "IA sabe programar em Elixir? Testei cinco modelos e o erro foi outro"
 description: "Montei uma armadilha pra cinco modelos errarem Elixir. Nenhum caiu. O que escorregou foi a convenção nova do Phoenix, e o bug passou em 44 testes."
-publishedAt: "[CONFIRMAR: horário de lançamento do vídeo, ex.: 2026-10-22T16:00:00Z]"
+publishedAt: "2026-10-22T16:00:00Z"
 tags: [elixir, phoenix, ai, programming]
-videoId: "[CONFIRMAR: ID do vídeo no YouTube]"
+videoId: 0U4Ob-_oh1g
 estudioSource: canais/br/youtube/2026-10-02-ia-sabe-programar-em-elixir
 ---
 
@@ -19,7 +19,7 @@ Spoiler: eu tava meio errado.
 
 Mas eles erraram outra coisa. E esse erro vale pra sua stack também, mesmo que você nunca encoste em Elixir. O vídeo com o experimento inteiro tá aqui:
 
-[embed](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+[embed](https://www.youtube.com/watch?v=0U4Ob-_oh1g)
 
 ## O arquivo que o Phoenix escreve pro agente
 
@@ -163,7 +163,7 @@ E abre o app. Teste passando não prova que a tela funciona.
 
 Se quiser fazer esse teste na sua stack, é simples: projeto novo, uma tarefa com armadilha, roda com e sem o arquivo, lê o diff e abre o app.
 
-Vídeo no YouTube: [IA sabe programar em Elixir?](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+Vídeo no YouTube: [IA sabe programar em Elixir?](https://www.youtube.com/watch?v=0U4Ob-_oh1g)
 
 Conheça meu trabalho: https://bergholz.com.br/
 
