@@ -1,7 +1,7 @@
 ---
 title: "NÃO vale a pena ser dev em 2026"
 description: "Eu vi o trabalho de dev acabar numa startup em quatro passos e em poucos meses. O que eu faria no seu lugar, se você quer entrar na área ou se já é dev."
-publishedAt: "2026-10-26T16:00:00Z"
+publishedAt: "2026-10-19T16:00:00Z"
 tags: [ai, career, programming]
 videoId: ufJv-YfbYzU
 estudioSource: canais/br/youtube/2026-10-05-nao-vale-a-pena-ser-dev

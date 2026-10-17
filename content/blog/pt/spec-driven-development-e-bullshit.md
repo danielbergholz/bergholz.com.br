@@ -1,7 +1,7 @@
 ---
 title: "Spec-Driven Development é bullshit"
 description: "Planejar antes de pedir código pro agente é ótimo. O problema é transformar o plano numa fábrica de Markdown que precisa ficar sincronizada com o código pra sempre."
-publishedAt: "2026-10-15T16:00:00Z"
+publishedAt: "2026-10-24T14:30:00Z"
 tags: [ai, programming, productivity]
 videoId: Boxi6nslTQM
 estudioSource: canais/br/youtube/2026-09-18-spec-driven-development-bullshit
