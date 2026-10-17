@@ -1,9 +1,9 @@
 ---
 title: "A OpenAI matou a matemática?"
 description: "A OpenAI publicou centenas de trabalhos resolvendo problemas em aberto e uma associação de matemáticos respondeu que ninguém pediu. O que foi anunciado de fato, a briga que veio depois e por que eu acho que rigor é uma coisa e segurar descoberta é outra."
-publishedAt: "[CONFIRMAR: horário de lançamento do vídeo, ex.: 2026-10-29T16:00:00Z]"
+publishedAt: "2026-10-15T16:00:00Z"
 tags: [ai, math, openai]
-videoId: "[CONFIRMAR: ID do vídeo no YouTube]"
+videoId: _wCLiRVBn4Y
 estudioSource: canais/br/youtube/2026-10-14-openai-matou-matematica
 ---
 
@@ -17,7 +17,7 @@ Eu fui ler a briga no Twitter e parecia que eu tava lendo dev reclamando de IA. 
 
 Eu gravei um vídeo sobre isso. Aqui vai a versão escrita.
 
-[embed](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+[embed](https://www.youtube.com/watch?v=_wCLiRVBn4Y)
 
 ## Como isso começou
 
@@ -110,7 +110,7 @@ Eu quero que humano e máquina resolvam o máximo possível, do jeito mais rápi
 
 O que não dá é exigir que tudo continue difícil e demorado porque foi assim com você.
 
-Vídeo no YouTube: [A OpenAI matou a matemática?](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+Vídeo no YouTube: [A OpenAI matou a matemática?](https://www.youtube.com/watch?v=_wCLiRVBn4Y)
 
 Conheça meu trabalho: https://bergholz.com.br/
 

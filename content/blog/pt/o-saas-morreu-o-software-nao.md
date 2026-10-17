@@ -1,9 +1,9 @@
 ---
 title: "O SaaS morreu. O software não."
 description: "O levelsio postou que o software morreu, e na mesma semana as ações de software bateram a maior alta em quase um ano. Por que eu concordo com metade, e um teste de três perguntas pra saber se aquele SaaS que você paga já morreu."
-publishedAt: "[CONFIRMAR: horário de lançamento do vídeo, ex.: 2026-11-05T16:00:00Z]"
+publishedAt: "2026-10-29T16:00:00Z"
 tags: [ai, saas, business]
-videoId: "[CONFIRMAR: ID do vídeo no YouTube]"
+videoId: KmjWZaTKYV4
 estudioSource: canais/br/youtube/2026-10-15-software-esta-morto
 ---
 
@@ -17,7 +17,7 @@ Eu concordo com metade. A outra metade tá errada, e é a metade que importa. O 
 
 Eu gravei um vídeo sobre isso. Aqui vai a versão escrita, com um teste de três perguntas no final pra você descobrir se aquele SaaS que você paga (ou quer construir) já morreu e ninguém avisou.
 
-[embed](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+[embed](https://www.youtube.com/watch?v=KmjWZaTKYV4)
 
 ## O que eu chamo de SaaS
 
@@ -109,7 +109,7 @@ Não escala como SaaS, e é por isso que investidor odeia. Mas pra quem é dev, 
 
 O SaaS morreu. O software ficou pessoal.
 
-Vídeo no YouTube: [SaaS morreu?](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+Vídeo no YouTube: [SaaS morreu?](https://www.youtube.com/watch?v=KmjWZaTKYV4)
 
 Conheça meu trabalho: https://bergholz.com.br/
 

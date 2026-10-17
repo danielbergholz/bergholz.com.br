@@ -1,9 +1,9 @@
 ---
 title: "FDE NÃO é o futuro da programação"
 description: "Forward deployed engineer virou o cargo mais quente de 2026, depois do product engineer e do design engineer. Por que eu acho que quem chama isso de futuro está pensando pequeno, e o que eu acho que vem de verdade."
-publishedAt: "[CONFIRMAR: horário de lançamento do vídeo, ex.: 2026-11-02T16:00:00Z]"
+publishedAt: "2026-10-26T16:00:00Z"
 tags: [ai, career, programming]
-videoId: "[CONFIRMAR: ID do vídeo no YouTube]"
+videoId: YyOWwQvr7OU
 estudioSource: canais/br/youtube/2026-10-15-fde-nao-e-o-futuro
 ---
 
@@ -19,7 +19,7 @@ Só que eu já vi esse filme. Antes do FDE, o futuro era o product engineer. Dep
 
 Eu gravei um vídeo sobre isso. Aqui vai a versão escrita.
 
-[embed](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+[embed](https://www.youtube.com/watch?v=YyOWwQvr7OU)
 
 ## O que é um FDE
 
@@ -99,7 +99,7 @@ Depois compara o seu resultado com o de quem faz isso há anos. É assim que se 
 
 Então não, forward deployed engineer não é o futuro da programação. Nem product engineer, nem design engineer, nem o marketing engineer que eu acabei de inventar. O futuro é você fazendo tudo isso ao mesmo tempo com IA e sabendo dizer quando o resultado tá bom.
 
-Vídeo no YouTube: [FDE NÃO é o futuro da programação](https://www.youtube.com/watch?v=[CONFIRMAR: ID do vídeo])
+Vídeo no YouTube: [Forward Deployed Engineer é o futuro da programação?](https://www.youtube.com/watch?v=YyOWwQvr7OU)
 
 Conheça meu trabalho: https://bergholz.com.br/
 
